@@ -1,6 +1,6 @@
 ﻿namespace CTC.Application.Shared.UseCase.IO
 {
-    internal interface IInput
+    public interface IInput
     {
     }
 }

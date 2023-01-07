@@ -2,6 +2,7 @@
 using CTC.Application.Features.Category.RegisterCategory.UseCase.IO;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
+using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Category.RegisterCategory.UseCase
 {
@@ -16,7 +17,7 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
             _repository = repository;
         }
 
-        public RegisterCategoryOutput Execute(RegisterCategoryInput input)
+        public async Task<RegisterCategoryOutput> Execute(RegisterCategoryInput input)
         {
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
@@ -30,7 +31,7 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
             }
 
             var category = new CategoryModel(input.CategoryName!);
-            _repository.InsertCategory(category);
+            await _repository.InsertCategory(category);
             return new RegisterCategoryOutput
             {
                 StatusCode = System.Net.HttpStatusCode.Created,

@@ -1,7 +1,9 @@
-﻿namespace CTC.Application.Features.Category.RegisterCategory.Repositories
+﻿using System.Threading.Tasks;
+
+namespace CTC.Application.Features.Category.RegisterCategory.Repositories
 {
     internal interface IRegisterCategoryRepository
     {
-        public void InsertCategory(CategoryModel model);
+        public Task InsertCategory(CategoryModel model);
     }
 }
