@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Category\RegisterCategory\DependencyInjection\" />
-    <Folder Include="Features\Category\RegisterCategory\Repositories\" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

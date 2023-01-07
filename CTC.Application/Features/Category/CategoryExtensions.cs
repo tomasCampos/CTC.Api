@@ -1,0 +1,14 @@
+﻿using CTC.Application.Features.Category.RegisterCategory;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CTC.Application.Features.Category
+{
+    public static class CategoryExtensions
+    {
+        public static IServiceCollection AddCategory(this IServiceCollection services)
+        {
+            services.AddRegisterCategory();
+            return services;
+        }
+    }
+}
