@@ -23,7 +23,7 @@ namespace CTC.Api.Features.Category.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Post(RegisterCategoryRequest request)
+        public async Task<IActionResult> Post([FromBody] RegisterCategoryRequest request)
         {
             var input = new RegisterCategoryInput { CategoryName = request.CategoryName };
             var output = await _registerCategoryUseCase.Execute(input);
