@@ -1,4 +1,4 @@
-using CTC.Application.Features.Category;
+using CTC.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Add project Services
-builder.Services.AddCategory();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.Category
 {
-    public static class CategoryExtensions
+    internal static class CategoryExtensions
     {
         public static IServiceCollection AddCategory(this IServiceCollection services)
         {
