@@ -4,7 +4,7 @@ using System.Net;
 
 namespace CTC.Api.Shared
 {
-    internal abstract class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         protected IActionResult GetHttpresponse(in IOutput output, in string? uri = null)
         {

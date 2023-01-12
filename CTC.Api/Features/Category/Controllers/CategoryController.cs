@@ -9,7 +9,7 @@ namespace CTC.Api.Features.Category.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    internal sealed class CategoryController : BaseController
+    public sealed class CategoryController : BaseController
     {
         private readonly IUseCase<RegisterCategoryInput, RegisterCategoryOutput> _registerCategoryUseCase;
 
