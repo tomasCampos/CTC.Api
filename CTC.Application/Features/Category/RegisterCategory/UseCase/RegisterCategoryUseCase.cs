@@ -2,6 +2,7 @@
 using CTC.Application.Features.Category.RegisterCategory.UseCase.IO;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Category.RegisterCategory.UseCase
@@ -24,9 +25,17 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
             {
                 return new RegisterCategoryOutput
                 {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     ValidationErrorMessage = validationResult.ErrorMessage
+                };
+            }
+
+            if (await _repository.SearchCategoryByName(input.CategoryName!) > 0)
+            {
+                return new RegisterCategoryOutput
+                {
+                    StatusCode = HttpStatusCode.Conflict,
+                    ValidationErrorMessage = "Já existe uma categoria com esse nome."
                 };
             }
 
@@ -34,8 +43,8 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
             await _repository.InsertCategory(category);
             return new RegisterCategoryOutput
             {
-                StatusCode = System.Net.HttpStatusCode.Created,
-                Success = true
+                StatusCode = HttpStatusCode.Created,
+                Body = category
             };
         }
     }
