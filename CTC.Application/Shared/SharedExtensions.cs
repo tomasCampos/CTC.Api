@@ -7,7 +7,8 @@ namespace CTC.Application.Shared
     {
         public static IServiceCollection AddShared(this IServiceCollection services)
         {
-            services.AddScoped<IMySqlDataBaseConnector, MySqlDataBaseConnector>();
+            services.AddScoped<ISqlService, SqlService>();
+            services.AddSingleton<IDataContext, MySqlDataContext>();
             return services;
         }
     }

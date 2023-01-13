@@ -5,9 +5,9 @@ namespace CTC.Application.Features.Category.RegisterCategory.Repositories
 {
     internal sealed class RegisterCategoryRepository : IRegisterCategoryRepository
     {
-        private readonly IMySqlDataBaseConnector _mySqlDataBaseConnector;
+        private readonly ISqlService _mySqlDataBaseConnector;
 
-        public RegisterCategoryRepository(IMySqlDataBaseConnector mySqlDataBaseConnector)
+        public RegisterCategoryRepository(ISqlService mySqlDataBaseConnector)
         {
             _mySqlDataBaseConnector = mySqlDataBaseConnector;
         }
