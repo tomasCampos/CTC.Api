@@ -28,7 +28,7 @@ namespace CTC.Api.Features.Category.Controllers
             var input = new RegisterCategoryInput { CategoryName = request.CategoryName };
             var output = await _registerCategoryUseCase.Execute(input);
 
-            return GetHttpresponse(output);
+            return GetHttpresponse(output, "/category");
         }
     }
 }

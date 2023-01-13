@@ -30,7 +30,7 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
                 };
             }
 
-            if (await _repository.SearchCategoryByName(input.CategoryName!) > 0)
+            if (await _repository.CountCategoryByName(input.CategoryName!) > 0)
             {
                 return new RegisterCategoryOutput
                 {
@@ -43,8 +43,7 @@ namespace CTC.Application.Features.Category.RegisterCategory.UseCase
             await _repository.InsertCategory(category);
             return new RegisterCategoryOutput
             {
-                StatusCode = HttpStatusCode.Created,
-                Body = category
+                StatusCode = HttpStatusCode.Created
             };
         }
     }

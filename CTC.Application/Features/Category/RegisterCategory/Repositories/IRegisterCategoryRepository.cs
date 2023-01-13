@@ -6,6 +6,6 @@ namespace CTC.Application.Features.Category.RegisterCategory.Repositories
     {
         public Task InsertCategory(CategoryModel model);
 
-        public Task<int> SearchCategoryByName(string categoryName);
+        public Task<int> CountCategoryByName(string categoryName);
     }
 }
