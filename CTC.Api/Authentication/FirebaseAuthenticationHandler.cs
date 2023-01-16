@@ -27,9 +27,7 @@ namespace CTC.Api.Authentication
         {
             IHeaderDictionary headers = Context.Request.Headers;
             if (!headers.ContainsKey("Authorization"))
-            {
                 return AuthenticateResult.NoResult();
-            }
 
             string bearerToken = headers["Authorization"]!;
 
