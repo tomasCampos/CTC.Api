@@ -6,7 +6,7 @@ namespace CTC.Api.Shared
 {
     public abstract class BaseController : ControllerBase
     {
-        protected IActionResult GetHttpresponse(in IOutput output, in string? uri = null)
+        protected IActionResult GetHttpResponse(in IOutput output, in string? uri = null)
         {
             var httpResponse = new { output.StatusCode, output.ValidationErrorMessage, output.Body};
 

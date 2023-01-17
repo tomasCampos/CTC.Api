@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace CTC.Api.Features.Category.Controllers
+namespace CTC.Api.Features.Category
 {
     [ApiController]
     [Route("[controller]")]
@@ -25,12 +25,12 @@ namespace CTC.Api.Features.Category.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Post([FromBody] RegisterCategoryRequest request)
+        public async Task<IActionResult> RegisterCategory([FromBody] RegisterCategoryRequest request)
         {
             var input = new RegisterCategoryInput { CategoryName = request.CategoryName };
             var output = await _registerCategoryUseCase.Execute(input);
 
-            return GetHttpresponse(output, "/category");
+            return GetHttpResponse(output, "/category");
         }
     }
 }

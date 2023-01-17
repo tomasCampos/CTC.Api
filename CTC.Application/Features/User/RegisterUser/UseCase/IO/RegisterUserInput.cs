@@ -1,8 +1,9 @@
 ﻿using CTC.Application.Features.User.Models;
+using CTC.Application.Shared.UseCase.IO;
 
-namespace CTC.Api.Features.User.Contracts
+namespace CTC.Application.Features.User.RegisterUser.UseCase.IO
 {
-    public sealed class RegisterUserRequest
+    public sealed class RegisterUserInput : IInput
     {
         public string? UserFirstName { get; set; }
         public string? UserEmail { get; set; }
