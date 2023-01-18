@@ -9,8 +9,8 @@ namespace CTC.Application.Features.Category
             if(string.IsNullOrWhiteSpace(categoryName))
                 throw new ArgumentNullException(nameof(categoryName));
 
-            CategoryName = categoryName;
-            CategoryId = Guid.NewGuid().ToString();
+            Name = categoryName;
+            Id = Guid.NewGuid().ToString();
         }
 
         public CategoryModel(in string categoryName, in string categoryId)
@@ -20,12 +20,12 @@ namespace CTC.Application.Features.Category
             if (string.IsNullOrWhiteSpace(categoryId))
                 throw new ArgumentNullException(nameof(categoryId));
 
-            CategoryName = categoryName;
-            CategoryId = categoryId;
+            Name = categoryName;
+            Id = categoryId;
         }
 
-        public string CategoryId { get; set; }
-        public string CategoryName { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
 
         //TODO: Refatorar para remover a palavra Category do nome das propriedades
     }

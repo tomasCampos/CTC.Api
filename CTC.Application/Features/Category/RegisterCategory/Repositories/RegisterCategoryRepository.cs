@@ -19,7 +19,7 @@ namespace CTC.Application.Features.Category.RegisterCategory.Repositories
 
         public async Task InsertCategory(CategoryModel model)
         {
-            _ = await _sqlService.ExecuteAsync(RegisterCategorySqlScripts.INSERT_CATEGORY_SQL, new { category_id = model.CategoryId, category_name = model.CategoryName});
+            _ = await _sqlService.ExecuteAsync(RegisterCategorySqlScripts.INSERT_CATEGORY_SQL, new { category_id = model.Id, category_name = model.Name});
         }
     }
 }
