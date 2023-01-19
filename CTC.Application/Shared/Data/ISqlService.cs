@@ -8,5 +8,6 @@ namespace CTC.Application.Shared.Data
         Task<IEnumerable<T>> SelectAsync<T>(string sql, object @params);
         Task<int> CountAsync(string sql, object @params);
         Task<int> ExecuteAsync(string sql, object @params);
+        Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands);
     }
 }

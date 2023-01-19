@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.Category;
+using CTC.Application.Features.User;
 using CTC.Application.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace CTC.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddCategory();
+            services.AddUser();
             services.AddShared();
             return services;
         }

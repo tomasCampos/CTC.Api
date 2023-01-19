@@ -30,5 +30,30 @@ namespace CTC.Application.Shared.Data
             using var connection = _context.GetConnection();
             return await connection.QueryAsync<T>(sql, param);
         }
+
+        public async Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
+        {          
+            using var connection = _context.GetConnection();
+            var transaction = connection.BeginTransaction();
+            try
+            {
+                foreach (var command in commands)
+                {
+                    var rowsAffected = await connection.ExecuteAsync(command.Key, command.Value);
+                    if (rowsAffected == 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
+
+            transaction.Commit();
+            return true;
+        }
     }
 }

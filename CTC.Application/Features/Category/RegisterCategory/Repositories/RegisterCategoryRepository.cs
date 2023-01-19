@@ -7,9 +7,9 @@ namespace CTC.Application.Features.Category.RegisterCategory.Repositories
     {
         private readonly ISqlService _sqlService;
 
-        public RegisterCategoryRepository(ISqlService mySqlDataBaseConnector)
+        public RegisterCategoryRepository(ISqlService sqlService)
         {
-            _sqlService = mySqlDataBaseConnector;
+            _sqlService = sqlService;
         }
 
         public async Task<int> CountCategoryByName(string categoryName)
