@@ -31,13 +31,22 @@ namespace CTC.Application.Features.User.RegisterUser.UseCase
                 };
             }
 
-            //TODO: cadastrar usuário no firebase
-
             var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, input.UserPassword!);
-            await _repository.InsertUser(user);
-            return new RegisterUserOutput 
-            { 
-                StatusCode = HttpStatusCode.OK 
+            var success = await _repository.InsertUser(user);
+
+            if (success) 
+            {
+                //TODO: cadastrar usuário no firebase
+                return new RegisterUserOutput
+                {
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
+
+            return new RegisterUserOutput
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                ValidationErrorMessage = "Não foi possível cadastrar o usuário. Tente novamente mais tarde."
             };
         }
     }

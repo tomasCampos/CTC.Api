@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,12 +35,14 @@ namespace CTC.Application.Shared.Data
         public async Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
         {          
             using var connection = _context.GetConnection();
-            var transaction = connection.BeginTransaction();
+            connection.Open();
+
+            using var transaction = connection.BeginTransaction();
             try
             {
                 foreach (var command in commands)
                 {
-                    var rowsAffected = await connection.ExecuteAsync(command.Key, command.Value);
+                    var rowsAffected = await connection.ExecuteAsync(command.Key, command.Value, transaction);
                     if (rowsAffected == 0)
                     {
                         transaction.Rollback();
@@ -50,6 +53,7 @@ namespace CTC.Application.Shared.Data
             catch
             {
                 transaction.Rollback();
+                return false;
             }
 
             transaction.Commit();
