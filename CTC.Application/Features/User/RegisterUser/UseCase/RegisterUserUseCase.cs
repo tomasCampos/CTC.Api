@@ -39,7 +39,7 @@ namespace CTC.Application.Features.User.RegisterUser.UseCase
                 //TODO: cadastrar usuário no firebase
                 return new RegisterUserOutput
                 {
-                    StatusCode = HttpStatusCode.OK
+                    StatusCode = HttpStatusCode.Created
                 };
             }
 
