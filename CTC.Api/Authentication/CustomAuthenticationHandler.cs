@@ -56,7 +56,7 @@ namespace CTC.Api.Authentication
 
         private static IEnumerable<Claim>? ToClaims(IReadOnlyDictionary<string, object> claims)
         {
-            //TODO: PEGAR O EMAIL DO CLAIMS E FAZER UM SELECT NO BANCO PARA OBTER O TIPO DE PERMISSÃO DO USUÁRIO
+            //TODO: PEGAR O EMAIL DO CLAIMS E FAZER UM SELECT NO BANCO PARA OBTER O TIPO DE PERMISSÃO DO USUÁRIO. TENTAR USER CACHE
             return new List<Claim>
             {
                 new Claim("id", claims["user_id"].ToString()!),

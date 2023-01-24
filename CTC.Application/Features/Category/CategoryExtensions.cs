@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.Category.RegisterCategory;
+﻿using CTC.Application.Features.Category.UseCases.RegisterCategory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.Category

@@ -1,6 +1,6 @@
 using CTC.Api.Features.Category.Contracts;
 using CTC.Api.Shared;
-using CTC.Application.Features.Category.RegisterCategory.UseCase.IO;
+using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
 using CTC.Application.Shared.UseCase;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

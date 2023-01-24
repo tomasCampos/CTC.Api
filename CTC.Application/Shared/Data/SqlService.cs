@@ -32,6 +32,12 @@ namespace CTC.Application.Shared.Data
             return await connection.QueryAsync<T>(sql, param);
         }
 
+        public async Task<T> SelectSingleAsync<T>(string sql, object? param = default)
+        {
+            using var connection = _context.GetConnection();
+            return await connection.QuerySingleAsync<T>(sql, param);
+        }
+
         public async Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
         {          
             using var connection = _context.GetConnection();
