@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Features.User.Models;
 using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
+using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using Firebase.Auth;
@@ -15,12 +16,14 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         private readonly IRequestValidator<RegisterUserInput> _validator;
         private readonly IRegisterUserRepository _repository;
         private readonly string FireBaseApiKey;
+        private readonly string AESKey;
 
         public RegisterUserUseCase(IRequestValidator<RegisterUserInput> validator, IRegisterUserRepository repository, IConfiguration configuration)
         {
             _validator = validator;
             _repository = repository;
             FireBaseApiKey = configuration["FireBaseApiKey"]!;
+            AESKey = configuration["CypherAESKey"]!;
         }
 
         public async Task<RegisterUserOutput> Execute(RegisterUserInput input)
@@ -45,9 +48,9 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
                 };
             }
 
-            //TODO: CRIPTOGRAFAR A SENHA ANTES DE SALVAR NO BANCO
+            var encryptedPassword = AES.Encrypt(input.UserPassword!, AESKey);
 
-            var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, input.UserPassword!);
+            var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, encryptedPassword);
 
             var wasUserInsertedInDataBaseWithSuccess = await _repository.InsertUser(user);
             if (!wasUserInsertedInDataBaseWithSuccess)
@@ -59,7 +62,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
                 };
             }
 
-            var firebaseAuthLink = await RegisterFireBaseUser(user);
+            var firebaseAuthLink = await RegisterFireBaseUser(input);
 
             return new RegisterUserOutput
             {
@@ -68,11 +71,11 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             };
         }
 
-        private async Task<string> RegisterFireBaseUser(UserModel user)
+        private async Task<string> RegisterFireBaseUser(RegisterUserInput user)
         {
             FirebaseAuthProvider firebaseAuthProvider = new FirebaseAuthProvider(new FirebaseConfig(FireBaseApiKey));
 
-            FirebaseAuthLink firebaseAuthLink = await firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(user.Email, user.Password);
+            FirebaseAuthLink firebaseAuthLink = await firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(user.UserEmail, user.UserPassword);
             return firebaseAuthLink.FirebaseToken;
         }
     }
