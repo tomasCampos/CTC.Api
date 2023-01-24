@@ -14,8 +14,10 @@ namespace CTC.Api.Shared
                 return BadRequest(httpResponse);
             if(output.StatusCode == HttpStatusCode.Conflict)
                 return Conflict(httpResponse);
+            if (output.StatusCode == HttpStatusCode.InternalServerError)
+                return StatusCode(500);
 
-            if(output.StatusCode == HttpStatusCode.Unauthorized)
+            if (output.StatusCode == HttpStatusCode.Unauthorized)
                 return Unauthorized();
 
             if(output.StatusCode == HttpStatusCode.OK)

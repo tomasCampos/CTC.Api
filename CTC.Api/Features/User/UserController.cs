@@ -37,7 +37,7 @@ namespace CTC.Api.Features.User
             };
 
             var output = await _registerUserUseCase.Execute(input);
-
+            
             return GetHttpResponse(output, "/user");
         }
     }

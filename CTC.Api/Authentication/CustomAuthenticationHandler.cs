@@ -8,12 +8,12 @@ using System.Text.Encodings.Web;
 
 namespace CTC.Api.Authentication
 {
-    public class FirebaseAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class CustomAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private static readonly string BearerPrefix = "Bearer ";
         private readonly FirebaseApp _firebaseApp;
 
-        public FirebaseAuthenticationHandler(
+        public CustomAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
@@ -50,17 +50,17 @@ namespace CTC.Api.Authentication
         {
             return new AuthenticationTicket(new ClaimsPrincipal(new List<ClaimsIdentity>
             {
-                new ClaimsIdentity(ToClaims(firebaseToken.Claims), nameof(FirebaseAuthenticationHandler))
+                new ClaimsIdentity(ToClaims(firebaseToken.Claims), nameof(CustomAuthenticationHandler))
             }), JwtBearerDefaults.AuthenticationScheme);
         }
 
         private static IEnumerable<Claim>? ToClaims(IReadOnlyDictionary<string, object> claims)
         {
+            //TODO: PEGAR O EMAIL DO CLAIMS E FAZER UM SELECT NO BANCO PARA OBTER O TIPO DE PERMISSÃO DO USUÁRIO
             return new List<Claim>
             {
                 new Claim("id", claims["user_id"].ToString()!),
-                new Claim("email", claims["user_id"].ToString()!),
-                new Claim("name", claims["user_id"].ToString()!),
+                new Claim("email", claims["email"].ToString()!)
             };
         }
     }
