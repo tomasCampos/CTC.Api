@@ -14,5 +14,9 @@
                                                 @user_permission,
                                                 @user_password,
                                                 @person_id);";
+
+        public static string COUNT_USER_BY_EMAIL = @"SELECT COUNT(*)
+                                                    FROM railway.Person p
+                                                    WHERE p.person_email = @person_email";
     }
 }

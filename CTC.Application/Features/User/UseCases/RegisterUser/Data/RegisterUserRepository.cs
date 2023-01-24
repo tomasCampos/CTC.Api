@@ -22,6 +22,11 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
             return await _sqlService.ExecuteWithTransactionAsync(commands);
         }
 
+        public async Task<int> CountUserByEmail(string email)
+        {
+            return await _sqlService.CountAsync(RegisterUserSqlScripts.COUNT_USER_BY_EMAIL, new { person_email = email });
+        }
+
         #region PrivateMethods
 
         private static Dictionary<string, object?> BuildCommands(UserModel model)

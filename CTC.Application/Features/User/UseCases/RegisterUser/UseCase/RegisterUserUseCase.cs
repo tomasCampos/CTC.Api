@@ -35,7 +35,16 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
                 };
             }
 
-            //TODO: DAR UM GET NO USER PELO EMAIL E VERIFICAR SE ELE JA EXISTE, CASO JA EXISTA, RETORNAR CENÁRIO DE CONFLITO (409)
+            var userAlreadyExists = await _repository.CountUserByEmail(input.UserEmail!);
+            if (userAlreadyExists > 0)
+            {
+                return new RegisterUserOutput
+                {
+                    StatusCode = HttpStatusCode.Conflict,
+                    ValidationErrorMessage = $"Já existe um usuário cadastrado com este email: {input.UserEmail}"
+                };
+            }
+
             //TODO: CRIPTOGRAFAR A SENHA ANTES DE SALVAR NO BANCO
 
             var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, input.UserPassword!);
