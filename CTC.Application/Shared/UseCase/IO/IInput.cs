@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
+﻿using CTC.Application.Shared.Request;
 
 namespace CTC.Application.Shared.UseCase.IO
 {

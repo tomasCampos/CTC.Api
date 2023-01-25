@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.GetUser.Data
 {

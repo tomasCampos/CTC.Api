@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
+﻿using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

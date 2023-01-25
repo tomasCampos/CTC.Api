@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
-using CTC.Application.Features.User.UseCases.GetUser.Data;
+﻿using CTC.Application.Features.User.UseCases.GetUser.Data;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Shared.UseCase;
 using System.Threading.Tasks;

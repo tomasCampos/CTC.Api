@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
-using CTC.Application.Shared.Data;
+﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Person;
 using System.Collections.Generic;
 using System.Threading.Tasks;

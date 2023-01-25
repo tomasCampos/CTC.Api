@@ -1,6 +1,5 @@
 ﻿using CTC.Api.Features.User.Contracts;
 using CTC.Api.Shared;
-using CTC.Application.Features.User.Models;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
 using CTC.Application.Shared.UseCase;
@@ -39,7 +38,7 @@ namespace CTC.Api.Features.User
                 request.UserLastName,
                 request.UserPermission,
                 request.UserPassword,
-                UserPermission.Unknown
+                GetRequestUserPermissiomFromClaims()
             );
 
             var output = await _registerUserUseCase.Execute(input);

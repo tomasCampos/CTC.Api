@@ -24,8 +24,10 @@ namespace CTC.Application.Features.Category
             Id = categoryId;
         }
 
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public CategoryModel() { }
+
+        public string? Id { get; set; }
+        public string? Name { get; set; }
 
         //TODO: Refatorar para remover a palavra Category do nome das propriedades
     }

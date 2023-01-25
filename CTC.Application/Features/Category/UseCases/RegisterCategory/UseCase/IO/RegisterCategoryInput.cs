@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
+﻿using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase.IO;
 
 namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO

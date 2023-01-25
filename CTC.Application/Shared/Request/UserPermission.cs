@@ -1,4 +1,4 @@
-﻿namespace CTC.Application.Features.User.Models
+﻿namespace CTC.Application.Shared.Request
 {
     public enum UserPermission
     {

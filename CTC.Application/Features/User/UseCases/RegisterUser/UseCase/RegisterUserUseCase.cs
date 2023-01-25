@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.User.Models;
-using CTC.Application.Features.User.UseCases.RegisterUser.Data;
+﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
@@ -38,8 +37,8 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
                 };
             }
 
-            var userAlreadyExists = await _repository.CountUserByEmail(input.UserEmail!);
-            if (userAlreadyExists > 0)
+            var userAlreadyExists = await _repository.CountUserByEmail(input.UserEmail!) > 0;
+            if (userAlreadyExists)
             {
                 return new RegisterUserOutput
                 {
