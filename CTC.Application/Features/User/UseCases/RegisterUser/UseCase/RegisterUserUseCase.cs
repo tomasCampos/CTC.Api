@@ -49,7 +49,6 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 
             var encryptedPassword = AES.Encrypt(input.UserPassword!, AESKey);
             var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, encryptedPassword);
-
             var wasUserInsertedInDataBaseWithSuccess = await _repository.InsertUser(user);
             if (!wasUserInsertedInDataBaseWithSuccess)
             {
