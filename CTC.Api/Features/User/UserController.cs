@@ -2,6 +2,7 @@
 using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
+using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace CTC.Api.Features.User
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
+            //TODO: ADICIONAR O AUTHORIZE AQUI E PASSAR GetRequestUserPermissiomFromClaims NO LUGAR DE UserPermission.Administrator
             var input = new RegisterUserInput
             (
                 request.UserFirstName,
@@ -38,7 +40,7 @@ namespace CTC.Api.Features.User
                 request.UserLastName,
                 request.UserPermission,
                 request.UserPassword,
-                GetRequestUserPermissiomFromClaims()
+                UserPermission.Administrator
             );
 
             var output = await _registerUserUseCase.Execute(input);
