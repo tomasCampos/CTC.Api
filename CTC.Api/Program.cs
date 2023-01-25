@@ -1,4 +1,5 @@
-using CTC.Api.Authentication;
+using CTC.Api.Auth;
+using CTC.Api.Auth.Services;
 using CTC.Application;
 using FirebaseAdmin;
 using Microsoft.AspNetCore.Authentication;
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton(FirebaseApp.Create());
+builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, (o) => { });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

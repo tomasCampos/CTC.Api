@@ -1,4 +1,5 @@
-﻿using FirebaseAdmin;
+﻿using CTC.Api.Auth.Services;
+using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,21 +7,24 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
-namespace CTC.Api.Authentication
+namespace CTC.Api.Auth
 {
     public class CustomAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private static readonly string BearerPrefix = "Bearer ";
         private readonly FirebaseApp _firebaseApp;
+        private readonly IUserAuthorizationService _userAuthorizationService;
 
         public CustomAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            FirebaseApp firebaseApp) : base(options, logger, encoder, clock)
+            FirebaseApp firebaseApp,
+            IUserAuthorizationService userAuthorizationService) : base(options, logger, encoder, clock)
         {
             _firebaseApp = firebaseApp;
+            _userAuthorizationService = userAuthorizationService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -38,7 +42,7 @@ namespace CTC.Api.Authentication
             try
             {
                 FirebaseToken firebaseToken = await FirebaseAuth.GetAuth(_firebaseApp).VerifyIdTokenAsync(token);
-                return AuthenticateResult.Success(GetAuthenticationTicket(firebaseToken));
+                return AuthenticateResult.Success(await GetAuthenticationTicket(firebaseToken));
             }
             catch (Exception ex)
             {
@@ -46,21 +50,25 @@ namespace CTC.Api.Authentication
             }
         }
 
-        private static AuthenticationTicket GetAuthenticationTicket(FirebaseToken firebaseToken)
+        private async Task<AuthenticationTicket> GetAuthenticationTicket(FirebaseToken firebaseToken)
         {
+            var claims = await ToClaims(firebaseToken.Claims);
             return new AuthenticationTicket(new ClaimsPrincipal(new List<ClaimsIdentity>
             {
-                new ClaimsIdentity(ToClaims(firebaseToken.Claims), nameof(CustomAuthenticationHandler))
+                new ClaimsIdentity(claims, nameof(CustomAuthenticationHandler))
             }), JwtBearerDefaults.AuthenticationScheme);
         }
 
-        private static IEnumerable<Claim>? ToClaims(IReadOnlyDictionary<string, object> claims)
+        private async Task<IEnumerable<Claim>?> ToClaims(IReadOnlyDictionary<string, object> claims)
         {
-            //TODO: PEGAR O EMAIL DO CLAIMS E FAZER UM SELECT NO BANCO PARA OBTER O TIPO DE PERMISSÃO DO USUÁRIO. TENTAR USER CACHE
+            var email = claims["email"].ToString()!;
+            var permission = (int)await _userAuthorizationService.GetUserPermission(email);
+            var permissionClaim = permission.ToString()!;
             return new List<Claim>
             {
                 new Claim("id", claims["user_id"].ToString()!),
-                new Claim("email", claims["email"].ToString()!)
+                new Claim("email", email),
+                new Claim("permission", permissionClaim)
             };
         }
     }

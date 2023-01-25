@@ -5,7 +5,7 @@ namespace CTC.Application.Features.User.Models
 {
     internal sealed class UserModel : PersonModel
     {
-        public UserModel(in string personId, in string firstName, in string email, in string phone, in string document, in string userId, in string lastName, in int permission, in string password)
+        public UserModel(in string userId, in string personId, in string firstName, in string email, in string phone, in string lastName, in string password, in int permission, in string document)
             : base(personId, firstName, email, phone, document)
         {
             if(string.IsNullOrWhiteSpace(userId))
@@ -19,7 +19,7 @@ namespace CTC.Application.Features.User.Models
 
             UserId = userId;
             LastName = lastName;
-            Permission = permission;
+            Permission = (UserPermission)permission;
             Password = password;
         }
 
@@ -35,13 +35,17 @@ namespace CTC.Application.Features.User.Models
 
             UserId = Guid.NewGuid().ToString();
             LastName = lastName;
-            Permission = permission;
+            Permission = (UserPermission)permission;
             Password = password;
         }
 
-        public string UserId { get; set; }
-        public string LastName { get; set; }
-        public int Permission { get; set; }
-        public string Password { get; set; }
+        public UserModel() : base()
+        { 
+        }
+
+        public string? UserId { get; set; }
+        public string? LastName { get; set; }
+        public UserPermission? Permission { get; set; }
+        public string? Password { get; set; }
     }
 }

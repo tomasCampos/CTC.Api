@@ -1,4 +1,5 @@
-﻿using CTC.Application.Shared.UseCase.IO;
+﻿using CTC.Application.Features.User.Models;
+using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -26,6 +27,11 @@ namespace CTC.Api.Shared
                 return Created(uri!, httpResponse);
 
             return NoContent();
+        }
+
+        protected UserPermission GetRequestUserPermissiomFromClaims()
+        {
+            return (UserPermission)Convert.ToInt32(this.User.Claims.ToArray()[2].Value);
         }
     }
 }

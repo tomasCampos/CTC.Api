@@ -51,7 +51,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
                     {
                         user_id = model.UserId,
                         user_last_name = model.LastName,
-                        user_permission = model.Permission,
+                        user_permission = (int)model.Permission,
                         user_password = model.Password,
                         person_id = model.PersonId
                     }
