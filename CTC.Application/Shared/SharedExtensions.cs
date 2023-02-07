@@ -1,4 +1,5 @@
-﻿using CTC.Application.Shared.Data;
+﻿using CTC.Application.Shared.Authorization;
+using CTC.Application.Shared.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Shared
@@ -9,6 +10,7 @@ namespace CTC.Application.Shared
         {
             services.AddScoped<ISqlService, SqlService>();
             services.AddSingleton<IDataContext, MySqlDataContext>();
+            services.AddSingleton<IUseCaseAuthorizationService, UseCaseAuthorizationService>();
             return services;
         }
     }

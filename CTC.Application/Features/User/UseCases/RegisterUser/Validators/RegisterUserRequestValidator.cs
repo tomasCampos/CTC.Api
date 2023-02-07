@@ -18,7 +18,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
                 errors.Add("A permissão do usuário deve ser informada");
             if (string.IsNullOrWhiteSpace(request.UserPassword))
                 errors.Add("A senha do usuário deve ser informada");
-            if (request.UserPassword!.Length > 6)
+            if (request.UserPassword!.Length < 6)
                 errors.Add("A senha do usuário deve conter pelo menos 6 dígitos");
             if (string.IsNullOrWhiteSpace(request.UserFirstName))
                 errors.Add("O primeiro nome do usuário deve ser informado");
@@ -26,7 +26,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
                 errors.Add("O E-mail do usuário deve ser informado");
             if (!Regex.IsMatch(request.UserEmail, ValidEmailRegex, RegexOptions.IgnoreCase))
                 errors.Add("O E-mail do usuário não é válido");
-            if (!string.IsNullOrWhiteSpace(request.UserDocument) && request.UserDocument.Length < 11)
+            if (string.IsNullOrWhiteSpace(request.UserDocument) || request.UserDocument.Length < 11)
                 errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");
 
             return new RequestValidationModel(errors);

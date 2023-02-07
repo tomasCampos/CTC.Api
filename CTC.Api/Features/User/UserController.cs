@@ -30,7 +30,6 @@ namespace CTC.Api.Features.User
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
-            //TODO: ADICIONAR O AUTHORIZE AQUI E PASSAR GetRequestUserPermissiomFromClaims NO LUGAR DE UserPermission.Administrator
             var input = new RegisterUserInput
             (
                 request.UserFirstName,
@@ -40,7 +39,7 @@ namespace CTC.Api.Features.User
                 request.UserLastName,
                 request.UserPermission,
                 request.UserPassword,
-                UserPermission.Administrator
+                GetRequestUserPermissiomFromClaims()
             );
 
             var output = await _registerUserUseCase.Execute(input);

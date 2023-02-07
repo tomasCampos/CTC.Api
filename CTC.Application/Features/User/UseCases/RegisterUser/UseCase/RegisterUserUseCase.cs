@@ -1,5 +1,8 @@
-﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
+﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
+using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
+using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
+using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
@@ -14,19 +17,31 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
     {
         private readonly IRequestValidator<RegisterUserInput> _validator;
         private readonly IRegisterUserRepository _repository;
+        private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly string FireBaseApiKey;
         private readonly string AESKey;
 
-        public RegisterUserUseCase(IRequestValidator<RegisterUserInput> validator, IRegisterUserRepository repository, IConfiguration configuration)
+        public RegisterUserUseCase(IRequestValidator<RegisterUserInput> validator, IRegisterUserRepository repository, IConfiguration configuration, IUseCaseAuthorizationService useCaseAuthorizationService)
         {
             _validator = validator;
             _repository = repository;
+            _useCaseAuthorizationService = useCaseAuthorizationService;
             FireBaseApiKey = configuration["FireBaseApiKey"]!;
             AESKey = configuration["CypherAESKey"]!;
         }
 
         public async Task<RegisterUserOutput> Execute(RegisterUserInput input)
         {
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterUserUseCase), input.RequestUserPermission);
+            if (!isAuthorized)
+            {
+                return new RegisterUserOutput
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ValidationErrorMessage = "Falta de permissão para realizar tal ação"
+                };
+            }
+
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
             {
