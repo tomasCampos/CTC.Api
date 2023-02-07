@@ -1,7 +1,5 @@
-﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
-using CTC.Application.Features.User.UseCases.GetUser.Data;
+﻿using CTC.Application.Features.User.UseCases.GetUser.Data;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
-using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using System.Net;
