@@ -20,8 +20,10 @@ namespace CTC.Api.Shared
 
             if (output.StatusCode == HttpStatusCode.Unauthorized)
                 return Unauthorized();
+            if (output.StatusCode == HttpStatusCode.Forbidden)
+                return Forbid();
 
-            if(output.StatusCode == HttpStatusCode.OK)
+            if (output.StatusCode == HttpStatusCode.OK)
                 return Ok(httpResponse);
             if(output.StatusCode == HttpStatusCode.Created)
                 return Created(uri!, httpResponse);
