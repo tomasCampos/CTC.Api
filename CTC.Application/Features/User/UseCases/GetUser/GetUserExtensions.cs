@@ -2,6 +2,7 @@
 using CTC.Application.Features.User.UseCases.GetUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.User.UseCases.GetUser
@@ -10,7 +11,7 @@ namespace CTC.Application.Features.User.UseCases.GetUser
     {
         public static IServiceCollection AddGetUser(this IServiceCollection services)
         {
-            services.AddScoped<IUseCase<IGetUserInput, GetUserOutput>, GetUserUseCase>();
+            services.AddScoped<IUseCase<IGetUserInput, Output>, GetUserUseCase>();
             services.AddScoped<IGetUserRepository, GetUserRepository>();
             return services;
         }

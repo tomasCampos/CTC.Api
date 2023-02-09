@@ -1,9 +1,9 @@
 ﻿using CTC.Api.Features.User.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
-using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
-using CTC.Application.Shared.Request;
+using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -14,15 +14,16 @@ namespace CTC.Api.Features.User
     [Route("[controller]")]
     public sealed class UserController : BaseController
     {
-        private readonly IUseCase<RegisterUserInput, RegisterUserOutput> _registerUserUseCase;
-        private readonly IUseCase<IGetUserInput, GetUserOutput> _getUserUseCase;
+        private readonly IUseCase<RegisterUserInput, Output> _registerUserUseCase;
+        private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
 
-        public UserController(IUseCase<RegisterUserInput, RegisterUserOutput> registerUserUseCase, IUseCase<IGetUserInput, GetUserOutput> getUserUseCase)
+        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, IUseCase<IGetUserInput, Output> getUserUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
             _getUserUseCase = getUserUseCase;
         }
 
+        [Authorize]
         [HttpPost()]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

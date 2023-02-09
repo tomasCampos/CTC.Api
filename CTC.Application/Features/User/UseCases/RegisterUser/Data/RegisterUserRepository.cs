@@ -21,9 +21,9 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
             return await _sqlService.ExecuteWithTransactionAsync(commands);
         }
 
-        public async Task<int> CountUserByEmail(string email)
+        public async Task<int> VerifyIfUserAlreadyExists(string email, string phone, string document)
         {
-            return await _sqlService.CountAsync(RegisterUserSqlScripts.COUNT_USER_BY_EMAIL, new { person_email = email });
+            return await _sqlService.CountAsync(RegisterUserSqlScripts.COUNT_USER_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
         }
 
         #region PrivateMethods

@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
+﻿using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
 using CTC.Application.Shared.Request;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

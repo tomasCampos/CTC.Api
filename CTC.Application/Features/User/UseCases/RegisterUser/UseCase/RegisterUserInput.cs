@@ -1,7 +1,7 @@
 ﻿using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase.IO;
 
-namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO
+namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 {
     public sealed class RegisterUserInput : IInput
     {

@@ -2,7 +2,7 @@
 
 namespace CTC.Application.Shared.UseCase.IO
 {
-    public interface IOutput
+    public class Output
     {
         public HttpStatusCode StatusCode { get; set; }
         public string? ValidationErrorMessage { get; set; }

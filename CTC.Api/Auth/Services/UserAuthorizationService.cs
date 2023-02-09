@@ -1,16 +1,17 @@
 ﻿using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 
 namespace CTC.Api.Auth.Services
 {
     public class UserAuthorizationService : IUserAuthorizationService
     {
-        private readonly IUseCase<IGetUserInput, GetUserOutput> _getUserUseCase;
+        private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
 
         private static readonly IDictionary<string, UserPermission> UserPermissionsCache = new Dictionary<string, UserPermission>();
 
-        public UserAuthorizationService(IUseCase<IGetUserInput, GetUserOutput> getUserUseCase)
+        public UserAuthorizationService(IUseCase<IGetUserInput, Output> getUserUseCase)
         {
             _getUserUseCase = getUserUseCase;
         }

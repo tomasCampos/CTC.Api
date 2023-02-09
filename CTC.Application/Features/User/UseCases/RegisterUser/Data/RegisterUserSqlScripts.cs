@@ -15,8 +15,13 @@
                                                 @user_password,
                                                 @person_id);";
 
-        public static string COUNT_USER_BY_EMAIL = @"SELECT COUNT(*)
-                                                    FROM railway.Person p
-                                                    WHERE p.person_email = @person_email";
+        public static string COUNT_USER_BY_EMAIL_PHONE_DOCUMENT = @"SELECT 
+	                                                    COUNT(*)
+                                                    FROM 
+	                                                    railway.Person p
+                                                    WHERE 
+	                                                    p.person_email = @person_email
+                                                        OR p.person_phone = @person_phone
+                                                        OR p.person_document = @person_document";
     }
 }

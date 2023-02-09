@@ -1,4 +1,4 @@
-﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
+﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
 using CTC.Application.Shared.Request;
 using System.Collections.Generic;
 

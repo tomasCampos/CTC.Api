@@ -1,14 +1,14 @@
 ﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.Data;
-using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
 {
-    internal sealed class RegisterCategoryUseCase : IUseCase<RegisterCategoryInput, RegisterCategoryOutput>
+    internal sealed class RegisterCategoryUseCase : IUseCase<RegisterCategoryInput, Output>
     {
         private readonly IRequestValidator<RegisterCategoryInput> _validator;
         private readonly IRegisterCategoryRepository _repository;
@@ -21,12 +21,12 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
             _useCaseAuthorizationService = useCaseAuthorizationService;
         }
 
-        public async Task<RegisterCategoryOutput> Execute(RegisterCategoryInput input)
+        public async Task<Output> Execute(RegisterCategoryInput input)
         {
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterCategoryUseCase), input.RequestUserPermission);
             if (!isAuthorized)
             {
-                return new RegisterCategoryOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                     ValidationErrorMessage = "Falta de permissão para realizar tal ação"
@@ -36,7 +36,7 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
             {
-                return new RegisterCategoryOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     ValidationErrorMessage = validationResult.ErrorMessage
@@ -45,7 +45,7 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
 
             if (await _repository.CountCategoryByName(input.CategoryName!) > 0)
             {
-                return new RegisterCategoryOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.Conflict,
                     ValidationErrorMessage = "Já existe uma categoria com esse nome."
@@ -54,7 +54,7 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
 
             var category = new CategoryModel(input.CategoryName!);
             await _repository.InsertCategory(category);
-            return new RegisterCategoryOutput
+            return new Output
             {
                 StatusCode = HttpStatusCode.Created
             };

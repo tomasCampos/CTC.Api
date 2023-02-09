@@ -1,7 +1,8 @@
 using CTC.Api.Features.Category.Contracts;
 using CTC.Api.Shared;
-using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
+using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -12,9 +13,9 @@ namespace CTC.Api.Features.Category
     [Route("[controller]")]
     public sealed class CategoryController : BaseController
     {
-        private readonly IUseCase<RegisterCategoryInput, RegisterCategoryOutput> _registerCategoryUseCase;
+        private readonly IUseCase<RegisterCategoryInput, Output> _registerCategoryUseCase;
 
-        public CategoryController(IUseCase<RegisterCategoryInput, RegisterCategoryOutput> registerCategoryUseCase)
+        public CategoryController(IUseCase<RegisterCategoryInput, Output> registerCategoryUseCase)
         {
             _registerCategoryUseCase = registerCategoryUseCase;
         }

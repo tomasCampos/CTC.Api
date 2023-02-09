@@ -1,11 +1,9 @@
-﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase.IO;
-using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
-using CTC.Application.Features.User.UseCases.RegisterUser.Data;
-using CTC.Application.Features.User.UseCases.RegisterUser.UseCase.IO;
+﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
+using CTC.Application.Shared.UseCase.IO;
 using Firebase.Auth;
 using Microsoft.Extensions.Configuration;
 using System.Net;
@@ -13,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 {
-    internal sealed class RegisterUserUseCase : IUseCase<RegisterUserInput, RegisterUserOutput>
+    internal sealed class RegisterUserUseCase : IUseCase<RegisterUserInput, Output>
     {
         private readonly IRequestValidator<RegisterUserInput> _validator;
         private readonly IRegisterUserRepository _repository;
@@ -30,12 +28,12 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             AESKey = configuration["CypherAESKey"]!;
         }
 
-        public async Task<RegisterUserOutput> Execute(RegisterUserInput input)
+        public async Task<Output> Execute(RegisterUserInput input)
         {
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterUserUseCase), input.RequestUserPermission);
             if (!isAuthorized)
             {
-                return new RegisterUserOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                     ValidationErrorMessage = "Falta de permissão para realizar tal ação"
@@ -45,20 +43,20 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
             {
-                return new RegisterUserOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     ValidationErrorMessage = validationResult.ErrorMessage
                 };
             }
 
-            var userAlreadyExists = await _repository.CountUserByEmail(input.UserEmail!) > 0;
+            var userAlreadyExists = await _repository.VerifyIfUserAlreadyExists(input.UserEmail!, input.UserPhone!, input.UserDocument!) > 0;
             if (userAlreadyExists)
             {
-                return new RegisterUserOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.Conflict,
-                    ValidationErrorMessage = $"Já existe um usuário cadastrado com este email: {input.UserEmail}"
+                    ValidationErrorMessage = $"Já existe um usuário cadastrado com o email, telefone ou documento informados"
                 };
             }
 
@@ -67,7 +65,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             var wasUserInsertedInDataBaseWithSuccess = await _repository.InsertUser(user);
             if (!wasUserInsertedInDataBaseWithSuccess)
             {
-                return new RegisterUserOutput
+                return new Output
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ValidationErrorMessage = "Não foi possível cadastrar o usuário. Tente novamente mais tarde."
@@ -76,7 +74,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 
             var firebaseAuthLink = await RegisterFireBaseUser(input);
 
-            return new RegisterUserOutput
+            return new Output
             {
                 StatusCode = HttpStatusCode.Created,
                 Body = new { AuthToken = firebaseAuthLink }

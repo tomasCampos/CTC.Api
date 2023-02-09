@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace CTC.Application.Shared.UseCase
 {
-    public interface IUseCase<TInput, TOutput> where TInput : IInput where TOutput : IOutput
+    public interface IUseCase<TInput, TOutput> where TInput : IInput where TOutput : Output
     {
-        Task<TOutput> Execute(TInput input);
+        Task<Output> Execute(TInput input);
     }
 }
