@@ -3,7 +3,6 @@ using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.GetUser.UseCase
@@ -23,26 +22,14 @@ namespace CTC.Application.Features.User.UseCases.GetUser.UseCase
         {
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(GetUserUseCase), input.RequestUserPermission);
             if (!isAuthorized)
-            {
-                return new Output
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ValidationErrorMessage = "Falta de permissão para realizar tal ação"
-                };
-            }
+                return Output.CreateForbiddenResult();
 
             UserModel? user = null;
 
             if (input.GetUserInputParameterType == GetUserInputParameterType.Email)
-            {
                 user = await _userRepository.GetUserByEmail(input.Parameter!);
-            }
 
-            return new Output
-            {
-                StatusCode = System.Net.HttpStatusCode.OK,
-                Body = user
-            };
+            return Output.CreateOkResult(user);
         }
     }
 }

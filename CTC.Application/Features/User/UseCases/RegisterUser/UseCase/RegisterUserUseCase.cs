@@ -32,53 +32,25 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         {
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterUserUseCase), input.RequestUserPermission);
             if (!isAuthorized)
-            {
-                return new Output
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ValidationErrorMessage = "Falta de permissão para realizar tal ação"
-                };
-            }
+                return Output.CreateForbiddenResult();
 
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
-            {
-                return new Output
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    ValidationErrorMessage = validationResult.ErrorMessage
-                };
-            }
+                return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
             var userAlreadyExists = await _repository.VerifyIfUserAlreadyExists(input.UserEmail!, input.UserPhone!, input.UserDocument!) > 0;
             if (userAlreadyExists)
-            {
-                return new Output
-                {
-                    StatusCode = HttpStatusCode.Conflict,
-                    ValidationErrorMessage = $"Já existe um usuário cadastrado com o email, telefone ou documento informados"
-                };
-            }
+                return Output.CreateConflictResult("Já existe um usuário cadastrado com o email, telefone ou documento informados");
 
             var encryptedPassword = AES.Encrypt(input.UserPassword!, AESKey);
             var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, encryptedPassword);
             var wasUserInsertedInDataBaseWithSuccess = await _repository.InsertUser(user);
             if (!wasUserInsertedInDataBaseWithSuccess)
-            {
-                return new Output
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ValidationErrorMessage = "Não foi possível cadastrar o usuário. Tente novamente mais tarde."
-                };
-            }
+                return Output.CreateInternalErrorResult("Não foi possível cadastrar o usuário. Tente novamente mais tarde.");
 
             var firebaseAuthLink = await RegisterFireBaseUser(input);
 
-            return new Output
-            {
-                StatusCode = HttpStatusCode.Created,
-                Body = new { AuthToken = firebaseAuthLink }
-            };
+            return Output.CreateCreatedResult(new { AuthToken = firebaseAuthLink });
         }
 
         private async Task<string> RegisterFireBaseUser(RegisterUserInput user)
