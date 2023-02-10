@@ -6,7 +6,6 @@ using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Firebase.Auth;
 using Microsoft.Extensions.Configuration;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase

@@ -1,4 +1,5 @@
-﻿using CTC.Application.Features.User.UseCases.GetUser;
+﻿using CTC.Application.Features.User.UseCases.AuthorizeUser;
+using CTC.Application.Features.User.UseCases.GetUser;
 using CTC.Application.Features.User.UseCases.RegisterUser;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace CTC.Application.Features.User
         {
             services.AddRegisterUser();
             services.AddGetUser();
+            services.AddAuthorizeUser();
             return services;
         }
     }

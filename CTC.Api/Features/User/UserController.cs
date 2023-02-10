@@ -1,5 +1,6 @@
 ﻿using CTC.Api.Features.User.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
 using CTC.Application.Shared.UseCase;
@@ -16,11 +17,13 @@ namespace CTC.Api.Features.User
     {
         private readonly IUseCase<RegisterUserInput, Output> _registerUserUseCase;
         private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
+        private readonly IUseCase<AuthorizeUserInput, Output> _authorizeUserUseCase;
 
-        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, IUseCase<IGetUserInput, Output> getUserUseCase)
+        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, IUseCase<IGetUserInput, Output> getUserUseCase, IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
             _getUserUseCase = getUserUseCase;
+            _authorizeUserUseCase = authorizeUserUseCase;
         }
 
         [Authorize]
@@ -28,6 +31,7 @@ namespace CTC.Api.Features.User
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
@@ -50,11 +54,23 @@ namespace CTC.Api.Features.User
         [Authorize]
         [HttpGet("{userEmail}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetUser([FromRoute] string userEmail)
         {
             var input = new GetUserByEmailInput(userEmail, GetRequestUserPermissiomFromClaims());
             var output = await _getUserUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [HttpPost("Authorize")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> AuthorizeUser([FromBody] AuthorizeUserRequest request)
+        {
+            var input = new AuthorizeUserInput(request.UserEmail, request.UserPassword);
+            var output = await _authorizeUserUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }
