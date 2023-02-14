@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// For running in Railway
+var portVar = Environment.GetEnvironmentVariable("PORT");
+if (portVar is { Length: > 0 } && int.TryParse(portVar, out int port))
+{
+    builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(port); });
+}    
+
 builder.Services.AddControllers();
 builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
