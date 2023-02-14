@@ -1,0 +1,39 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:8464",
+      "sslPort": 44311
+    }
+  },
+  "profiles": {
+    "CTC.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7034;http://localhost:5034",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_APPLICATION_CREDENTIALS": "./firebase-config.json",
+        "MySqlConnectionString": "Server=containers-us-west-45.railway.app;Port=7325;Database=railway;Uid=root;Pwd=JlkstkpJh6F05b6EuMUN;charset=utf8;",
+        "FireBaseApiKey": "AIzaSyBCZFbbv25GX2n8GvNfjKIROGRQ4VSdlIE",
+        "CypherAESKey": "e8affb0e-7408-474f-a3d8-84b4d55b60fc"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_APPLICATION_CREDENTIALS": "./firebase-config.json",
+        "MySqlConnectionString": "Server=containers-us-west-45.railway.app;Port=7325;Database=railway;Uid=root;Pwd=JlkstkpJh6F05b6EuMUN;charset=utf8;",
+        "FireBaseApiKey": "AIzaSyBCZFbbv25GX2n8GvNfjKIROGRQ4VSdlIE",
+        "CypherAESKey": "e8affb0e-7408-474f-a3d8-84b4d55b60fc"
+      }
+    }
+  }
+}
