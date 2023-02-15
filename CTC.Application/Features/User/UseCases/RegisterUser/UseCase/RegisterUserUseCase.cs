@@ -6,6 +6,8 @@ using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Firebase.Auth;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Configuration;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
@@ -18,13 +20,20 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         private readonly string FireBaseApiKey;
         private readonly string AESKey;
 
+        private const string FireBaseApiKeyEnvironmentVariableName = "FIRE_BASE_API_KEY";
+        private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
+
         public RegisterUserUseCase(IRequestValidator<RegisterUserInput> validator, IRegisterUserRepository repository, IConfiguration configuration, IUseCaseAuthorizationService useCaseAuthorizationService)
         {
             _validator = validator;
             _repository = repository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
-            FireBaseApiKey = configuration["FireBaseApiKey"]!;
-            AESKey = configuration["CypherAESKey"]!;
+
+            FireBaseApiKey = Environment.GetEnvironmentVariable(FireBaseApiKeyEnvironmentVariableName)
+                ?? throw new ConfigurationErrorsException($"Missing environment variable named {FireBaseApiKeyEnvironmentVariableName}");
+
+            AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
+                ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
         }
 
         public async Task<Output> Execute(RegisterUserInput input)

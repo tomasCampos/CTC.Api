@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace CTC.Application.Shared.UseCase.IO
 {
@@ -45,6 +46,11 @@ namespace CTC.Application.Shared.UseCase.IO
         public static Output CreateInternalErrorResult(in string message)
         {
             return new Output(HttpStatusCode.InternalServerError, message, null);
+        }
+
+        internal static Output CreateNotFoundResult()
+        {
+            return new Output(HttpStatusCode.NotFound, null, null);
         }
     }
 }

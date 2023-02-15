@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using MySqlConnector;
+﻿using MySqlConnector;
+using System;
+using System.Configuration;
 using System.Data;
 
 namespace CTC.Application.Shared.Data
@@ -8,9 +9,12 @@ namespace CTC.Application.Shared.Data
     {
         private readonly string _connectionString;
 
-        public MySqlDataContext(IConfiguration configuration)
+        private const string MySqlConnectionStringEnvironmentVariableName = "MY_SQL_CONNECTION_STRING";
+
+        public MySqlDataContext()
         {
-            _connectionString = configuration["MySqlConnectionString"]!;
+            _connectionString = Environment.GetEnvironmentVariable(MySqlConnectionStringEnvironmentVariableName) 
+                ?? throw new ConfigurationErrorsException($"Missing environment variable named: {MySqlConnectionStringEnvironmentVariableName}");
         }
 
         public IDbConnection GetConnection()

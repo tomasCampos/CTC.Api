@@ -29,6 +29,9 @@ namespace CTC.Application.Features.User.UseCases.GetUser.UseCase
             if (input.GetUserInputParameterType == GetUserInputParameterType.Email)
                 user = await _userRepository.GetUserByEmail(input.Parameter!);
 
+            if(user == null)
+                return Output.CreateNotFoundResult();
+
             return Output.CreateOkResult(user);
         }
     }

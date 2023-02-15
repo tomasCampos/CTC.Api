@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Shared.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.GetUser.Data
@@ -14,7 +15,8 @@ namespace CTC.Application.Features.User.UseCases.GetUser.Data
 
         public async Task<UserModel> GetUserByEmail(string email)
         {
-            return await _sqlService.SelectSingleAsync<UserModel>(GetUserSqlScripts.GetUserByEmail, new { person_email = email });
+            var user = await _sqlService.SelectAsync<UserModel>(GetUserSqlScripts.GetUserByEmail, new { person_email = email });
+            return user.FirstOrDefault();
         }
     }
 }
