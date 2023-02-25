@@ -2,7 +2,7 @@
 {
     internal static class PersonSqlScripts
     {
-        public static string InsertPersonSql = @"INSERT INTO railway.Person
+        public static string InsertPersonSql = @"INSERT INTO Person
                                                 (`person_id`,
                                                 `person_first_name`,
                                                 `person_email`,
