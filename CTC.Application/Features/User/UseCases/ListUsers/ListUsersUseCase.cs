@@ -9,6 +9,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers
         public Task<Output> Execute(QueryInput input)
         {
             //TODO: Chamar repositório para buscar usuarios paginados
+            //TODO: verificar permissao do usuario (só admin pode)
             throw new System.NotImplementedException();
         }
     }
