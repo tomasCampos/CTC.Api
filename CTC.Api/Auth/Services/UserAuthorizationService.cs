@@ -1,5 +1,5 @@
 ﻿using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
-using CTC.Application.Shared.Request;
+using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 

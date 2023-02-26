@@ -3,6 +3,7 @@ using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
+using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +50,16 @@ namespace CTC.Api.Features.User
 
             var output = await _registerUserUseCase.Execute(input);
             return GetHttpResponse(output, "/user");
+        }
+
+        [Authorize]
+        [HttpGet("")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ListUsers([FromQuery] QueryRequest request)
+        {
+            return Ok();
         }
 
         [Authorize]

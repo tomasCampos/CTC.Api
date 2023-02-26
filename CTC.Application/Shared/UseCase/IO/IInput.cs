@@ -1,4 +1,4 @@
-﻿using CTC.Application.Shared.Request;
+﻿using CTC.Application.Shared.Authorization;
 
 namespace CTC.Application.Shared.UseCase.IO
 {

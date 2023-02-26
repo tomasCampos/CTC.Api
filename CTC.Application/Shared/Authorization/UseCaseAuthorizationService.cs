@@ -1,5 +1,4 @@
-﻿using CTC.Application.Shared.Request;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CTC.Application.Shared.Authorization
 {

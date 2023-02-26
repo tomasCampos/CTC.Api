@@ -1,5 +1,5 @@
-﻿using CTC.Application.Shared.Person;
-using CTC.Application.Shared.Request;
+﻿using CTC.Application.Shared.Authorization;
+using CTC.Application.Shared.Person;
 using System;
 
 namespace CTC.Application.Features.User
