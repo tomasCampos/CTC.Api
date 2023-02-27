@@ -2,6 +2,7 @@
 using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
+using CTC.Application.Features.User.UseCases.ListUsers.UseCase;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
@@ -19,12 +20,17 @@ namespace CTC.Api.Features.User
         private readonly IUseCase<RegisterUserInput, Output> _registerUserUseCase;
         private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
         private readonly IUseCase<AuthorizeUserInput, Output> _authorizeUserUseCase;
+        private readonly IUseCase<ListUsersUseCaseInput, Output> _listUsersUseCase;
 
-        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, IUseCase<IGetUserInput, Output> getUserUseCase, IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase)
+        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, 
+                            IUseCase<IGetUserInput, Output> getUserUseCase, 
+                            IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase, 
+                            IUseCase<ListUsersUseCaseInput, Output> listUsersUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
             _getUserUseCase = getUserUseCase;
             _authorizeUserUseCase = authorizeUserUseCase;
+            _listUsersUseCase = listUsersUseCase;
         }
 
         [Authorize]
@@ -59,7 +65,10 @@ namespace CTC.Api.Features.User
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> ListUsers([FromQuery] QueryRequest request)
         {
-            return Ok();
+            //TODO: request nao ta pegando os parametros. Arrumar
+            var input = new ListUsersUseCaseInput(request, GetRequestUserPermissiomFromClaims());
+            var output = await _listUsersUseCase.Execute(input);
+            return GetHttpResponse(output);
         }
 
         [Authorize]

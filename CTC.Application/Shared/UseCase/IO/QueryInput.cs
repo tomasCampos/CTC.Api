@@ -3,7 +3,7 @@ using CTC.Application.Shared.Request;
 
 namespace CTC.Application.Shared.UseCase.IO
 {
-    internal sealed class QueryInput : IInput
+    public abstract class QueryInput : IInput
     {
         public QueryInput(QueryRequest request, in UserPermission requestUserPermission)
         {

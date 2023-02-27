@@ -1,7 +1,5 @@
 ﻿using CTC.Application.Shared.Data;
-using CTC.Application.Shared.Data.Pagination;
 using CTC.Application.Shared.Request;
-using System;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.ListUsers.Data
@@ -15,12 +13,12 @@ namespace CTC.Application.Features.User.UseCases.ListUsers.Data
             _sqlService = sqlService;
         }
 
-        public Task<PaginatedQueryResult<UserModel>> ListUsers(QueryRequest queryParams)
+        public async Task<PaginatedQueryResult<UserModel>> ListUsers(QueryRequest queryParams)
         {
-            //TODO: Fazer consulta paginada no banco de dados
-            var paginationFilters = PaginationSqlScript.GetLimitParameters(queryParams.PageNumber, queryParams.PageSize);
+            var result = await _sqlService.SelectPaginated<UserModel>(queryParams, ListUsersSqlScripts.ListUsersSelectStatement, ListUsersSqlScripts.ListUsersFromAndJoinsStatements,
+                                    ListUsersSqlScripts.ListUsersWhereStatement, new { search_param = queryParams.SearchParam});
 
-            throw new NotImplementedException();
+            return result;
         }
     }
 }

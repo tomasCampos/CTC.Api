@@ -1,5 +1,5 @@
-﻿using Dapper;
-using System;
+﻿using CTC.Application.Shared.Request;
+using Dapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -64,6 +64,21 @@ namespace CTC.Application.Shared.Data
 
             transaction.Commit();
             return true;
+        }
+
+        public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "", object? param = null) where T : class
+        {
+            var sqlCount = string.Format("SELECT COUNT(*) {0} {1}", fromAndJoinsStatements, whereStatement);
+            var startRow = queryRequest.PageSize * (queryRequest.PageNumber - 1);
+            var limitStatement = $"LIMIT {startRow}, {queryRequest.PageSize}";
+            var sqlQuery = string.Format(selectStatement, fromAndJoinsStatements, whereStatement, limitStatement);
+
+            using var connection = _context.GetConnection();
+            var count = await connection.QueryFirstAsync<int>(sqlCount, param);
+            var data = await connection.QueryAsync<T>(sqlQuery, param);
+
+            var result = new PaginatedQueryResult<T>(data, count);
+            return result;
         }
     }
 }

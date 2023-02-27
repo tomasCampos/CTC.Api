@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CTC.Application.Shared.Data.Pagination
+namespace CTC.Application.Shared.Data
 {
     internal sealed class PaginatedQueryResult<T> where T : class
     {

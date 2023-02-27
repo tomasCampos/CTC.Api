@@ -13,7 +13,7 @@
             SearchParam = string.Empty;
         }
 
-        protected QueryRequest(in int pageNumber, in int pageSize, in string searchParam)
+        protected QueryRequest(int pageNumber, int pageSize, string searchParam)
         {
             PageNumber = pageNumber < 1 ? 1 : pageNumber;
             PageSize = pageSize > 10 ? 10 : pageSize;

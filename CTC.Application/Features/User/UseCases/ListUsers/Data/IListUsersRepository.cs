@@ -1,4 +1,4 @@
-﻿using CTC.Application.Shared.Data.Pagination;
+﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Request;
 using System.Threading.Tasks;
 
