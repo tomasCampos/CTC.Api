@@ -11,6 +11,6 @@ namespace CTC.Application.Shared.Data
         Task<int> CountAsync(string sql, object @params);
         Task<int> ExecuteAsync(string sql, object @params);
         Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands);
-        Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "", object? param = null) where T : class;
+        Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "") where T : class;
     }
 }

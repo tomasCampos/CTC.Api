@@ -59,13 +59,13 @@ namespace CTC.Api.Features.User
         }
 
         [Authorize]
-        [HttpGet("")]
+        [HttpGet()]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> ListUsers([FromQuery] QueryRequest request)
+        public async Task<IActionResult> ListUsers([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
         {
-            //TODO: request nao ta pegando os parametros. Arrumar
+            var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
             var input = new ListUsersUseCaseInput(request, GetRequestUserPermissiomFromClaims());
             var output = await _listUsersUseCase.Execute(input);
             return GetHttpResponse(output);

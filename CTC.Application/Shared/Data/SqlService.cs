@@ -66,16 +66,20 @@ namespace CTC.Application.Shared.Data
             return true;
         }
 
-        public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "", object? param = null) where T : class
+        public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "") where T : class
         {
+            if (queryRequest.SearchParam == null)
+                whereStatement = string.Empty;
+
             var sqlCount = string.Format("SELECT COUNT(*) {0} {1}", fromAndJoinsStatements, whereStatement);
             var startRow = queryRequest.PageSize * (queryRequest.PageNumber - 1);
             var limitStatement = $"LIMIT {startRow}, {queryRequest.PageSize}";
             var sqlQuery = string.Format(selectStatement, fromAndJoinsStatements, whereStatement, limitStatement);
 
             using var connection = _context.GetConnection();
-            var count = await connection.QueryFirstAsync<int>(sqlCount, param);
-            var data = await connection.QueryAsync<T>(sqlQuery, param);
+            object? searchParam = queryRequest.SearchParam == null ? null : new { search_param = queryRequest.SearchParam }; 
+            var count = await connection.QueryFirstAsync<int>(sqlCount, searchParam);
+            var data = await connection.QueryAsync<T>(sqlQuery, searchParam);
 
             var result = new PaginatedQueryResult<T>(data, count);
             return result;
