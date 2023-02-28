@@ -9,7 +9,7 @@
         private QueryRequest(in int pageNumber, in int pageSize, in string? searchParam)
         {
             PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            PageSize = pageSize > 10 ? 10 : pageSize;
+            PageSize = pageSize > 10 || pageSize == 0 ? 10 : pageSize;
             SearchParam = searchParam;
         }
 

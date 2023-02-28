@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Shared.Request;
 using Dapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Shared.Data
@@ -68,8 +69,11 @@ namespace CTC.Application.Shared.Data
 
         public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "") where T : class
         {
+            selectStatement += " {0} {1} {2}";
             if (queryRequest.SearchParam == null)
                 whereStatement = string.Empty;
+            else
+                whereStatement = whereStatement.Replace("@search_param", queryRequest.SearchParam);
 
             var sqlCount = string.Format("SELECT COUNT(*) {0} {1}", fromAndJoinsStatements, whereStatement);
             var startRow = queryRequest.PageSize * (queryRequest.PageNumber - 1);
@@ -77,9 +81,8 @@ namespace CTC.Application.Shared.Data
             var sqlQuery = string.Format(selectStatement, fromAndJoinsStatements, whereStatement, limitStatement);
 
             using var connection = _context.GetConnection();
-            object? searchParam = queryRequest.SearchParam == null ? null : new { search_param = queryRequest.SearchParam }; 
-            var count = await connection.QueryFirstAsync<int>(sqlCount, searchParam);
-            var data = await connection.QueryAsync<T>(sqlQuery, searchParam);
+            var count = await connection.QueryFirstAsync<int>(sqlCount);
+            var data = await connection.QueryAsync<T>(sqlQuery);
 
             var result = new PaginatedQueryResult<T>(data, count);
             return result;

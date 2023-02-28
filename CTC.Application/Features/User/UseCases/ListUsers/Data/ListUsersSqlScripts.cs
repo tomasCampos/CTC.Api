@@ -11,10 +11,7 @@
 											u.user_last_name AS lastName,
 											u.user_password AS `password`,
 											u.user_permission AS permission,
-											p.person_document AS document
-										{0}
-										{1}
-										{2}";
+											p.person_document AS document";
 
 		public static string ListUsersFromAndJoinsStatements = @"FROM 
 																	heroku_3a06699194dd49a.User u
