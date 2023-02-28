@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.User.UseCases.GetUser.UseCase;
-using CTC.Application.Features.User.UseCases.ListUsers.Data;
+﻿using CTC.Application.Features.User.UseCases.ListUsers.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
@@ -20,7 +19,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
 
         public async Task<Output> Execute(ListUsersUseCaseInput input)
         {
-            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(GetUserUseCase), input.RequestUserPermission);
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(ListUsersUseCase), input.RequestUserPermission);
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 

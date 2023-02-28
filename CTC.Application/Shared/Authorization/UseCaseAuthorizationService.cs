@@ -13,10 +13,13 @@ namespace CTC.Application.Shared.Authorization
                 return Task.FromResult(userPermission == UserPermission.Write);
 
             if (string.Equals(useCaseName, "GetUserUseCase"))            
-                return Task.FromResult(userPermission == UserPermission.Read || userPermission == UserPermission.Write);            
+                return Task.FromResult(userPermission == UserPermission.Read || userPermission == UserPermission.Write || userPermission == UserPermission.Read);            
 
             if (string.Equals(useCaseName, "RegisterUserUseCase"))            
-                return Task.FromResult(userPermission == UserPermission.Administrator);            
+                return Task.FromResult(userPermission == UserPermission.Administrator);
+
+            if (string.Equals(useCaseName, "ListUsersUseCase"))
+                return Task.FromResult(userPermission == UserPermission.Administrator);
 
             return Task.FromResult(false);
         }

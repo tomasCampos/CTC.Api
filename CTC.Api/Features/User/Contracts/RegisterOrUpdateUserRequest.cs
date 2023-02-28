@@ -2,7 +2,7 @@
 
 namespace CTC.Api.Features.User.Contracts
 {
-    public sealed class RegisterUserRequest
+    public sealed class RegisterOrUpdateUserRequest
     {
         public string? UserFirstName { get; set; }
         public string? UserEmail { get; set; }
