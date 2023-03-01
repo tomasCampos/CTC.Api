@@ -4,6 +4,7 @@ using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
+using CTC.Application.Shared.UserContext;
 using Firebase.Auth;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -23,7 +24,12 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         private const string FireBaseApiKeyEnvironmentVariableName = "FIRE_BASE_API_KEY";
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
 
-        public RegisterUserUseCase(IRequestValidator<RegisterUserInput> validator, IRegisterUserRepository repository, IConfiguration configuration, IUseCaseAuthorizationService useCaseAuthorizationService)
+        public RegisterUserUseCase(
+            IRequestValidator<RegisterUserInput> validator, 
+            IRegisterUserRepository repository, 
+            IConfiguration configuration, 
+            IUseCaseAuthorizationService useCaseAuthorizationService,
+            IUserContext userContext)
         {
             _validator = validator;
             _repository = repository;
@@ -38,7 +44,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 
         public async Task<Output> Execute(RegisterUserInput input)
         {
-            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterUserUseCase), input.RequestUserPermission);
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterUserUseCase));
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 

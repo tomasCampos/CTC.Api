@@ -4,6 +4,6 @@ namespace CTC.Application.Shared.Authorization
 {
     internal interface IUseCaseAuthorizationService
     {
-        Task<bool> Authorize(string useCaseName, UserPermission userPermission);
+        Task<bool> Authorize(string useCaseName);
     }
 }

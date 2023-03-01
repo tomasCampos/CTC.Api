@@ -50,8 +50,7 @@ namespace CTC.Api.Features.User
                 request.UserDocument,
                 request.UserLastName,
                 request.UserPermission,
-                request.UserPassword,
-                GetRequestUserPermissiomFromClaims()
+                request.UserPassword
             );
 
             var output = await _registerUserUseCase.Execute(input);
@@ -66,7 +65,7 @@ namespace CTC.Api.Features.User
         public async Task<IActionResult> ListUsers([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
         {
             var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
-            var input = new ListUsersUseCaseInput(request, GetRequestUserPermissiomFromClaims());
+            var input = new ListUsersUseCaseInput(request);
             var output = await _listUsersUseCase.Execute(input);
             return GetHttpResponse(output);
         }
@@ -78,7 +77,7 @@ namespace CTC.Api.Features.User
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetUser([FromRoute] string userEmail)
         {
-            var input = new GetUserByEmailInput(userEmail, GetRequestUserPermissiomFromClaims());
+            var input = new GetUserByEmailInput(userEmail);
             var output = await _getUserUseCase.Execute(input);
             return GetHttpResponse(output);
         }

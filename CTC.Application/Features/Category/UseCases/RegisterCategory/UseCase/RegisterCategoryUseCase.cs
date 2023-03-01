@@ -13,7 +13,10 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
         private readonly IRegisterCategoryRepository _repository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
 
-        public RegisterCategoryUseCase(IRequestValidator<RegisterCategoryInput> validator, IRegisterCategoryRepository repository, IUseCaseAuthorizationService useCaseAuthorizationService)
+        public RegisterCategoryUseCase(
+            IRequestValidator<RegisterCategoryInput> validator, 
+            IRegisterCategoryRepository repository, 
+            IUseCaseAuthorizationService useCaseAuthorizationService)
         {
             _validator = validator;
             _repository = repository;
@@ -22,7 +25,7 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
 
         public async Task<Output> Execute(RegisterCategoryInput input)
         {
-            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterCategoryUseCase), input.RequestUserPermission);
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(RegisterCategoryUseCase));
             if (!isAuthorized)            
                 return Output.CreateForbiddenResult();            
 

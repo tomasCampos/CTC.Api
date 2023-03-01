@@ -2,6 +2,7 @@
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
+using CTC.Application.Shared.UserContext;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
@@ -11,7 +12,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly IListUsersRepository _usersRepository;
 
-        public ListUsersUseCase(IUseCaseAuthorizationService useCaseAuthorizationService, IListUsersRepository usersRepository)
+        public ListUsersUseCase(IUseCaseAuthorizationService useCaseAuthorizationService, IListUsersRepository usersRepository, IUserContext userContext)
         {
             _useCaseAuthorizationService = useCaseAuthorizationService;
             _usersRepository = usersRepository;
@@ -19,7 +20,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
 
         public async Task<Output> Execute(ListUsersUseCaseInput input)
         {
-            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(ListUsersUseCase), input.RequestUserPermission);
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(ListUsersUseCase));
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 

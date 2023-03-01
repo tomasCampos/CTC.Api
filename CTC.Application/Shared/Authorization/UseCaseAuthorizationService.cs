@@ -1,25 +1,30 @@
-﻿using System.Threading.Tasks;
+﻿using CTC.Application.Shared.UserContext;
+using System.Threading.Tasks;
 
 namespace CTC.Application.Shared.Authorization
 {
     internal sealed class UseCaseAuthorizationService : IUseCaseAuthorizationService
     {
-        public Task<bool> Authorize(string useCaseName, UserPermission userPermission)
+        private readonly IUserContext _userContext;
+
+        public UseCaseAuthorizationService(IUserContext userContext)
         {
-            if(userPermission == UserPermission.Administrator)
+            _userContext = userContext;
+        }
+
+        public Task<bool> Authorize(string useCaseName)
+        {
+            if(_userContext.UserPermission == UserPermission.Administrator)
                 return Task.FromResult(true);
 
             if(string.Equals(useCaseName, "RegisterCategoryUseCase"))
-                return Task.FromResult(userPermission == UserPermission.Write);
-
-            if (string.Equals(useCaseName, "GetUserUseCase"))            
-                return Task.FromResult(userPermission == UserPermission.Read || userPermission == UserPermission.Write || userPermission == UserPermission.Read);            
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Write);           
 
             if (string.Equals(useCaseName, "RegisterUserUseCase"))            
-                return Task.FromResult(userPermission == UserPermission.Administrator);
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Administrator);
 
             if (string.Equals(useCaseName, "ListUsersUseCase"))
-                return Task.FromResult(userPermission == UserPermission.Administrator);
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Administrator);
 
             return Task.FromResult(false);
         }

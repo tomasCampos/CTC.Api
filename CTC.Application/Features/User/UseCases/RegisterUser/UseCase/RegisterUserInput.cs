@@ -5,7 +5,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
 {
     public sealed class RegisterUserInput : IInput
     {
-        public RegisterUserInput(in string? userFirstName, in string? userEmail, in string? userPhone, in string? userDocument, in string? userLastName, in UserPermission? userPermission, in string? userPassword, in UserPermission requestUserPermission)
+        public RegisterUserInput(in string? userFirstName, in string? userEmail, in string? userPhone, in string? userDocument, in string? userLastName, in UserPermission? userPermission, in string? userPassword)
         {
             UserFirstName = userFirstName;
             UserEmail = userEmail;
@@ -14,7 +14,6 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             UserLastName = userLastName;
             UserPermission = userPermission;
             UserPassword = userPassword;
-            RequestUserPermission = requestUserPermission;
         }
 
         public string? UserFirstName { get; set; }
@@ -24,6 +23,5 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         public string? UserLastName { get; set; }
         public UserPermission? UserPermission { get; set; }
         public string? UserPassword { get; set; }
-        public UserPermission RequestUserPermission { get; }
     }
 }

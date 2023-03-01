@@ -29,7 +29,7 @@ namespace CTC.Api.Features.Category
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterCategory([FromBody] RegisterCategoryRequest request)
         {
-            var input = new RegisterCategoryInput(request.CategoryName, GetRequestUserPermissiomFromClaims());
+            var input = new RegisterCategoryInput(request.CategoryName);
             var output = await _registerCategoryUseCase.Execute(input);
 
             return GetHttpResponse(output, "/category");
