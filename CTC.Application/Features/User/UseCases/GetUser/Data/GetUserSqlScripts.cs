@@ -12,8 +12,8 @@
                                                 u.user_password AS `password`,
                                                 u.user_permission AS permission,
                                                 p.person_document AS document
-                                            FROM railway.User u
-                                            INNER JOIN railway.Person p on u.person_id = p.person_id
+                                            FROM heroku_3a06699194dd49a.User u
+                                            INNER JOIN heroku_3a06699194dd49a.Person p on u.person_id = p.person_id
                                             WHERE p.person_email = @person_email";
     }
 }

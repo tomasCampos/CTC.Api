@@ -18,7 +18,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_APPLICATION_CREDENTIALS": "./firebase-config.json",
-        "MY_SQL_CONNECTION_STRING": "Server=containers-us-west-45.railway.app;Port=7325;Database=railway;Uid=root;Pwd=JlkstkpJh6F05b6EuMUN;charset=utf8;",
+        "MY_SQL_CONNECTION_STRING": "server=us-cdbr-east-06.cleardb.net;user=b6f9f642524334;password=402758b8;database=heroku_3a06699194dd49a;SSL Mode=None",
         "FIRE_BASE_API_KEY": "AIzaSyBCZFbbv25GX2n8GvNfjKIROGRQ4VSdlIE",
         "CYPHER_AES_KEY": "e8affb0e-7408-474f-a3d8-84b4d55b60fc"
       }
@@ -30,7 +30,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_APPLICATION_CREDENTIALS": "./firebase-config.json",
-        "MY_SQL_CONNECTION_STRING": "Server=containers-us-west-45.railway.app;Port=7325;Database=railway;Uid=root;Pwd=JlkstkpJh6F05b6EuMUN;charset=utf8;",
+        "MY_SQL_CONNECTION_STRING": "server=us-cdbr-east-06.cleardb.net;user=b6f9f642524334;password=402758b8;database=heroku_3a06699194dd49a;SSL Mode=None",
         "FIRE_BASE_API_KEY": "AIzaSyBCZFbbv25GX2n8GvNfjKIROGRQ4VSdlIE",
         "CYPHER_AES_KEY": "e8affb0e-7408-474f-a3d8-84b4d55b60fc"
       }

@@ -1,5 +1,4 @@
-﻿using CTC.Application.Shared.Request;
-using CTC.Application.Shared.UseCase.IO;
+﻿using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -31,11 +30,6 @@ namespace CTC.Api.Shared
                 return StatusCode(500);
 
             return NoContent();
-        }
-
-        protected UserPermission GetRequestUserPermissiomFromClaims()
-        {
-            return (UserPermission)Convert.ToInt32(this.User.Claims.ToArray()[2].Value);
         }
     }
 }

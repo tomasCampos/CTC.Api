@@ -62,13 +62,12 @@ namespace CTC.Api.Auth
         private async Task<IEnumerable<Claim>?> ToClaims(IReadOnlyDictionary<string, object> claims)
         {
             var email = claims["email"].ToString()!;
-            var permission = (int)await _userAuthorizationService.GetUserPermission(email);
-            var permissionClaim = permission.ToString()!;
+            await _userAuthorizationService.SetUserContext(email);
+            
             return new List<Claim>
             {
                 new Claim("id", claims["user_id"].ToString()!),
-                new Claim("email", email),
-                new Claim("permission", permissionClaim)
+                new Claim("email", email)
             };
         }
     }

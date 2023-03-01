@@ -2,7 +2,7 @@
 {
     internal static class RegisterUserSqlScripts
     {
-        public static string INSERT_USER_SQL = @"INSERT INTO railway.User
+        public static string INSERT_USER_SQL = @"INSERT INTO heroku_3a06699194dd49a.User
                                                 (`user_id`,
                                                 `user_last_name`,
                                                 `user_permission`,
@@ -18,7 +18,7 @@
         public static string COUNT_USER_BY_EMAIL_PHONE_DOCUMENT = @"SELECT 
 	                                                    COUNT(*)
                                                     FROM 
-	                                                    railway.Person p
+	                                                    heroku_3a06699194dd49a.Person p
                                                     WHERE 
 	                                                    p.person_email = @person_email
                                                         OR p.person_phone = @person_phone
