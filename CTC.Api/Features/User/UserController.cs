@@ -73,11 +73,25 @@ namespace CTC.Api.Features.User
         [Authorize]
         [HttpGet("{userEmail}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetUser([FromRoute] string userEmail)
         {
             var input = new GetUserByEmailInput(userEmail);
+            var output = await _getUserUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpGet("Profile")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var input = new GetUserByBearerTokenInput();
             var output = await _getUserUseCase.Execute(input);
             return GetHttpResponse(output);
         }

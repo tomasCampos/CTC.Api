@@ -20,20 +20,30 @@ namespace CTC.Application.Features.User.UseCases.GetUser.UseCase
 
         public async Task<Output> Execute(IGetUserInput input)
         {
-            UserModel? user = null;
-
             if (input.GetUserInputParameterType == GetUserInputParameterType.Email)
             {
                 if (!string.IsNullOrEmpty(_userContext.UserEmail) && _userContext.UserEmail != input.Parameter)
                     return Output.CreateForbiddenResult();
 
-                user = await _userRepository.GetUserByEmail(input.Parameter!);
+                var user = await _userRepository.GetUserByEmail(input.Parameter!);
+
+                if(user == null)
+                    return Output.CreateNotFoundResult();
+
+                return Output.CreateOkResult(user);
             }
 
-            if(user == null)
-                return Output.CreateNotFoundResult();
+            if (input.GetUserInputParameterType == GetUserInputParameterType.Token)
+            {
+                var user = await _userRepository.GetUserByEmail(_userContext.UserEmail);
 
-            return Output.CreateOkResult(user);
+                if (user == null)
+                    return Output.CreateNotFoundResult();
+
+                return Output.CreateOkResult(user);
+            }
+
+            return Output.CreateNotFoundResult();
         }
     }
 }

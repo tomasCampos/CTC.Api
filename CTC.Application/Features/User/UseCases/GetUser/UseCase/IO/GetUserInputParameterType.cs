@@ -2,6 +2,7 @@
 {
     public enum GetUserInputParameterType
     {
-        Email = 1
+        Email = 1,
+        Token = 2
     }
 }

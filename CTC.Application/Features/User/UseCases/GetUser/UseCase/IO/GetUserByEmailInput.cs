@@ -2,7 +2,7 @@
 {
     public sealed class GetUserByEmailInput : IGetUserInput
     {
-        public GetUserByEmailInput(string? parameter)
+        public GetUserByEmailInput(in string? parameter)
         {
             Parameter = parameter;
         }
