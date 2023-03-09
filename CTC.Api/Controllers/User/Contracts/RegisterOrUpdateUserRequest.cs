@@ -1,6 +1,6 @@
 ﻿using CTC.Application.Shared.Authorization;
 
-namespace CTC.Api.Features.User.Contracts
+namespace CTC.Api.Controllers.User.Contracts
 {
     public sealed class RegisterOrUpdateUserRequest
     {

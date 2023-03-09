@@ -1,4 +1,4 @@
-using CTC.Api.Features.Category.Contracts;
+using CTC.Api.Controllers.Category.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
 using CTC.Application.Shared.UseCase;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace CTC.Api.Features.Category
+namespace CTC.Api.Controllers.Category
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,4 +1,4 @@
-﻿using CTC.Api.Features.User.Contracts;
+﻿using CTC.Api.Controllers.User.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace CTC.Api.Features.User
+namespace CTC.Api.Controllers.User
 {
     [ApiController]
     [Route("[controller]")]
@@ -22,9 +22,9 @@ namespace CTC.Api.Features.User
         private readonly IUseCase<AuthorizeUserInput, Output> _authorizeUserUseCase;
         private readonly IUseCase<ListUsersUseCaseInput, Output> _listUsersUseCase;
 
-        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase, 
-                            IUseCase<IGetUserInput, Output> getUserUseCase, 
-                            IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase, 
+        public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase,
+                            IUseCase<IGetUserInput, Output> getUserUseCase,
+                            IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase,
                             IUseCase<ListUsersUseCaseInput, Output> listUsersUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
