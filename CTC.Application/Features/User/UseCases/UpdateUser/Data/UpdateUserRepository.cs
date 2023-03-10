@@ -3,6 +3,7 @@ using CTC.Application.Shared.Person;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
 {
@@ -15,12 +16,33 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
             _sqlService = sqlService;
         }
 
-        public Task<(bool success, int affectedRows)> UpdateUser(UserModel model)
+        public async Task<(bool success, int affectedRows)> UpdateUser(UserModel model)
         {
             var commands = BuildCommands(model);
 
-            var result = _sqlService.ExecuteWithTransactionAsync(commands);
+            var result = await _sqlService.ExecuteWithTransactionAsync(commands);
             return result;
+        }
+
+        public async Task<List<UserModel>> GetUsersByEmail(string email)
+        {
+            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_email = @person_email");
+            var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_email = email });
+            return result.ToList();
+        }
+
+        public async Task<List<UserModel>> GetUsersByDocument(string document)
+        {
+            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_document = @person_document");
+            var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_document = document });
+            return result.ToList();
+        }
+
+        public async Task<List<UserModel>> GetUsersByPhone(string phone)
+        {
+            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_phone = @person_phone");
+            var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_phone = phone });
+            return result.ToList();
         }
 
         public async Task<UserModel> GetUserById(string userId)

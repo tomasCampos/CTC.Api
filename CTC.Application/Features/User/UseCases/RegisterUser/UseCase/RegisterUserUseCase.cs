@@ -4,7 +4,7 @@ using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using Firebase.Auth;
+using FirebaseAdmin.Auth;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -58,17 +58,21 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             if (!wasUserInsertedInDataBaseWithSuccess)
                 return Output.CreateInternalErrorResult("Não foi possível cadastrar o usuário. Tente novamente mais tarde.");
 
-            var firebaseAuthLink = await RegisterFireBaseUser(input);
+            await RegisterFireBaseUser(input);
 
-            return Output.CreateCreatedResult(new { AuthToken = firebaseAuthLink });
+            return Output.CreateCreatedResult();
         }
 
-        private async Task<string> RegisterFireBaseUser(RegisterUserInput user)
+        private async Task RegisterFireBaseUser(RegisterUserInput user)
         {
-            FirebaseAuthProvider firebaseAuthProvider = new FirebaseAuthProvider(new FirebaseConfig(FireBaseApiKey));
+            var args = new UserRecordArgs()
+            {
+                Email = user.UserEmail,
+                Password = user.UserPassword,
+                DisplayName = $"{user.UserFirstName} {user.UserLastName} - {(int)user.UserPermission!}"
+            };
 
-            FirebaseAuthLink firebaseAuthLink = await firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(user.UserEmail, user.UserPassword);
-            return firebaseAuthLink.FirebaseToken;
+            _ = await FirebaseAuth.DefaultInstance.CreateUserAsync(args);
         }
     }
 }

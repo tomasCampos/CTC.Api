@@ -8,6 +8,7 @@ using CTC.Application.Shared.UserContext;
 using FirebaseAdmin.Auth;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
@@ -52,26 +53,27 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
             var userToUpdate = await _repository.GetUserById(input.UserId!);
-            if(userToUpdate == null)
+            if (userToUpdate == null)
                 return Output.CreateInvalidParametersResult("O usuário a ser atualizado não existe");
+
+            var uniqueDataVerificationResult = await VerifyIfThereAreUsersWithTheSameUniqueData(input);
+            if (!uniqueDataVerificationResult.success)
+                return Output.CreateInvalidParametersResult(uniqueDataVerificationResult.errorMessage);
 
             var result = await UpdateSqlServeUser(userToUpdate, input);
 
-            if (!result.success)
+            if (!result)
                 return Output.CreateInternalErrorResult(UseCaseFailMessage);
 
-            if(result.needToUpdateFireBaseUser)
-            {
-                var success = await UpdateFireBaseUser(userToUpdate.Email!, input, userToUpdate);
+            var fireBaseSuccess = await UpdateFireBaseUser(userToUpdate.Email!, input, userToUpdate);
 
-                if (!success)
-                    Output.CreateInternalErrorResult(UseCaseFailMessage);
-            }
+            if (!fireBaseSuccess)
+                Output.CreateInternalErrorResult(UseCaseFailMessage);
 
             return Output.CreateOkResult();
         }
 
-        private async Task<(bool success, bool needToUpdateFireBaseUser)> UpdateSqlServeUser(UserModel currentUserData, UpdateUserInput newUserData)
+        private async Task<bool> UpdateSqlServeUser(UserModel currentUserData, UpdateUserInput newUserData)
         {
             var encryptedPassword = AES.Encrypt(newUserData.UserPassword!, AESKey);
 
@@ -87,8 +89,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
             var result = await _repository.UpdateUser(newUser);
 
-            var wasPasswordOrEmailUpdated = ((encryptedPassword != currentUserData.Password) || !string.IsNullOrEmpty(newUserEmail));
-            return (result.success, wasPasswordOrEmailUpdated);
+            return result.success;
         }
 
         private async Task<bool> UpdateFireBaseUser(string currentUserEmail, UpdateUserInput newUser, UserModel oldUser)
@@ -100,7 +101,8 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                 {
                     Uid = userRecord.Uid,
                     Email = newUser.UserEmail,
-                    Password = newUser.UserPassword
+                    Password = newUser.UserPassword,
+                    DisplayName = $"{newUser.UserFirstName} {newUser.UserLastName} - {(int)newUser.UserPermission!}"
                 };
 
                 _ = await FirebaseAuth.DefaultInstance.UpdateUserAsync(args);
@@ -111,6 +113,23 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                 _ = await _repository.UpdateUser(oldUser);
                 return false;
             }
+        }
+
+        private async Task<(bool success, string errorMessage)> VerifyIfThereAreUsersWithTheSameUniqueData(UpdateUserInput input)
+        {
+            var usersWithTheSamePhone = await _repository.GetUsersByPhone(input.UserPhone!);
+            if (usersWithTheSamePhone.Count > 1 || usersWithTheSamePhone.Any(u => u.UserId != input.UserId))
+                return (false, "Já existe um usuário com o telefone informado");
+
+            var usersWithTheSameEmail = await _repository.GetUsersByEmail(input.UserEmail!);
+            if (usersWithTheSameEmail.Count > 1 || usersWithTheSameEmail.Any(u => u.UserId != input.UserId))
+                return (false, "Já existe um usuário com o email informado");
+
+            var usersWithTheSameDocument = await _repository.GetUsersByDocument(input.UserDocument!);
+            if (usersWithTheSameDocument.Count > 1 || usersWithTheSameDocument.Any(u => u.UserId != input.UserId))
+                return (false, "Já existe um usuário com o documento informado");
+
+            return (true, string.Empty);
         }
     }
 }
