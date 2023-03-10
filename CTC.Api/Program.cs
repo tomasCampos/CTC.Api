@@ -2,7 +2,6 @@ using CTC.Api.Auth;
 using CTC.Api.Auth.Services;
 using CTC.Application;
 using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -14,11 +13,6 @@ if (portVar is { Length: > 0 } && int.TryParse(portVar, out int port))
 {
     builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(port); }); 
 }
-
-//FirebaseApp.Create(new AppOptions()
-//{
-//    Credential = GoogleCredential.GetApplicationDefault()
-//});
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton(FirebaseApp.Create());

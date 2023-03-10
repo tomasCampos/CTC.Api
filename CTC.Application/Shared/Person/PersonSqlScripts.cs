@@ -16,14 +16,15 @@
                                                 @person_document);
                                                 ";
 
-        public static string UPDATE_PERSON_SQL = @"UPDATE 
+        private static string UPDATE_PERSON_SQL = @"UPDATE 
 	                                                `heroku_3a06699194dd49a`.`person`
-                                                SET
-	                                                `person_first_name` = @person_first_name,
-	                                                `person_email` = @person_email,
-	                                                `person_phone` = @person_phone,
-	                                                `person_document` = @person_document
+                                                @@SET_STATEMENT@@
                                                 WHERE
 	                                                `person_id` = @person_id;";
+
+        public static string GetUpdatePersonSql(string setStatement)
+        {
+            return UPDATE_PERSON_SQL.Replace("@@SET_STATEMENT@@", setStatement);
+        }
     }
 }

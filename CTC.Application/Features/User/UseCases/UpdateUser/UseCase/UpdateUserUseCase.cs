@@ -54,23 +54,35 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             if(userToUpdate == null)
                 return Output.CreateInvalidParametersResult("O usuário a ser atualizado não existe");
 
-            var encryptedPassword = AES.Encrypt(input.UserPassword!, AESKey);
+            var result = await UpdateSqlServeUser(userToUpdate, input);
 
-            UserModel newUser;
-            if (_userContext.UserPermission != UserPermission.Administrator)
-                newUser = new UserModel(input.UserId!, userToUpdate.PersonId!, input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)userToUpdate.Permission!, encryptedPassword);
-            else
-                newUser = new UserModel(input.UserId!, userToUpdate.PersonId!, input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, encryptedPassword);
-
-            var result = await _repository.UpdateUser(newUser);
-
-            //TODO: Remover unique de telefone, documento e email do banco de dados, ta dando erro ao atualizar esses campos, quando são iguais aos que já estão no banco pro usuário atualizado.
             if (!result.success)
                 return Output.CreateInternalErrorResult("Falha ao atualizar o usuário. Verifique com o admministrador se o número de telefone, email e/ou número de documento informados já estão cadastrados para outro usuário.");
 
-            await UpdateFireBaseUser(userToUpdate, input);
+            if(result.needToUpdateFireBaseUser)
+                await UpdateFireBaseUser(userToUpdate, input);
 
             return Output.CreateOkResult();
+        }
+
+        private async Task<(bool success, bool needToUpdateFireBaseUser)> UpdateSqlServeUser(UserModel currentUserData, UpdateUserInput newUserData)
+        {
+            var encryptedPassword = AES.Encrypt(newUserData.UserPassword!, AESKey);
+
+            string? newUserPassword = newUserData.UserPassword == currentUserData.Password ? string.Empty : encryptedPassword;
+            string? newUserDocument = newUserData.UserDocument == currentUserData.Document ? string.Empty : newUserData.UserDocument;
+            string? newUserPhone = newUserData.UserPhone == currentUserData.Phone ? string.Empty : newUserData.UserPhone;
+            string? newUserEmail = newUserData.UserEmail == currentUserData.Email ? string.Empty : newUserData.UserEmail;
+
+            UserModel newUser;
+            if (_userContext.UserPermission != UserPermission.Administrator)
+                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserData.UserEmail!, newUserPhone!, newUserDocument!, newUserData.UserLastName!, (int)currentUserData.Permission!, encryptedPassword);
+            else
+                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserData.UserEmail!, newUserPhone!, newUserDocument!, newUserData.UserLastName!, (int)newUserData.UserPermission!, encryptedPassword);
+
+            var result = await _repository.UpdateUser(newUser);
+
+            return (result.success, (!string.IsNullOrEmpty(newUserPassword) || !string.IsNullOrEmpty(newUserEmail)));
         }
 
         private async Task UpdateFireBaseUser(UserModel currentUser, UpdateUserInput newUser)
