@@ -61,12 +61,10 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                 return Output.CreateInvalidParametersResult(uniqueDataVerificationResult.errorMessage);
 
             var result = await UpdateSqlServeUser(userToUpdate, input);
-
             if (!result)
                 return Output.CreateInternalErrorResult(UseCaseFailMessage);
 
             var fireBaseSuccess = await UpdateFireBaseUser(userToUpdate.Email!, input, userToUpdate);
-
             if (!fireBaseSuccess)
                 Output.CreateInternalErrorResult(UseCaseFailMessage);
 
