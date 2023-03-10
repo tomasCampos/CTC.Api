@@ -18,7 +18,8 @@
 
         private static string UPDATE_PERSON_SQL = @"UPDATE 
 	                                                `heroku_3a06699194dd49a`.`person`
-                                                @@SET_STATEMENT@@
+                                                SET
+                                                    @@SET_STATEMENT@@
                                                 WHERE
 	                                                `person_id` = @person_id;";
 

@@ -36,13 +36,13 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
             var updatePersonSetStatement = "`person_first_name` = @person_first_name";
 
             if(!string.IsNullOrWhiteSpace(model.Email))
-                updatePersonSetStatement += "`,person_email` = @person_email";
+                updatePersonSetStatement += ",`person_email` = @person_email";
 
             if (!string.IsNullOrWhiteSpace(model.Phone))
-                updatePersonSetStatement += "`,person_phone` = @person_phone";
+                updatePersonSetStatement += ",`person_phone` = @person_phone";
 
             if (!string.IsNullOrWhiteSpace(model.Document))
-                updatePersonSetStatement += "`,person_document` = @person_document";
+                updatePersonSetStatement += ",`person_document` = @person_document";
 
             var updatePersonSqlCommand = PersonSqlScripts.GetUpdatePersonSql(updatePersonSetStatement);
 
