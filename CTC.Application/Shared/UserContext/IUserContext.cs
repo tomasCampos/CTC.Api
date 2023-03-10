@@ -8,6 +8,7 @@ namespace CTC.Application.Shared.UserContext
         string UserDocument { get; }
         string UserEmail { get; }
         string UserPhone { get; }
+        string FireBaseUserIdToken { get; }
         UserPermission UserPermission { get; }
     }
 }

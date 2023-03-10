@@ -42,7 +42,7 @@ namespace CTC.Api.Auth
             try
             {
                 FirebaseToken firebaseToken = await FirebaseAuth.GetAuth(_firebaseApp).VerifyIdTokenAsync(token);
-                return AuthenticateResult.Success(await GetAuthenticationTicket(firebaseToken));
+                return AuthenticateResult.Success(await GetAuthenticationTicket(firebaseToken, token));
             }
             catch (Exception ex)
             {
@@ -50,19 +50,19 @@ namespace CTC.Api.Auth
             }
         }
 
-        private async Task<AuthenticationTicket> GetAuthenticationTicket(FirebaseToken firebaseToken)
+        private async Task<AuthenticationTicket> GetAuthenticationTicket(FirebaseToken firebaseToken, string bearerToken)
         {
-            var claims = await ToClaims(firebaseToken.Claims);
+            var claims = await ToClaims(firebaseToken.Claims, bearerToken);
             return new AuthenticationTicket(new ClaimsPrincipal(new List<ClaimsIdentity>
             {
                 new ClaimsIdentity(claims, nameof(CustomAuthenticationHandler))
             }), JwtBearerDefaults.AuthenticationScheme);
         }
 
-        private async Task<IEnumerable<Claim>?> ToClaims(IReadOnlyDictionary<string, object> claims)
+        private async Task<IEnumerable<Claim>?> ToClaims(IReadOnlyDictionary<string, object> claims, string bearerToken)
         {
             var email = claims["email"].ToString()!;
-            await _userAuthorizationService.SetUserContext(email);
+            await _userAuthorizationService.SetUserContext(email, bearerToken);
             
             return new List<Claim>
             {

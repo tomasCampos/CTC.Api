@@ -2,6 +2,7 @@
 using CTC.Application.Features.User.UseCases.GetUser;
 using CTC.Application.Features.User.UseCases.ListUsers;
 using CTC.Application.Features.User.UseCases.RegisterUser;
+using CTC.Application.Features.User.UseCases.UpdateUser;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.User
@@ -14,6 +15,7 @@ namespace CTC.Application.Features.User
             services.AddGetUser();
             services.AddAuthorizeUser();
             services.AddListUsers();
+            services.AddUpdateUser();
             return services;
         }
     }

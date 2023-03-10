@@ -14,13 +14,16 @@ namespace CTC.Application.Shared.UserContext
 
         public UserPermission UserPermission { get; private set; } = UserPermission.Unknown;
 
-        public void Set(string userName, string userEmail, UserPermission userPermission, string userPhone, string userDocument)
+        public string FireBaseUserIdToken { get; private set; } = string.Empty;
+
+        public void Set(string userName, string userEmail, UserPermission userPermission, string userPhone, string userDocument, string firebaseUserIdToken)
         {
             UserName = userName;
             UserDocument = userDocument;
             UserEmail = userEmail;
             UserPermission = userPermission;
             UserPhone = userPhone;
+            FireBaseUserIdToken = firebaseUserIdToken;
         }
     }
 }

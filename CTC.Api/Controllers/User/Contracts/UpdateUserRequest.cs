@@ -2,8 +2,9 @@
 
 namespace CTC.Api.Controllers.User.Contracts
 {
-    public sealed class RegisterOrUpdateUserRequest
+    public sealed class UpdateUserRequest
     {
+        public string? UserId { get; set; }
         public string? UserFirstName { get; set; }
         public string? UserEmail { get; set; }
         public string? UserPhone { get; set; }

@@ -27,9 +27,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         public RegisterUserUseCase(
             IRequestValidator<RegisterUserInput> validator, 
             IRegisterUserRepository repository, 
-            IConfiguration configuration, 
-            IUseCaseAuthorizationService useCaseAuthorizationService,
-            IUserContext userContext)
+            IUseCaseAuthorizationService useCaseAuthorizationService)
         {
             _validator = validator;
             _repository = repository;

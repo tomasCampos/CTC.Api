@@ -2,6 +2,6 @@
 {
     public interface IUserAuthorizationService
     {
-        Task SetUserContext(string userEmail);
+        Task SetUserContext(string userEmail, string bearerToken);
     }
 }

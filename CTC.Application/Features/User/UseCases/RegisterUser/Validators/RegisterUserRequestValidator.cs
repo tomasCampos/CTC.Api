@@ -1,5 +1,6 @@
 ﻿using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
 using CTC.Application.Shared.Request;
+using CTC.Application.Shared.UseCase.Validation;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,6 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
 {
     internal sealed class RegisterUserRequestValidator : IRequestValidator<RegisterUserInput>
     {
-        const string ValidEmailRegex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov)$";
         public RequestValidationModel Validate(RegisterUserInput request)
         {
             var errors = new List<string>();
@@ -24,7 +24,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
                 errors.Add("O primeiro nome do usuário deve ser informado");
             if (string.IsNullOrWhiteSpace(request.UserEmail))
                 errors.Add("O E-mail do usuário deve ser informado");
-            if (!Regex.IsMatch(request.UserEmail, ValidEmailRegex, RegexOptions.IgnoreCase))
+            if (!Regex.IsMatch(request.UserEmail, RegexValidationsConstants.ValidEmailRegex, RegexOptions.IgnoreCase))
                 errors.Add("O E-mail do usuário não é válido");
             if (string.IsNullOrWhiteSpace(request.UserDocument) || request.UserDocument.Length < 11)
                 errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");

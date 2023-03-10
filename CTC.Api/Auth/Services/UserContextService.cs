@@ -19,12 +19,12 @@ namespace CTC.Api.Auth.Services
             _userContextSet = userContextSet;
         }
 
-        public async Task SetUserContext(string userEmail)
+        public async Task SetUserContext(string userEmail, string bearerToken)
         {
             var isInCache = UserPermissionsCache.TryGetValue(userEmail, out UserContextModel? userModel);
             if (isInCache && userModel is not null)
             {
-                _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document);
+                _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document, bearerToken);
                 return;
             }
 
@@ -32,7 +32,7 @@ namespace CTC.Api.Auth.Services
             userModel = CreateUserContextModel(user);
             UserPermissionsCache.Add(userEmail, userModel);
 
-            _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document);
+            _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document, bearerToken);
         }
 
         private static UserContextModel CreateUserContextModel(Output user)
