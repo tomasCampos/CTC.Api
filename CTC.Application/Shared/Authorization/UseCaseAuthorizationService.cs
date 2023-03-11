@@ -12,7 +12,7 @@ namespace CTC.Application.Shared.Authorization
             _userContext = userContext;
         }
 
-        public Task<bool> Authorize(string useCaseName)
+        public Task<bool> Authorize(string useCaseName, string? userEmail = null)
         {
             if(_userContext.UserPermission == UserPermission.Administrator)
                 return Task.FromResult(true);
@@ -25,6 +25,9 @@ namespace CTC.Application.Shared.Authorization
 
             if (string.Equals(useCaseName, "ListUsersUseCase"))
                 return Task.FromResult(_userContext.UserPermission == UserPermission.Administrator);
+
+            if (string.Equals(useCaseName, "UpdateUserUseCase"))
+                return Task.FromResult(_userContext.UserEmail == userEmail);
 
             return Task.FromResult(false);
         }

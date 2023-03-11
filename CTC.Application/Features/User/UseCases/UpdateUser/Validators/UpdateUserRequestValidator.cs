@@ -1,17 +1,19 @@
-﻿using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
+﻿using CTC.Application.Features.User.UseCases.UpdateUser.UseCase;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase.Validation;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
+namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
 {
-    internal sealed class RegisterUserRequestValidator : IRequestValidator<RegisterUserInput>
+    internal class UpdateUserRequestValidator : IRequestValidator<UpdateUserInput>
     {
-        public RequestValidationModel Validate(RegisterUserInput request)
+        public RequestValidationModel Validate(UpdateUserInput request)
         {
             var errors = new List<string>();
 
+            if (string.IsNullOrWhiteSpace(request.UserId))
+                errors.Add("O Id do usuário deve ser informado");
             if (string.IsNullOrWhiteSpace(request.UserLastName))
                 errors.Add("O último nome do usuário deve ser informado");
             if (!request.UserPermission.HasValue)

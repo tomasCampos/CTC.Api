@@ -8,13 +8,6 @@ namespace CTC.Application.Shared.Person
 
         protected PersonModel(in string personId, in string firstName, in string email, in string phone, in string document)
         {
-            if (string.IsNullOrWhiteSpace(personId))
-                throw new ArgumentNullException(nameof(personId));
-            if (string.IsNullOrWhiteSpace(firstName))
-                throw new ArgumentNullException(nameof(firstName));
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentNullException(nameof(email));
-
             PersonId = personId;
             FirstName = firstName;
             Email = email;

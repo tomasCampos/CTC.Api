@@ -18,7 +18,8 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
         {
             var commands = BuildCommands(model);
 
-            return await _sqlService.ExecuteWithTransactionAsync(commands);
+            var result = await _sqlService.ExecuteWithTransactionAsync(commands);
+            return result.success;
         }
 
         public async Task<int> VerifyIfUserAlreadyExists(string email, string phone, string document)
@@ -33,7 +34,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
             var commands = new Dictionary<string, object?>
             {
                 {
-                    PersonSqlScripts.InsertPersonSql,
+                    PersonSqlScripts.INSERT_PERSON_SQL,
                     new
                     {
                         person_id = model.PersonId,
@@ -50,7 +51,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
                     {
                         user_id = model.UserId,
                         user_last_name = model.LastName,
-                        user_permission = (int)model.Permission,
+                        user_permission = (int)model.Permission!,
                         user_password = model.Password,
                         person_id = model.PersonId
                     }

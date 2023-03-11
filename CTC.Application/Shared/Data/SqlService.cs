@@ -38,8 +38,9 @@ namespace CTC.Application.Shared.Data
             return await connection.QuerySingleAsync<T>(sql, param);
         }
 
-        public async Task<bool> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
-        {          
+        public async Task<(bool success, int rowsAffected)> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
+        {
+            int totalRowsAffected = 0;
             using var connection = _context.GetConnection();
             connection.Open();
 
@@ -49,21 +50,22 @@ namespace CTC.Application.Shared.Data
                 foreach (var command in commands)
                 {
                     var rowsAffected = await connection.ExecuteAsync(command.Key, command.Value, transaction);
+                    totalRowsAffected += rowsAffected;
                     if (rowsAffected == 0)
                     {
                         transaction.Rollback();
-                        return false;
+                        return (false, 0);
                     }
                 }
             }
             catch
             {
                 transaction.Rollback();
-                return false;
+                return (false, 0);
             }
 
             transaction.Commit();
-            return true;
+            return (true, totalRowsAffected);
         }
 
         public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "") where T : class

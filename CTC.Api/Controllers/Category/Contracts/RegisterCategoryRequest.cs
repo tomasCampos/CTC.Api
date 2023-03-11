@@ -1,4 +1,4 @@
-﻿namespace CTC.Api.Features.Category.Contracts
+﻿namespace CTC.Api.Controllers.Category.Contracts
 {
     public sealed class RegisterCategoryRequest
     {

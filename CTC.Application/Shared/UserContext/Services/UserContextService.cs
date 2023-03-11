@@ -2,16 +2,17 @@
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using CTC.Application.Shared.UserContext;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace CTC.Api.Auth.Services
+namespace CTC.Application.Shared.UserContext.Services
 {
-    public class UserContextService : IUserAuthorizationService
+    public class UserContextService : IUserContextService, IUserContextCacheReset
     {
         private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
         private readonly IUserContextSet _userContextSet;
 
-        private static readonly IDictionary<string, UserContextModel?> UserPermissionsCache = new Dictionary<string, UserContextModel?>();
+        private static readonly IDictionary<string, UserContextModel?> UserContextCache = new Dictionary<string, UserContextModel?>();
 
         public UserContextService(IUseCase<IGetUserInput, Output> getUserUseCase, IUserContextSet userContextSet)
         {
@@ -19,20 +20,20 @@ namespace CTC.Api.Auth.Services
             _userContextSet = userContextSet;
         }
 
-        public async Task SetUserContext(string userEmail)
+        public async Task SetUserContext(string userEmail, string bearerToken)
         {
-            var isInCache = UserPermissionsCache.TryGetValue(userEmail, out UserContextModel? userModel);
-            if (isInCache && userModel is not null)
+            var isInCache = UserContextCache.TryGetValue(userEmail, out UserContextModel? userModel);
+            if (isInCache && userModel != null)
             {
-                _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document);
+                _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document, bearerToken);
                 return;
             }
 
             var user = await _getUserUseCase.Execute(new GetUserByEmailInput(userEmail));
             userModel = CreateUserContextModel(user);
-            UserPermissionsCache.Add(userEmail, userModel);
+            UserContextCache.Add(userEmail, userModel);
 
-            _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document);
+            _userContextSet.Set(userModel.Name, userModel.Email, userModel.Permission, userModel.Phone, userModel.Document, bearerToken);
         }
 
         private static UserContextModel CreateUserContextModel(Output user)
@@ -45,6 +46,11 @@ namespace CTC.Api.Auth.Services
             string document = (string)user.Body?.GetType().GetProperty("Document")?.GetValue(user.Body, null)!;
 
             return new UserContextModel($"{firstName} {lastName}", email, phone, document, permission);
+        }
+
+        public void Reset(string key)
+        {
+            UserContextCache.Remove(key);
         }
     }
 }
