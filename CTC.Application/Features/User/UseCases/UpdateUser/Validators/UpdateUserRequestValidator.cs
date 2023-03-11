@@ -3,12 +3,13 @@ using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase.Validation;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
 {
     internal class UpdateUserRequestValidator : IRequestValidator<UpdateUserInput>
     {
-        public RequestValidationModel Validate(UpdateUserInput request)
+        public Task<RequestValidationModel> Validate(UpdateUserInput request)
         {
             var errors = new List<string>();
 
@@ -31,7 +32,8 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
             if (string.IsNullOrWhiteSpace(request.UserDocument) || request.UserDocument.Length < 11)
                 errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");
 
-            return new RequestValidationModel(errors);
+            var result = new RequestValidationModel(errors);
+            return Task.FromResult(result);
         }
     }
 }

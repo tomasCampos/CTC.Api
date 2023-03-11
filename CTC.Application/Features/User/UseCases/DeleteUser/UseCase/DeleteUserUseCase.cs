@@ -1,9 +1,12 @@
 ﻿using CTC.Application.Features.User.UseCases.DeleteUser.Data;
 using CTC.Application.Shared.Authorization;
+using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using FirebaseAdmin.Auth;
+using System;
+using System.Configuration;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
@@ -13,7 +16,9 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
         private readonly IRequestValidator<DeleteUserInput> _validator;
         private readonly IDeleteUserRepository _deleteUserRepository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
+        private readonly string AESKey;
 
+        private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
         private const string ErrorMessage = "Falha ao excluir usuário. Contate o administrador";
 
         public DeleteUserUseCase(IRequestValidator<DeleteUserInput> validator, IDeleteUserRepository deleteUserRepository, IUseCaseAuthorizationService useCaseAuthorizationService)
@@ -21,6 +26,9 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
             _validator = validator;
             _deleteUserRepository = deleteUserRepository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
+
+            AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
+                ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
         }
 
         public async Task<Output> Execute(DeleteUserInput input)
@@ -29,7 +37,7 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 
-            var validationResult = _validator.Validate(input);
+            var validationResult = await _validator.Validate(input);
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
@@ -73,10 +81,11 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
 
         private async Task RegisterFireBaseUser(UserModel user)
         {
+            var password = AES.Decrypt(user.Password!, AESKey);
             var args = new UserRecordArgs()
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = password,
                 DisplayName = $"{user.FirstName} {user.LastName} - {(int)user.Permission!}"
             };
 

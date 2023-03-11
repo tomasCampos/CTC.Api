@@ -24,7 +24,7 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.Data
 
         public async Task<UserModel> GetUserById(string userId)
         {
-            var result = await _sqlService.SelectSingleAsync<UserModel>(DeleteUserSqlScripts.GET_USER_BY_ID_SQL_SCRIPT, userId);
+            var result = await _sqlService.SelectSingleAsync<UserModel>(DeleteUserSqlScripts.GET_USER_BY_ID_SQL_SCRIPT, new { user_id = userId });
             return result;
         }
 
@@ -35,20 +35,20 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.Data
             var commands = new Dictionary<string, object?>
             {
                 {
-                    PersonSqlScripts.DELETE_PERSON_SQL,
-                    new
-                    {
-                        person_id = personId
-                    }
-                },
-
-                {
                     DeleteUserSqlScripts.DELETE_USER_SQL,
                     new
                     {
                         user_id = userId
                     }
-                }
+                },
+
+                {
+                    PersonSqlScripts.DELETE_PERSON_SQL,
+                    new
+                    {
+                        person_id = personId
+                    }
+                }                
             };
 
             return commands;

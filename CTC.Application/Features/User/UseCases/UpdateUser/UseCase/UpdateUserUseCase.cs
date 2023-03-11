@@ -54,7 +54,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 
-            var validationResult = _validator.Validate(input);
+            var validationResult = await _validator.Validate(input);
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);           
 
