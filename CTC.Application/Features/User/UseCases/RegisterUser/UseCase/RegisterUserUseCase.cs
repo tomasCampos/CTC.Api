@@ -16,10 +16,8 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         private readonly IRequestValidator<RegisterUserInput> _validator;
         private readonly IRegisterUserRepository _repository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
-        private readonly string FireBaseApiKey;
         private readonly string AESKey;
 
-        private const string FireBaseApiKeyEnvironmentVariableName = "FIRE_BASE_API_KEY";
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
 
         public RegisterUserUseCase(
@@ -30,9 +28,6 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             _validator = validator;
             _repository = repository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
-
-            FireBaseApiKey = Environment.GetEnvironmentVariable(FireBaseApiKeyEnvironmentVariableName)
-                ?? throw new ConfigurationErrorsException($"Missing environment variable named {FireBaseApiKeyEnvironmentVariableName}");
 
             AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");

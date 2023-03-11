@@ -38,7 +38,7 @@ namespace CTC.Application.Shared.Data
             return await connection.QuerySingleAsync<T>(sql, param);
         }
 
-        public async Task<(bool success, int rowsAffected)> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
+        public async Task<(bool Success, int RowsAffected)> ExecuteWithTransactionAsync(IDictionary<string, object?> commands)
         {
             int totalRowsAffected = 0;
             using var connection = _context.GetConnection();

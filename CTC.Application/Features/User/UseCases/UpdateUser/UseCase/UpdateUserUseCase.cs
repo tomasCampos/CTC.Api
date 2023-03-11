@@ -21,12 +21,9 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly IUserContext _userContext;
         private readonly IUserContextCacheReset _userContextCacheReset;
-        private readonly string FireBaseApiKey;
         private readonly string AESKey;
 
-        private const string FireBaseApiKeyEnvironmentVariableName = "FIRE_BASE_API_KEY";
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
-
         private const string UseCaseFailMessage = "Falha ao atualizar o usuário, contate o administrador.";
 
         public UpdateUserUseCase(
@@ -41,9 +38,6 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             _useCaseAuthorizationService = useCaseAuthorizationService;
             _userContext = userContext;
             _userContextCacheReset = userContextCacheReset;
-
-            FireBaseApiKey = Environment.GetEnvironmentVariable(FireBaseApiKeyEnvironmentVariableName)
-                ?? throw new ConfigurationErrorsException($"Missing environment variable named {FireBaseApiKeyEnvironmentVariableName}");
 
             AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
@@ -103,7 +97,8 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         {
             try
             {
-                var userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(oldUser.Email);
+                var fireBaseInstance = FirebaseAuth.DefaultInstance;
+                var userRecord = await fireBaseInstance.GetUserByEmailAsync(oldUser.Email);
                 var args = new UserRecordArgs()
                 {
                     Uid = userRecord.Uid,
@@ -112,7 +107,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                     DisplayName = $"{newUser.UserFirstName} {newUser.UserLastName} - {(int)newUser.UserPermission!}"
                 };
 
-                _ = await FirebaseAuth.DefaultInstance.UpdateUserAsync(args);
+                _ = await fireBaseInstance.UpdateUserAsync(args);
                 return true;
             }
             catch

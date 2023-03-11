@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.User.UseCases.AuthorizeUser;
+using CTC.Application.Features.User.UseCases.DeleteUser;
 using CTC.Application.Features.User.UseCases.GetUser;
 using CTC.Application.Features.User.UseCases.ListUsers;
 using CTC.Application.Features.User.UseCases.RegisterUser;
@@ -16,6 +17,7 @@ namespace CTC.Application.Features.User
             services.AddAuthorizeUser();
             services.AddListUsers();
             services.AddUpdateUser();
+            services.AddDeleteUser();
             return services;
         }
     }
