@@ -74,7 +74,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
             var fireBaseSuccess = await UpdateFireBaseUser(input, currentUser);
             if (!fireBaseSuccess)
-                Output.CreateInternalErrorResult(UseCaseFailMessage);
+                return Output.CreateInternalErrorResult(UseCaseFailMessage);
 
             _userContextCacheReset.Reset(currentUser.Email!);
             return Output.CreateOkResult();
