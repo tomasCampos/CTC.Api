@@ -1,6 +1,6 @@
 ﻿using CTC.Application.Shared.Authorization;
 
-namespace CTC.Api.Auth.Services
+namespace CTC.Application.Shared.UserContext.Services
 {
     internal sealed class UserContextModel
     {
@@ -18,7 +18,5 @@ namespace CTC.Api.Auth.Services
         public string Phone { get; }
         public string Document { get; }
         public UserPermission Permission { get; }
-
-        
     }
 }

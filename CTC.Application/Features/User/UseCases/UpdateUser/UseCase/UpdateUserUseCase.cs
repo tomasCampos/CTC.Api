@@ -5,6 +5,7 @@ using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using CTC.Application.Shared.UserContext;
+using CTC.Application.Shared.UserContext.Services;
 using FirebaseAdmin.Auth;
 using System;
 using System.Configuration;
@@ -19,6 +20,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         private readonly IUpdateUserRepository _repository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly IUserContext _userContext;
+        private readonly IUserContextCacheReset _userContextCacheReset;
         private readonly string FireBaseApiKey;
         private readonly string AESKey;
 
@@ -27,12 +29,18 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
         private const string UseCaseFailMessage = "Falha ao atualizar o usuário, contate o administrador.";
 
-        public UpdateUserUseCase(IRequestValidator<UpdateUserInput> validator, IUpdateUserRepository repository, IUseCaseAuthorizationService useCaseAuthorizationService, IUserContext userContext)
+        public UpdateUserUseCase(
+            IRequestValidator<UpdateUserInput> validator,
+            IUpdateUserRepository repository,
+            IUseCaseAuthorizationService useCaseAuthorizationService,
+            IUserContext userContext,
+            IUserContextCacheReset userContextCacheReset)
         {
             _validator = validator;
             _repository = repository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
             _userContext = userContext;
+            _userContextCacheReset = userContextCacheReset;
 
             FireBaseApiKey = Environment.GetEnvironmentVariable(FireBaseApiKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {FireBaseApiKeyEnvironmentVariableName}");
@@ -44,30 +52,31 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
         public async Task<Output> Execute(UpdateUserInput input)
         {
-            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(UpdateUserUseCase), input.UserEmail);
+            var currentUser = await _repository.GetUserById(input.UserId!);
+            if (currentUser == null)
+                return Output.CreateInvalidParametersResult("O usuário a ser atualizado não existe");
+
+            var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(UpdateUserUseCase), currentUser.Email);
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
 
             var validationResult = _validator.Validate(input);
             if (!validationResult.IsValid)
-                return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
-
-            var userToUpdate = await _repository.GetUserById(input.UserId!);
-            if (userToUpdate == null)
-                return Output.CreateInvalidParametersResult("O usuário a ser atualizado não existe");
+                return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);           
 
             var uniqueDataVerificationResult = await VerifyIfThereAreUsersWithTheSameUniqueData(input);
             if (!uniqueDataVerificationResult.success)
                 return Output.CreateInvalidParametersResult(uniqueDataVerificationResult.errorMessage);
 
-            var result = await UpdateSqlServeUser(userToUpdate, input);
+            var result = await UpdateSqlServeUser(currentUser, input);
             if (!result)
                 return Output.CreateInternalErrorResult(UseCaseFailMessage);
 
-            var fireBaseSuccess = await UpdateFireBaseUser(userToUpdate.Email!, input, userToUpdate);
+            var fireBaseSuccess = await UpdateFireBaseUser(input, currentUser);
             if (!fireBaseSuccess)
                 Output.CreateInternalErrorResult(UseCaseFailMessage);
 
+            _userContextCacheReset.Reset(currentUser.Email!);
             return Output.CreateOkResult();
         }
 
@@ -90,11 +99,11 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             return result.success;
         }
 
-        private async Task<bool> UpdateFireBaseUser(string currentUserEmail, UpdateUserInput newUser, UserModel oldUser)
+        private async Task<bool> UpdateFireBaseUser(UpdateUserInput newUser, UserModel oldUser)
         {
             try
             {
-                var userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(currentUserEmail);
+                var userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(oldUser.Email);
                 var args = new UserRecordArgs()
                 {
                     Uid = userRecord.Uid,

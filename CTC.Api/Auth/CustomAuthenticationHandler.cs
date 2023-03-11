@@ -1,4 +1,4 @@
-﻿using CTC.Api.Auth.Services;
+﻿using CTC.Application.Shared.UserContext.Services;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authentication;
@@ -13,7 +13,7 @@ namespace CTC.Api.Auth
     {
         private static readonly string BearerPrefix = "Bearer ";
         private readonly FirebaseApp _firebaseApp;
-        private readonly IUserAuthorizationService _userAuthorizationService;
+        private readonly IUserContextService _userAuthorizationService;
 
         public CustomAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -21,7 +21,7 @@ namespace CTC.Api.Auth
             UrlEncoder encoder,
             ISystemClock clock,
             FirebaseApp firebaseApp,
-            IUserAuthorizationService userAuthorizationService) : base(options, logger, encoder, clock)
+            IUserContextService userAuthorizationService) : base(options, logger, encoder, clock)
         {
             _firebaseApp = firebaseApp;
             _userAuthorizationService = userAuthorizationService;

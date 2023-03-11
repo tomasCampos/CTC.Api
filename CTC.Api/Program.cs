@@ -1,5 +1,4 @@
 using CTC.Api.Auth;
-using CTC.Api.Auth.Services;
 using CTC.Application;
 using FirebaseAdmin;
 using Microsoft.AspNetCore.Authentication;
@@ -16,7 +15,6 @@ if (portVar is { Length: > 0 } && int.TryParse(portVar, out int port))
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton(FirebaseApp.Create());
-builder.Services.AddScoped<IUserAuthorizationService, UserContextService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, (o) => { });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

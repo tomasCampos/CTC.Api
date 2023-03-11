@@ -12,15 +12,8 @@ namespace CTC.Application.Shared
             services.AddScoped<ISqlService, SqlService>();
             services.AddSingleton<IDataContext, MySqlDataContext>();
             services.AddScoped<IUseCaseAuthorizationService, UseCaseAuthorizationService>();
-            AddUserContext(services);
+            services.AddUserContext();
             return services;
-        }
-
-        private static void AddUserContext(IServiceCollection services)
-        {
-            services.AddScoped<UserContext.UserContext>();
-            services.AddScoped<IUserContext>(provider => provider.GetRequiredService<UserContext.UserContext>());
-            services.AddScoped<IUserContextSet>(provider => provider.GetRequiredService<UserContext.UserContext>());
         }
     }
 }
