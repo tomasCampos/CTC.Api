@@ -19,7 +19,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
             var commands = BuildCommands(model);
 
             var result = await _sqlService.ExecuteWithTransactionAsync(commands);
-            return result.success;
+            return result.Success;
         }
 
         public async Task<int> VerifyIfUserAlreadyExists(string email, string phone, string document)

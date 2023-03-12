@@ -1,6 +1,7 @@
 ﻿using CTC.Api.Controllers.User.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
+using CTC.Application.Features.User.UseCases.DeleteUser.UseCase;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
 using CTC.Application.Features.User.UseCases.ListUsers.UseCase;
 using CTC.Application.Features.User.UseCases.RegisterUser.UseCase;
@@ -23,18 +24,21 @@ namespace CTC.Api.Controllers.User
         private readonly IUseCase<AuthorizeUserInput, Output> _authorizeUserUseCase;
         private readonly IUseCase<ListUsersUseCaseInput, Output> _listUsersUseCase;
         private readonly IUseCase<UpdateUserInput, Output> _updateUserUseCase;
+        private readonly IUseCase<DeleteUserInput, Output> _deleteUserUseCase;
 
         public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase,
                             IUseCase<IGetUserInput, Output> getUserUseCase,
                             IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase,
                             IUseCase<ListUsersUseCaseInput, Output> listUsersUseCase,
-                            IUseCase<UpdateUserInput, Output> updateUserUseCase)
+                            IUseCase<UpdateUserInput, Output> updateUserUseCase,
+                            IUseCase<DeleteUserInput, Output> deleteUserUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
             _getUserUseCase = getUserUseCase;
             _authorizeUserUseCase = authorizeUserUseCase;
             _listUsersUseCase = listUsersUseCase;
             _updateUserUseCase = updateUserUseCase;
+            _deleteUserUseCase = deleteUserUseCase;
         }
 
         [Authorize]
@@ -132,6 +136,19 @@ namespace CTC.Api.Controllers.User
         {
             var input = new AuthorizeUserInput(request.UserEmail, request.UserPassword);
             var output = await _authorizeUserUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpDelete("{userId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteUser([FromRoute] string? userId)
+        {
+            var input = new DeleteUserInput { UserId = userId };
+            var output = await _deleteUserUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }

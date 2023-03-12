@@ -20,12 +20,6 @@ namespace CTC.Application.Shared.Authorization
             if(string.Equals(useCaseName, "RegisterCategoryUseCase"))
                 return Task.FromResult(_userContext.UserPermission == UserPermission.Write);           
 
-            if (string.Equals(useCaseName, "RegisterUserUseCase"))            
-                return Task.FromResult(_userContext.UserPermission == UserPermission.Administrator);
-
-            if (string.Equals(useCaseName, "ListUsersUseCase"))
-                return Task.FromResult(_userContext.UserPermission == UserPermission.Administrator);
-
             if (string.Equals(useCaseName, "UpdateUserUseCase"))
                 return Task.FromResult(_userContext.UserEmail == userEmail);
 

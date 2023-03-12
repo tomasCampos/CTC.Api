@@ -1,12 +1,13 @@
 ﻿using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Shared.Request;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.AuthorizeUser.Validators
 {
     internal sealed class AuthorizeUserRequestValidator : IRequestValidator<AuthorizeUserInput>
     {
-        public RequestValidationModel Validate(AuthorizeUserInput request)
+        public Task<RequestValidationModel> Validate(AuthorizeUserInput request)
         {
             var errors = new List<string>();
 
@@ -15,7 +16,8 @@ namespace CTC.Application.Features.User.UseCases.AuthorizeUser.Validators
             if (string.IsNullOrWhiteSpace(request.UserPassword))
                 errors.Add("A senha deve ser informada");
 
-            return new RequestValidationModel(errors);
+            var result = new RequestValidationModel(errors);
+            return Task.FromResult(result);
         }
     }
 }

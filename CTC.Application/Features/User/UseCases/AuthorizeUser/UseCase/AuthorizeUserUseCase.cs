@@ -24,7 +24,7 @@ namespace CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase
 
         public async Task<Output> Execute(AuthorizeUserInput input)
         {
-            var validationResult = _validator.Validate(input);
+            var validationResult = await _validator.Validate(input);
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 

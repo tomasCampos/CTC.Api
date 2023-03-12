@@ -16,6 +16,8 @@
                                                 @person_document);
                                                 ";
 
+        public static string DELETE_PERSON_SQL = @"DELETE FROM `heroku_3a06699194dd49a`.person WHERE person_id = @person_id";
+
         private static string UPDATE_PERSON_SQL = @"UPDATE 
 	                                                `heroku_3a06699194dd49a`.`person`
                                                 SET

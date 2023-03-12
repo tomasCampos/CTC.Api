@@ -29,7 +29,7 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase
             if (!isAuthorized)            
                 return Output.CreateForbiddenResult();            
 
-            var validationResult = _validator.Validate(input);
+            var validationResult = await _validator.Validate(input);
             if (!validationResult.IsValid)            
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);            
 
