@@ -52,13 +52,13 @@ namespace CTC.Api.Controllers.User
         {
             var input = new RegisterUserInput
             (
-                request.UserFirstName,
-                request.UserEmail,
-                request.UserPhone,
-                request.UserDocument,
-                request.UserLastName,
-                request.UserPermission,
-                request.UserPassword
+                request.FirstName,
+                request.Email,
+                request.Phone,
+                request.Document,
+                request.LastName,
+                request.Permission,
+                request.Password
             );
 
             var output = await _registerUserUseCase.Execute(input);
