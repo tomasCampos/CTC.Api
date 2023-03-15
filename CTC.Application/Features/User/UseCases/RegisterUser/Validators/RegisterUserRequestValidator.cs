@@ -27,7 +27,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Validators
                 errors.Add("O E-mail do usuário deve ser informado");
             if (!Regex.IsMatch(request.UserEmail, RegexValidationsConstants.ValidEmailRegex, RegexOptions.IgnoreCase))
                 errors.Add("O E-mail do usuário não é válido");
-            if (string.IsNullOrWhiteSpace(request.UserDocument) || request.UserDocument.Length < 11)
+            if (!string.IsNullOrWhiteSpace(request.UserDocument) && request.UserDocument.Length < 11)
                 errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");
 
             var result = new RequestValidationModel(errors);
