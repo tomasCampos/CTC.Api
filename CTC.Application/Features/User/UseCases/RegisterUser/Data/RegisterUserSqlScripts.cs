@@ -15,13 +15,14 @@
                                                 @user_password,
                                                 @person_id);";
 
-        public static string COUNT_USER_BY_EMAIL_PHONE_DOCUMENT = @"SELECT 
-	                                                    COUNT(*)
-                                                    FROM 
-	                                                    heroku_3a06699194dd49a.Person p
-                                                    WHERE 
-	                                                    p.person_email = @person_email
-                                                        OR p.person_phone = @person_phone
-                                                        OR p.person_document = @person_document";
+        public static string COUNT_USER_BY_EMAIL_PHONE_DOCUMENT = @"SELECT COUNT(*)
+                                                                    FROM 
+	                                                                    `heroku_3a06699194dd49a`.User u
+                                                                    INNER JOIN 
+	                                                                    `heroku_3a06699194dd49a`.Person p ON u.person_id = p.person_id
+                                                                    WHERE 
+	                                                                    p.person_email = @person_email
+                                                                        OR p.person_phone = @person_phone
+                                                                        OR p.person_document = @person_document";
     }
 }

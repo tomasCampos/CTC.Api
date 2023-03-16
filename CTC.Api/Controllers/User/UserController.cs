@@ -50,17 +50,7 @@ namespace CTC.Api.Controllers.User
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
-            var input = new RegisterUserInput
-            (
-                request.FirstName,
-                request.Email,
-                request.Phone,
-                request.Document,
-                request.LastName,
-                request.Permission,
-                request.Password
-            );
-
+            var input = new RegisterUserInput(request.FirstName, request.Email, request.Phone, request.Document, request.LastName, request.Permission, request.Password);
             var output = await _registerUserUseCase.Execute(input);
             return GetHttpResponse(output, "/user");
         }

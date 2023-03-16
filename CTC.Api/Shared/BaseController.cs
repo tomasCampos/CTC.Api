@@ -27,7 +27,7 @@ namespace CTC.Api.Shared
                 return Created(uri!, httpResponse);
 
             if (output.StatusCode == HttpStatusCode.InternalServerError)
-                return StatusCode(500);
+                return StatusCode(500, output.ValidationErrorMessage);
 
             return NoContent();
         }

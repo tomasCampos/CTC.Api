@@ -1,4 +1,4 @@
-﻿namespace CTC.Application.Shared.UseCase.Validation
+﻿namespace CTC.Application.Shared.Request.Validator
 {
     internal static class RegexValidationsConstants
     {

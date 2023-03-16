@@ -1,6 +1,6 @@
 ﻿using CTC.Application.Features.User.UseCases.AuthorizeUser.UseCase;
 using CTC.Application.Features.User.UseCases.AuthorizeUser.Validators;
-using CTC.Application.Shared.Request;
+using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.Extensions.DependencyInjection;

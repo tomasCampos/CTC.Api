@@ -1,4 +1,4 @@
-﻿using CTC.Application.Shared.Request;
+﻿using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Firebase.Auth;

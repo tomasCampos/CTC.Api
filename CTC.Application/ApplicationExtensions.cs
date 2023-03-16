@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.Category;
+using CTC.Application.Features.Supplier;
 using CTC.Application.Features.User;
 using CTC.Application.Shared;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace CTC.Application
         {
             services.AddCategory();
             services.AddUser();
+            services.AddSupplier();
             services.AddShared();
             return services;
         }
