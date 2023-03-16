@@ -12,8 +12,8 @@ namespace CTC.Application
         {
             services.AddCategory();
             services.AddUser();
-            services.AddShared();
             services.AddSupplier();
+            services.AddShared();
             return services;
         }
     }

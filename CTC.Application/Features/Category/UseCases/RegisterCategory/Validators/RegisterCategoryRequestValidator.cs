@@ -1,5 +1,5 @@
 ﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
-using CTC.Application.Shared.Request;
+using CTC.Application.Shared.Request.Validator;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

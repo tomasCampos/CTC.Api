@@ -1,7 +1,7 @@
 ﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
-using CTC.Application.Shared.Request;
+using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using FirebaseAdmin.Auth;
@@ -51,7 +51,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             var user = new UserModel(input.UserFirstName!, input.UserEmail!, input.UserPhone!, input.UserDocument!, input.UserLastName!, (int)input.UserPermission!, encryptedPassword);
             var wasUserInsertedInDataBaseWithSuccess = await _repository.InsertUser(user);
             if (!wasUserInsertedInDataBaseWithSuccess)
-                return Output.CreateInternalErrorResult("Não foi possível cadastrar o usuário. Tente novamente mais tarde.");
+                return Output.CreateInternalErrorResult("Ocorreu um erro e não foi possível cadastrar o usuário. Tente novamente mais tarde.");
 
             await RegisterFireBaseUser(input);
 

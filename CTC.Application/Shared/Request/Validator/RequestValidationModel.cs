@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CTC.Application.Shared.Request
+namespace CTC.Application.Shared.Request.Validator
 {
     internal sealed class RequestValidationModel
     {

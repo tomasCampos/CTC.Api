@@ -1,6 +1,6 @@
 ﻿using CTC.Application.Features.Category.UseCases.RegisterCategory.Data;
 using CTC.Application.Shared.Authorization;
-using CTC.Application.Shared.Request;
+using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using System.Threading.Tasks;

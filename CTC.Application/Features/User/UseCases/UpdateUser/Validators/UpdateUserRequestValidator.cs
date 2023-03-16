@@ -1,6 +1,5 @@
 ﻿using CTC.Application.Features.User.UseCases.UpdateUser.UseCase;
-using CTC.Application.Shared.Request;
-using CTC.Application.Shared.UseCase.Validation;
+using CTC.Application.Shared.Request.Validator;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
