@@ -5,6 +5,8 @@ using CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase;
 using CTC.Application.Features.Supplier.UseCases.RegisterSupplier.UseCase;
 using CTC.Application.Features.User.UseCases.DeleteUser.UseCase;
 using CTC.Application.Shared.Request;
+using CTC.Application.Features.Supplier.UseCases.UpdateSupplier.UseCase;
+using CTC.Application.Features.User.UseCases.UpdateUser.UseCase;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -19,15 +21,18 @@ namespace CTC.Api.Controllers.Supplier
     {
         private readonly IUseCase<RegisterSupplierInput, Output> _registerSupplierUseCase;
         private readonly IUseCase<ListSuppliersUseCaseInput, Output> _listSuppliersUseCase;
+        private readonly IUseCase<UpdateSupplierInput, Output> _updateSupplierUseCase;
         private readonly IUseCase<DeleteSupplierInput, Output> _deleteSupplierUseCase;
 
         public SupplierController(IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase,
                                   IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase,
+                                  IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase,
                                   IUseCase<DeleteSupplierInput, Output> deleteSupplierUseCase)
         {
             _registerSupplierUseCase = registerSupplierUseCase;
             _listSuppliersUseCase = listSuppliersUseCase;
             _deleteSupplierUseCase = deleteSupplierUseCase;
+            _updateSupplierUseCase = updateSupplierUseCase;
         }
 
         [Authorize]
@@ -55,6 +60,27 @@ namespace CTC.Api.Controllers.Supplier
             var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
             var input = new ListSuppliersUseCaseInput(request);
             var output = await _listSuppliersUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpPut()]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateSupplier([FromBody] UpdateSupplierRequest request)
+        {
+            var input = new UpdateSupplierInput
+            (
+                request.Id,
+                request.Name,
+                request.Email,
+                request.Phone,
+                request.Document
+            );
+
+            var output = await _updateSupplierUseCase.Execute(input);
             return GetHttpResponse(output);
         }
 

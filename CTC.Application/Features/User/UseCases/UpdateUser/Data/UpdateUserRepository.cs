@@ -3,11 +3,10 @@ using CTC.Application.Shared.Person;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
 {
-    internal class UpdateUserRepository : IUpdateUserRepository
+    internal sealed class UpdateUserRepository : IUpdateUserRepository
     {
         private readonly ISqlService _sqlService;
 
@@ -55,18 +54,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
 
         private static Dictionary<string, object?> BuildCommands(UserModel model)
         {
-            var updatePersonSetStatement = "`person_first_name` = @person_first_name";
-
-            if(!string.IsNullOrWhiteSpace(model.Email))
-                updatePersonSetStatement += ",`person_email` = @person_email";
-
-            if (!string.IsNullOrWhiteSpace(model.Phone))
-                updatePersonSetStatement += ",`person_phone` = @person_phone";
-
-            if (!string.IsNullOrWhiteSpace(model.Document))
-                updatePersonSetStatement += ",`person_document` = @person_document";
-
-            var updatePersonSqlCommand = PersonSqlScripts.GetUpdatePersonSql(updatePersonSetStatement);
+            var updatePersonSqlCommand = PersonSqlScripts.GetUpdatePersonSql(model);
 
             var commands = new Dictionary<string, object?>
             {

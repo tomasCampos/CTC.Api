@@ -1,5 +1,6 @@
 ﻿using CTC.Application.Features.User.UseCases.GetUser.Data;
 using CTC.Application.Features.User.UseCases.GetUser.UseCase.IO;
+using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using CTC.Application.Shared.UserContext;
@@ -22,7 +23,7 @@ namespace CTC.Application.Features.User.UseCases.GetUser.UseCase
         {
             if (input.GetUserInputParameterType == GetUserInputParameterType.Email)
             {
-                if (!string.IsNullOrEmpty(_userContext.UserEmail) && _userContext.UserEmail != input.Parameter)
+                if (!string.IsNullOrEmpty(_userContext.UserEmail) && _userContext.UserEmail != input.Parameter && _userContext.UserPermission != UserPermission.Administrator)
                     return Output.CreateForbiddenResult();
 
                 var user = await _userRepository.GetUserByEmail(input.Parameter!);
