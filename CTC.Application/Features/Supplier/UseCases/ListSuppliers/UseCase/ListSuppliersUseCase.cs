@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase
 {
-    internal sealed class ListSuppliersUseCase : IUseCase<ListSuppliersUseCaseInput, Output>
+    internal sealed class ListSuppliersUseCase : IUseCase<ListSuppliersInput, Output>
     {
         private readonly IListSuppliersRepository _suppliersRepository;
 
@@ -15,7 +15,7 @@ namespace CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase
             _suppliersRepository = suppliersRepository;
         }
         
-        public async Task<Output> Execute(ListSuppliersUseCaseInput input)
+        public async Task<Output> Execute(ListSuppliersInput input)
         {
             var result = await _suppliersRepository.ListSuppliers(input.Request);
             return Output.CreateOkResult(result);

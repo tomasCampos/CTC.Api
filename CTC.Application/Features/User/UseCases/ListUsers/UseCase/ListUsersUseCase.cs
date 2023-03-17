@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
 {
-    internal sealed class ListUsersUseCase : IUseCase<ListUsersUseCaseInput, Output>
+    internal sealed class ListUsersUseCase : IUseCase<ListUsersInput, Output>
     {
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly IListUsersRepository _usersRepository;
@@ -18,7 +18,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers.UseCase
             _usersRepository = usersRepository;
         }
 
-        public async Task<Output> Execute(ListUsersUseCaseInput input)
+        public async Task<Output> Execute(ListUsersInput input)
         {
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(ListUsersUseCase));
             if (!isAuthorized)

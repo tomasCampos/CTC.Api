@@ -22,14 +22,14 @@ namespace CTC.Api.Controllers.User
         private readonly IUseCase<RegisterUserInput, Output> _registerUserUseCase;
         private readonly IUseCase<IGetUserInput, Output> _getUserUseCase;
         private readonly IUseCase<AuthorizeUserInput, Output> _authorizeUserUseCase;
-        private readonly IUseCase<ListUsersUseCaseInput, Output> _listUsersUseCase;
+        private readonly IUseCase<ListUsersInput, Output> _listUsersUseCase;
         private readonly IUseCase<UpdateUserInput, Output> _updateUserUseCase;
         private readonly IUseCase<DeleteUserInput, Output> _deleteUserUseCase;
 
         public UserController(IUseCase<RegisterUserInput, Output> registerUserUseCase,
                             IUseCase<IGetUserInput, Output> getUserUseCase,
                             IUseCase<AuthorizeUserInput, Output> authorizeUserUseCase,
-                            IUseCase<ListUsersUseCaseInput, Output> listUsersUseCase,
+                            IUseCase<ListUsersInput, Output> listUsersUseCase,
                             IUseCase<UpdateUserInput, Output> updateUserUseCase,
                             IUseCase<DeleteUserInput, Output> deleteUserUseCase)
         {
@@ -64,7 +64,7 @@ namespace CTC.Api.Controllers.User
         public async Task<IActionResult> ListUsers([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
         {
             var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
-            var input = new ListUsersUseCaseInput(request);
+            var input = new ListUsersInput(request);
             var output = await _listUsersUseCase.Execute(input);
             return GetHttpResponse(output);
         }

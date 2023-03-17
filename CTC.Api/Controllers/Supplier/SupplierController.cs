@@ -1,12 +1,10 @@
 ﻿using CTC.Api.Controllers.Supplier.Contracts;
 using CTC.Api.Shared;
-using CTC.Application.Features.Supplier.UseCases.DeleteSupplier.UseCase;
+using CTC.Application.Features.Supplier.UseCases.GetSupplier.UseCase;
 using CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase;
 using CTC.Application.Features.Supplier.UseCases.RegisterSupplier.UseCase;
-using CTC.Application.Features.User.UseCases.DeleteUser.UseCase;
-using CTC.Application.Shared.Request;
 using CTC.Application.Features.Supplier.UseCases.UpdateSupplier.UseCase;
-using CTC.Application.Features.User.UseCases.UpdateUser.UseCase;
+using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -20,19 +18,20 @@ namespace CTC.Api.Controllers.Supplier
     public sealed class SupplierController : BaseController
     {
         private readonly IUseCase<RegisterSupplierInput, Output> _registerSupplierUseCase;
-        private readonly IUseCase<ListSuppliersUseCaseInput, Output> _listSuppliersUseCase;
+        private readonly IUseCase<ListSuppliersInput, Output> _listSuppliersUseCase;
         private readonly IUseCase<UpdateSupplierInput, Output> _updateSupplierUseCase;
-        private readonly IUseCase<DeleteSupplierInput, Output> _deleteSupplierUseCase;
+        private readonly IUseCase<GetSupplierInput, Output> _getSupplierUseCase;
 
-        public SupplierController(IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase,
-                                  IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase,
-                                  IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase,
-                                  IUseCase<DeleteSupplierInput, Output> deleteSupplierUseCase)
+        public SupplierController(
+            IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, 
+            IUseCase<ListSuppliersInput, Output> listSuppliersUseCase, 
+            IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase,
+            IUseCase<GetSupplierInput, Output> getSupplierUseCase)
         {
             _registerSupplierUseCase = registerSupplierUseCase;
             _listSuppliersUseCase = listSuppliersUseCase;
-            _deleteSupplierUseCase = deleteSupplierUseCase;
             _updateSupplierUseCase = updateSupplierUseCase;
+            _getSupplierUseCase = getSupplierUseCase;
         }
 
         [Authorize]
@@ -42,12 +41,12 @@ namespace CTC.Api.Controllers.Supplier
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterSupplierRequest request)
+        public async Task<IActionResult> RegisterSupplier([FromBody] RegisterSupplierRequest request)
         {
             var input = new RegisterSupplierInput(request.Name, request.Email, request.Phone, request.Document);
 
             var output = await _registerSupplierUseCase.Execute(input);
-            return GetHttpResponse(output, "/user");
+            return GetHttpResponse(output, "/supplier");
         }
 
         [Authorize]
@@ -58,8 +57,19 @@ namespace CTC.Api.Controllers.Supplier
         public async Task<IActionResult> ListSuppliers([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
         {
             var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
-            var input = new ListSuppliersUseCaseInput(request);
+            var input = new ListSuppliersInput(request);
             var output = await _listSuppliersUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpGet("{supplierId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetSupplier([FromRoute] string supplierId)
+        {
+            var input = new GetSupplierInput { SupplierId = supplierId };
+            var output = await _getSupplierUseCase.Execute(input);
             return GetHttpResponse(output);
         }
 
@@ -81,19 +91,6 @@ namespace CTC.Api.Controllers.Supplier
             );
 
             var output = await _updateSupplierUseCase.Execute(input);
-            return GetHttpResponse(output);
-        }
-
-        [Authorize]
-        [HttpDelete("{supplierId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteSupplier([FromRoute] string? supplierId)
-        {
-            var input = new DeleteSupplierInput { SupplierId = supplierId };
-            var output = await _deleteSupplierUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }

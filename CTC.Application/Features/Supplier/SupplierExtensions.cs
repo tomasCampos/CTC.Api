@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.Supplier.UseCases.DeleteSupplier;
+using CTC.Application.Features.Supplier.UseCases.GetSupplier;
 using CTC.Application.Features.Supplier.UseCases.ListSuppliers;
 using CTC.Application.Features.Supplier.UseCases.RegisterSupplier;
 using CTC.Application.Features.Supplier.UseCases.UpdateSupplier;
@@ -14,6 +15,7 @@ namespace CTC.Application.Features.Supplier
             services.AddListSuppliers();
             services.AddUpdateSupplier();
             services.AddDeleteSupplier();
+            services.AddGetSupplier();
             return services;
         }
     }

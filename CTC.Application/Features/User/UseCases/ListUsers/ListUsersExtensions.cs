@@ -10,7 +10,7 @@ namespace CTC.Application.Features.User.UseCases.ListUsers
     {
         public static IServiceCollection AddListUsers(this IServiceCollection services)
         {
-            services.AddScoped<IUseCase<ListUsersUseCaseInput, Output>, ListUsersUseCase>();
+            services.AddScoped<IUseCase<ListUsersInput, Output>, ListUsersUseCase>();
             services.AddScoped<IListUsersRepository, ListUsersRepository>();
             return services;
         }

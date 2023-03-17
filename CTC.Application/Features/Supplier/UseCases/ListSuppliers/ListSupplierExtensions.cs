@@ -10,7 +10,7 @@ namespace CTC.Application.Features.Supplier.UseCases.ListSuppliers
     {
         public static IServiceCollection AddListSuppliers(this IServiceCollection services)
         {
-            services.AddScoped<IUseCase<ListSuppliersUseCaseInput, Output>, ListSuppliersUseCase>();
+            services.AddScoped<IUseCase<ListSuppliersInput, Output>, ListSuppliersUseCase>();
             services.AddScoped<IListSuppliersRepository, ListSuppliersRepository>();
             return services;
         }
