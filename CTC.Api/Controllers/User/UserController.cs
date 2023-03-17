@@ -59,6 +59,7 @@ namespace CTC.Api.Controllers.User
         [HttpGet()]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> ListUsers([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
         {
