@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
 {
-    internal class UpdateUserRequestValidator : IRequestValidator<UpdateUserInput>
+    internal sealed class UpdateUserRequestValidator : IRequestValidator<UpdateUserInput>
     {
         public Task<RequestValidationModel> Validate(UpdateUserInput request)
         {
@@ -28,8 +28,14 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
                 errors.Add("O E-mail do usuário deve ser informado");
             if (!Regex.IsMatch(request.UserEmail, RegexValidationsConstants.ValidEmailRegex, RegexOptions.IgnoreCase))
                 errors.Add("O E-mail do usuário não é válido");
-            if (string.IsNullOrWhiteSpace(request.UserDocument) || request.UserDocument.Length < 11)
-                errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");
+            if (!string.IsNullOrWhiteSpace(request.UserDocument))
+            {
+                if (request.UserDocument.Length < 11)
+                    errors.Add("O número do documento do usuário deve conter pelo menos 11 dígitos");
+
+                if (!request.UserDocument.IsDigitsOnly())
+                    errors.Add("O número do documento do usuário deve conter apenas caracteres numéricos");
+            }
 
             var result = new RequestValidationModel(errors);
             return Task.FromResult(result);

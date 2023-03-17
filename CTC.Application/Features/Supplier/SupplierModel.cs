@@ -17,8 +17,9 @@ namespace CTC.Application.Features.Supplier
 
         public SupplierModel() : base()
         {
+                
         }
 
-        public string SupplierId { get; set; }
+        public string? SupplierId { get; set; }
     }
 }
