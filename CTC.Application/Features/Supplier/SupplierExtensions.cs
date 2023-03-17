@@ -1,4 +1,5 @@
-﻿using CTC.Application.Features.Supplier.UseCases.RegisterSupplier;
+﻿using CTC.Application.Features.Supplier.UseCases.ListSuppliers;
+using CTC.Application.Features.Supplier.UseCases.RegisterSupplier;
 using CTC.Application.Features.Supplier.UseCases.UpdateSupplier;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace CTC.Application.Features.Supplier
         public static IServiceCollection AddSupplier(this IServiceCollection services) 
         {
             services.AddRegisterSupplier();
+            services.AddListSuppliers();
             services.AddUpdateSupplier();
             return services;
         }
