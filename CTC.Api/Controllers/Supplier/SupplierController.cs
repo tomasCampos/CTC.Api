@@ -1,5 +1,6 @@
 ﻿using CTC.Api.Controllers.Supplier.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.Supplier.UseCases.DeleteSupplier.UseCase;
 using CTC.Application.Features.Supplier.UseCases.GetSupplier.UseCase;
 using CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase;
 using CTC.Application.Features.Supplier.UseCases.RegisterSupplier.UseCase;
@@ -21,6 +22,7 @@ namespace CTC.Api.Controllers.Supplier
         private readonly IUseCase<ListSuppliersInput, Output> _listSuppliersUseCase;
         private readonly IUseCase<UpdateSupplierInput, Output> _updateSupplierUseCase;
         private readonly IUseCase<GetSupplierInput, Output> _getSupplierUseCase;
+        private readonly IUseCase<DeleteSupplierInput, Output> _deleteSupplierUseCase;
 
         public SupplierController(
             IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, 
@@ -91,6 +93,19 @@ namespace CTC.Api.Controllers.Supplier
             );
 
             var output = await _updateSupplierUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpDelete("{supplierId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteSupplier([FromRoute] string? supplierId)
+        {
+            var input = new DeleteSupplierInput { SupplierId = supplierId };
+            var output = await _deleteSupplierUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }
