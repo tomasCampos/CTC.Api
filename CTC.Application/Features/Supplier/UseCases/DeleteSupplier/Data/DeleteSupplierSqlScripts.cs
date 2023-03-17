@@ -6,11 +6,11 @@
 
         public static string GET_SUPPLIER_BY_ID_SQL_SCRIPT = @"SELECT
                                                             s.supplier_id AS SupplierId,
-                                                            s.person_id AS person_id,
+                                                            s.person_id AS PersonId,
                                                             p.person_document AS Document,
                                                             p.person_email AS Email,
                                                             p.person_phone AS Phone,
-                                                            p.person_first_name AS 'Name'
+                                                            p.person_first_name AS FirstName
                                                         FROM
                                                             `heroku_3a06699194dd49a`.supplier s
                                                         INNER JOIN
