@@ -1,7 +1,9 @@
 ﻿using CTC.Api.Controllers.Supplier.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.Supplier.UseCases.DeleteSupplier.UseCase;
 using CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase;
 using CTC.Application.Features.Supplier.UseCases.RegisterSupplier.UseCase;
+using CTC.Application.Features.User.UseCases.DeleteUser.UseCase;
 using CTC.Application.Shared.Request;
 using CTC.Application.Features.Supplier.UseCases.UpdateSupplier.UseCase;
 using CTC.Application.Features.User.UseCases.UpdateUser.UseCase;
@@ -20,14 +22,16 @@ namespace CTC.Api.Controllers.Supplier
         private readonly IUseCase<RegisterSupplierInput, Output> _registerSupplierUseCase;
         private readonly IUseCase<ListSuppliersUseCaseInput, Output> _listSuppliersUseCase;
         private readonly IUseCase<UpdateSupplierInput, Output> _updateSupplierUseCase;
+        private readonly IUseCase<DeleteSupplierInput, Output> _deleteSupplierUseCase;
 
-        public SupplierController(
-            IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, 
-            IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase, 
-            IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase)
+        public SupplierController(IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase,
+                                  IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase,
+                                  IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase,
+                                  IUseCase<DeleteSupplierInput, Output> deleteSupplierUseCase)
         {
             _registerSupplierUseCase = registerSupplierUseCase;
             _listSuppliersUseCase = listSuppliersUseCase;
+            _deleteSupplierUseCase = deleteSupplierUseCase;
             _updateSupplierUseCase = updateSupplierUseCase;
         }
 
@@ -77,6 +81,19 @@ namespace CTC.Api.Controllers.Supplier
             );
 
             var output = await _updateSupplierUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpDelete("{supplierId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteSupplier([FromRoute] string? supplierId)
+        {
+            var input = new DeleteSupplierInput { SupplierId = supplierId };
+            var output = await _deleteSupplierUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }
