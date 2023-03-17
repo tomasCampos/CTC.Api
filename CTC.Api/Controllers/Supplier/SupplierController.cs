@@ -21,9 +21,10 @@ namespace CTC.Api.Controllers.Supplier
         private readonly IUseCase<ListSuppliersUseCaseInput, Output> _listSuppliersUseCase;
         private readonly IUseCase<UpdateSupplierInput, Output> _updateSupplierUseCase;
 
-        public SupplierController(IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase,
-                                  IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase)
-        public SupplierController(IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase)
+        public SupplierController(
+            IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, 
+            IUseCase<ListSuppliersUseCaseInput, Output> listSuppliersUseCase, 
+            IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase)
         {
             _registerSupplierUseCase = registerSupplierUseCase;
             _listSuppliersUseCase = listSuppliersUseCase;
