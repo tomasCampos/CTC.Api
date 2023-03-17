@@ -3,8 +3,8 @@ using CTC.Application.Shared.UseCase.IO;
 
 namespace CTC.Application.Features.Supplier.UseCases.ListSuppliers.UseCase
 {
-    public sealed class ListSuppliersUseCaseInput : QueryInput
+    public sealed class ListSuppliersInput : QueryInput
     {
-        public ListSuppliersUseCaseInput(QueryRequest request) : base(request) {}
+        public ListSuppliersInput(QueryRequest request) : base(request) {}
     }
 }
