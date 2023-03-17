@@ -28,12 +28,14 @@ namespace CTC.Api.Controllers.Supplier
             IUseCase<RegisterSupplierInput, Output> registerSupplierUseCase, 
             IUseCase<ListSuppliersInput, Output> listSuppliersUseCase, 
             IUseCase<UpdateSupplierInput, Output> updateSupplierUseCase,
-            IUseCase<GetSupplierInput, Output> getSupplierUseCase)
+            IUseCase<GetSupplierInput, Output> getSupplierUseCase,
+            IUseCase<DeleteSupplierInput, Output> deleteSupplierUseCase)
         {
             _registerSupplierUseCase = registerSupplierUseCase;
             _listSuppliersUseCase = listSuppliersUseCase;
             _updateSupplierUseCase = updateSupplierUseCase;
             _getSupplierUseCase = getSupplierUseCase;
+            _deleteSupplierUseCase = deleteSupplierUseCase;
         }
 
         [Authorize]
