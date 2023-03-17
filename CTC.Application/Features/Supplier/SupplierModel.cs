@@ -15,6 +15,10 @@ namespace CTC.Application.Features.Supplier
             SupplierId = Guid.NewGuid().ToString();
         }
 
+        public SupplierModel() : base()
+        {
+        }
+
         public string SupplierId { get; set; }
     }
 }
