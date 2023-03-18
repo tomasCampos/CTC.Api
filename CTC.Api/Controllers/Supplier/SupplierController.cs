@@ -69,6 +69,7 @@ namespace CTC.Api.Controllers.Supplier
         [Authorize]
         [HttpGet("{supplierId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetSupplier([FromRoute] string supplierId)
         {
