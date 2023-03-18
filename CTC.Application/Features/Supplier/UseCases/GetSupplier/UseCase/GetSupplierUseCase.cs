@@ -17,6 +17,10 @@ namespace CTC.Application.Features.Supplier.UseCases.GetSupplier.UseCase
         public async Task<Output> Execute(GetSupplierInput input)
         {
             var result = await _repository.GetSupplierById(input.SupplierId);
+
+            if (result == null)
+                return Output.CreateNotFoundResult();
+
             return Output.CreateOkResult(result);
         }
     }

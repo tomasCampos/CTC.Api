@@ -17,6 +17,10 @@ namespace CTC.Application.Features.Client.UseCases.GetClient.UseCase
         public async Task<Output> Execute(GetClientInput input)
         {
             var result = await _repository.GetClientById(input.ClientId);
+
+            if(result == null )
+                return Output.CreateNotFoundResult();
+
             return Output.CreateOkResult(result);
         }
     }

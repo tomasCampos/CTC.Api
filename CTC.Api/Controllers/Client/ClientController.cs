@@ -32,6 +32,7 @@ namespace CTC.Api.Controllers.Client
         [Authorize]
         [HttpGet("{clientId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetClient([FromRoute] string clientId)
         {
