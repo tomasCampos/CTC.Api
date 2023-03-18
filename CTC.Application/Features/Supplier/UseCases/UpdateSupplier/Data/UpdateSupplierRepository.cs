@@ -3,7 +3,6 @@ using CTC.Application.Shared.Person;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace CTC.Application.Features.Supplier.UseCases.UpdateSupplier.Data
 {
