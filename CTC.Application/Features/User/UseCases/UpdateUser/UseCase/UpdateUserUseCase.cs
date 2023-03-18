@@ -81,12 +81,13 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             string? newUserDocument = newUserData.UserDocument == currentUserData.Document ? string.Empty : newUserData.UserDocument;
             string? newUserPhone = newUserData.UserPhone == currentUserData.Phone ? string.Empty : newUserData.UserPhone;
             string? newUserEmail = newUserData.UserEmail == currentUserData.Email ? string.Empty : newUserData.UserEmail;
+            string? newUserPassword = string.IsNullOrWhiteSpace(newUserData.UserPassword) ? currentUserData.Password : newUserData.UserPassword;
 
             UserModel newUser;
             if (_userContext.UserPermission != UserPermission.Administrator)
-                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)currentUserData.Permission!, newUserDocument!);
+                newUser = new UserModel(currentUserData.UserId!, newUserPassword!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)currentUserData.Permission!, newUserDocument!);
             else
-                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)newUserData.UserPermission!, newUserDocument!);
+                newUser = new UserModel(currentUserData.UserId!, newUserPassword!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)newUserData.UserPermission!, newUserDocument!);
 
             var result = await _repository.UpdateUser(newUser);
 
@@ -97,13 +98,14 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         {
             try
             {
+                string? newUserPassword = string.IsNullOrWhiteSpace(newUser.UserPassword) ? oldUser.Password : newUser.UserPassword;
                 var fireBaseInstance = FirebaseAuth.DefaultInstance;
                 var userRecord = await fireBaseInstance.GetUserByEmailAsync(oldUser.Email);
                 var args = new UserRecordArgs()
                 {
                     Uid = userRecord.Uid,
                     Email = newUser.UserEmail,
-                    Password = newUser.UserPassword,
+                    Password = newUserPassword,
                     DisplayName = $"{newUser.UserFirstName} {newUser.UserLastName} - {(int)newUser.UserPermission!}"
                 };
 

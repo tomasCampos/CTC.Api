@@ -18,10 +18,11 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
                 errors.Add("O último nome do usuário deve ser informado");
             if (!request.UserPermission.HasValue)
                 errors.Add("A permissão do usuário deve ser informada");
-            if (string.IsNullOrWhiteSpace(request.UserPassword))
-                errors.Add("A senha do usuário deve ser informada");
-            if (request.UserPassword!.Length < 6)
-                errors.Add("A senha do usuário deve conter pelo menos 6 dígitos");
+            if (!string.IsNullOrWhiteSpace(request.UserPassword))
+            {
+                if (request.UserPassword!.Length < 6)
+                    errors.Add("A senha do usuário deve conter pelo menos 6 dígitos");
+            }
             if (string.IsNullOrWhiteSpace(request.UserFirstName))
                 errors.Add("O primeiro nome do usuário deve ser informado");
             if (string.IsNullOrWhiteSpace(request.UserEmail))
