@@ -10,7 +10,7 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient
 {
     internal static class DeleteClientExtensions
     {
-        public static IServiceCollection AddClientClient(this IServiceCollection services)
+        public static IServiceCollection AddDeleteClient(this IServiceCollection services)
         {
             services.AddScoped<IRequestValidator<DeleteClientInput>, DeleteClientRequestValidator>();
             services.AddScoped<IDeleteClientRepository, DeleteClientRepository>();
