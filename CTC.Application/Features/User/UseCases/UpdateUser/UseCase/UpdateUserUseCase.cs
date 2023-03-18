@@ -76,18 +76,16 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
         private async Task<bool> UpdateSqlServeUser(UserModel currentUserData, UpdateUserInput newUserData)
         {
-            var encryptedPassword = AES.Encrypt(newUserData.UserPassword!, AESKey);
-
             string? newUserDocument = newUserData.UserDocument == currentUserData.Document ? string.Empty : newUserData.UserDocument;
             string? newUserPhone = newUserData.UserPhone == currentUserData.Phone ? string.Empty : newUserData.UserPhone;
             string? newUserEmail = newUserData.UserEmail == currentUserData.Email ? string.Empty : newUserData.UserEmail;
-            string? newUserPassword = string.IsNullOrWhiteSpace(newUserData.UserPassword) ? currentUserData.Password : newUserData.UserPassword;
+            string? newUserPassword = string.IsNullOrWhiteSpace(newUserData.UserPassword) ? currentUserData.Password : AES.Encrypt(newUserData.UserPassword!, AESKey);
 
             UserModel newUser;
             if (_userContext.UserPermission != UserPermission.Administrator)
-                newUser = new UserModel(currentUserData.UserId!, newUserPassword!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)currentUserData.Permission!, newUserDocument!);
+                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, newUserPassword!, (int)currentUserData.Permission!, newUserDocument!);
             else
-                newUser = new UserModel(currentUserData.UserId!, newUserPassword!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, encryptedPassword, (int)newUserData.UserPermission!, newUserDocument!);
+                newUser = new UserModel(currentUserData.UserId!, currentUserData.PersonId!, newUserData.UserFirstName!, newUserEmail!, newUserPhone!, newUserData.UserLastName!, newUserPassword!, (int)newUserData.UserPermission!, newUserDocument!);
 
             var result = await _repository.UpdateUser(newUser);
 
