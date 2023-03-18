@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Shared.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Supplier.UseCases.GetSupplier.Data
@@ -14,8 +15,8 @@ namespace CTC.Application.Features.Supplier.UseCases.GetSupplier.Data
 
         public async Task<SupplierModel> GetSupplierById(string supplierId)
         {
-            var result = await _sqlService.SelectSingleAsync<SupplierModel>(GetSupplierSqlScripts.GET_SUPPLIER_BY_ID_SQL_SCRIPT, new { supplier_id = supplierId });
-            return result;
+            var result = await _sqlService.SelectAsync<SupplierModel>(GetSupplierSqlScripts.GET_SUPPLIER_BY_ID_SQL_SCRIPT, new { supplier_id = supplierId });
+            return result.FirstOrDefault();
         }
     }
 }
