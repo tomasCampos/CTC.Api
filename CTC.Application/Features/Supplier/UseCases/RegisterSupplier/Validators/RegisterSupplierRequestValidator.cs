@@ -23,7 +23,7 @@ namespace CTC.Application.Features.Supplier.UseCases.RegisterSupplier.Validators
                 if(request.Document.Length < 11)
                     errors.Add("O número do documento do fornecedor deve conter pelo menos 11 dígitos");
                 if (!request.Document.IsDigitsOnly())
-                    errors.Add(" número do documento do fornecedor deve conter apenas caracteres numéricos");
+                    errors.Add("O número do documento do fornecedor deve conter apenas caracteres numéricos");
             }              
             
             var result = new RequestValidationModel(errors);
