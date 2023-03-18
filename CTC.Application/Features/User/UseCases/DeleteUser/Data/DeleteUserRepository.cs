@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Person;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.User.UseCases.DeleteUser.Data
@@ -24,8 +25,8 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.Data
 
         public async Task<UserModel> GetUserById(string userId)
         {
-            var result = await _sqlService.SelectSingleAsync<UserModel>(DeleteUserSqlScripts.GET_USER_BY_ID_SQL_SCRIPT, new { user_id = userId });
-            return result;
+            var result = await _sqlService.SelectAsync<UserModel>(DeleteUserSqlScripts.GET_USER_BY_ID_SQL_SCRIPT, new { user_id = userId });
+            return result.FirstOrDefault();
         }
 
         #region PrivateMethods

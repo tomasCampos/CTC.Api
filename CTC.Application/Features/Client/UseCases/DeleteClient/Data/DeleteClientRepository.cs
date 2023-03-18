@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Person;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Client.UseCases.DeleteClient.Data
@@ -24,8 +25,8 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient.Data
 
         public async Task<ClientModel> GetClientById(string clientId)
         {
-            var result = await _sqlService.SelectSingleAsync<ClientModel>(DeleteClientSqlScripts.GET_CLIENT_BY_ID_SQL_SCRIPT, new { client_id = clientId });
-            return result;
+            var result = await _sqlService.SelectAsync<ClientModel>(DeleteClientSqlScripts.GET_CLIENT_BY_ID_SQL_SCRIPT, new { client_id = clientId });
+            return result.FirstOrDefault();
         }
 
         #region PrivateMethods

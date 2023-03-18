@@ -12,7 +12,7 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient.UseCase
         private readonly IRequestValidator<DeleteClientInput> _validator;
         private readonly IDeleteClientRepository _deleteClientRepository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
-        private const string ErrorMessage = "Falha ao excluir fornecedor. Contate o administrador";
+        private const string ErrorMessage = "Falha ao excluir cliente. Contate o administrador";
 
         public DeleteClientUseCase(IRequestValidator<DeleteClientInput> validator, IDeleteClientRepository deleteClientRepository, IUseCaseAuthorizationService useCaseAuthorizationService)
         {
@@ -33,7 +33,7 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient.UseCase
 
             var user = await _deleteClientRepository.GetClientById(input.ClientId!);
             if (user == null)
-                return Output.CreateInvalidParametersResult("O fornecedor a ser excluído não existe.");
+                return Output.CreateInvalidParametersResult("O cliente a ser excluído não existe.");
 
             var deleteUserInSqlResult = await _deleteClientRepository.DeleteClient(user.ClientId!, user.PersonId!);
             if (!deleteUserInSqlResult)
