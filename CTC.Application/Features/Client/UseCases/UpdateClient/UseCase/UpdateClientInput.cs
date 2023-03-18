@@ -2,7 +2,7 @@
 
 namespace CTC.Application.Features.Client.UseCases.UpdateClient.UseCase
 {
-    internal class UpdateClientInput : IInput
+    public class UpdateClientInput : IInput
     {
         public UpdateClientInput(in string? id, in string? name, in string? email, in string? phone, in string? document)
         {
