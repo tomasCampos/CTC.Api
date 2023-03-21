@@ -60,5 +60,15 @@ namespace CTC.Application.Features.User.Services.Firebase
 
             _ = await _firebaseAdmin.CreateUserAsync(args);
         }
+
+        public async Task UpdateFireBaseUser(UserRecordArgs userArgs)
+        {
+            _ = await _firebaseAdmin.UpdateUserAsync(userArgs);
+        }
+
+        public async Task<UserRecord> GetFirebaseUserByEmail(string userEmail)
+        {
+            return await _firebaseAdmin.GetUserByEmailAsync(userEmail);
+        }
     }
 }
