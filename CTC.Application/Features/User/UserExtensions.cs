@@ -1,4 +1,5 @@
-﻿using CTC.Application.Features.User.UseCases.AuthorizeUser;
+﻿using CTC.Application.Features.User.Services.Firebase;
+using CTC.Application.Features.User.UseCases.AuthorizeUser;
 using CTC.Application.Features.User.UseCases.DeleteUser;
 using CTC.Application.Features.User.UseCases.GetUser;
 using CTC.Application.Features.User.UseCases.ListUsers;
@@ -18,6 +19,7 @@ namespace CTC.Application.Features.User
             services.AddListUsers();
             services.AddUpdateUser();
             services.AddDeleteUser();
+            services.AddFirebaseService();
             return services;
         }
     }

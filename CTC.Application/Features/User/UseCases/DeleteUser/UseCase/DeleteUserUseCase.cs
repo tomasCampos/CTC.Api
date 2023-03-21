@@ -1,10 +1,11 @@
-﻿using CTC.Application.Features.User.UseCases.DeleteUser.Data;
+﻿using CTC.Application.Features.User.Services.Firebase;
+using CTC.Application.Features.User.UseCases.DeleteUser.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using FirebaseAdmin.Auth;
+using CTC.Application.Shared.UserContext.Services;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -16,16 +17,25 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
         private readonly IRequestValidator<DeleteUserInput> _validator;
         private readonly IDeleteUserRepository _deleteUserRepository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
+        private readonly IUserContextCacheReset _userContextCacheReset;
+        private readonly IFirebaseService _firebaseService;
         private readonly string AESKey;
 
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
         private const string ErrorMessage = "Falha ao excluir usuário. Contate o administrador";
 
-        public DeleteUserUseCase(IRequestValidator<DeleteUserInput> validator, IDeleteUserRepository deleteUserRepository, IUseCaseAuthorizationService useCaseAuthorizationService)
+        public DeleteUserUseCase(
+            IRequestValidator<DeleteUserInput> validator,
+            IDeleteUserRepository deleteUserRepository,
+            IUseCaseAuthorizationService useCaseAuthorizationService,
+            IUserContextCacheReset userContextCacheReset,
+            IFirebaseService firebaseService)
         {
             _validator = validator;
             _deleteUserRepository = deleteUserRepository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
+            _userContextCacheReset = userContextCacheReset;
+            _firebaseService = firebaseService;
 
             AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
@@ -45,7 +55,7 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
             if (user == null)
                 return Output.CreateInvalidParametersResult("O usuário a ser excluído não existe.");
 
-            var deleteUserFireBaseResult = await DeleteFireBaseUser(user);
+            var deleteUserFireBaseResult = await _firebaseService.DeleteFireBaseUser(user.Email!);
 
             if (!deleteUserFireBaseResult)
                 return Output.CreateInternalErrorResult(ErrorMessage);
@@ -54,42 +64,12 @@ namespace CTC.Application.Features.User.UseCases.DeleteUser.UseCase
 
             if (!deleteUserInSqlResult)
             {
-                await RegisterFireBaseUser(user);
+                await _firebaseService.RegisterFireBaseUser(AES.Decrypt(user.Password!, AESKey), user.Email!, $"{user.FirstName} {user.LastName} - {(int)user.Permission!}");
                 return Output.CreateInternalErrorResult(ErrorMessage);
             }
 
+            _userContextCacheReset.Reset(user.Email!);
             return Output.CreateOkResult();
-        }
-
-        private async Task<bool> DeleteFireBaseUser(UserModel user)
-        {
-            try
-            {
-                var fireBaseInstance = FirebaseAuth.DefaultInstance;
-
-                var userRecord = await fireBaseInstance.GetUserByEmailAsync(user.Email);
-
-                await fireBaseInstance.DeleteUserAsync(userRecord.Uid);
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private async Task RegisterFireBaseUser(UserModel user)
-        {
-            var password = AES.Decrypt(user.Password!, AESKey);
-            var args = new UserRecordArgs()
-            {
-                Email = user.Email,
-                Password = password,
-                DisplayName = $"{user.FirstName} {user.LastName} - {(int)user.Permission!}"
-            };
-
-            _ = await FirebaseAuth.DefaultInstance.CreateUserAsync(args);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CTC.Application.Features.User.UseCases.UpdateUser.Data;
+﻿using CTC.Application.Features.User.Services.Firebase;
+using CTC.Application.Features.User.UseCases.UpdateUser.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request.Validator;
@@ -21,6 +22,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
         private readonly IUserContext _userContext;
         private readonly IUserContextCacheReset _userContextCacheReset;
+        private readonly IFirebaseService _firebaseService;
         private readonly string AESKey;
 
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
@@ -31,13 +33,15 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             IUpdateUserRepository repository,
             IUseCaseAuthorizationService useCaseAuthorizationService,
             IUserContext userContext,
-            IUserContextCacheReset userContextCacheReset)
+            IUserContextCacheReset userContextCacheReset,
+            IFirebaseService firebaseService)
         {
             _validator = validator;
             _repository = repository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
             _userContext = userContext;
             _userContextCacheReset = userContextCacheReset;
+            _firebaseService = firebaseService;
 
             AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
@@ -97,8 +101,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
             try
             {
                 string? newUserPassword = string.IsNullOrWhiteSpace(newUser.UserPassword) ? oldUser.Password : newUser.UserPassword;
-                var fireBaseInstance = FirebaseAuth.DefaultInstance;
-                var userRecord = await fireBaseInstance.GetUserByEmailAsync(oldUser.Email);
+                var userRecord = await _firebaseService.GetFirebaseUserByEmail(oldUser.Email!);
                 var args = new UserRecordArgs()
                 {
                     Uid = userRecord.Uid,
@@ -107,7 +110,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
                     DisplayName = $"{newUser.UserFirstName} {newUser.UserLastName} - {(int)newUser.UserPermission!}"
                 };
 
-                _ = await fireBaseInstance.UpdateUserAsync(args);
+                await _firebaseService.UpdateFireBaseUser(args);
                 return true;
             }
             catch
