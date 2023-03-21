@@ -1,10 +1,10 @@
-﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
+﻿using CTC.Application.Features.User.Services.Firebase;
+using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Cypher;
 using CTC.Application.Shared.Request.Validator;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using FirebaseAdmin.Auth;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -16,6 +16,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         private readonly IRequestValidator<RegisterUserInput> _validator;
         private readonly IRegisterUserRepository _repository;
         private readonly IUseCaseAuthorizationService _useCaseAuthorizationService;
+        private readonly IFirebaseService _firebaseService;
         private readonly string AESKey;
 
         private const string CypherAesKeyEnvironmentVariableName = "CYPHER_AES_KEY";
@@ -23,11 +24,13 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
         public RegisterUserUseCase(
             IRequestValidator<RegisterUserInput> validator, 
             IRegisterUserRepository repository, 
-            IUseCaseAuthorizationService useCaseAuthorizationService)
+            IUseCaseAuthorizationService useCaseAuthorizationService,
+            IFirebaseService firebaseService)
         {
             _validator = validator;
             _repository = repository;
             _useCaseAuthorizationService = useCaseAuthorizationService;
+            _firebaseService = firebaseService;
 
             AESKey = Environment.GetEnvironmentVariable(CypherAesKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {CypherAesKeyEnvironmentVariableName}");
@@ -53,21 +56,8 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.UseCase
             if (!wasUserInsertedInDataBaseWithSuccess)
                 return Output.CreateInternalErrorResult("Ocorreu um erro e não foi possível cadastrar o usuário. Tente novamente mais tarde.");
 
-            await RegisterFireBaseUser(input);
-
+            await _firebaseService.RegisterFireBaseUser(input.UserPassword!, input.UserEmail!, $"{input.UserFirstName} {input.UserLastName} - {(int)input.UserPermission!}");
             return Output.CreateCreatedResult();
-        }
-
-        private async Task RegisterFireBaseUser(RegisterUserInput user)
-        {
-            var args = new UserRecordArgs()
-            {
-                Email = user.UserEmail,
-                Password = user.UserPassword,
-                DisplayName = $"{user.UserFirstName} {user.UserLastName} - {(int)user.UserPermission!}"
-            };
-
-            _ = await FirebaseAuth.DefaultInstance.CreateUserAsync(args);
         }
     }
 }

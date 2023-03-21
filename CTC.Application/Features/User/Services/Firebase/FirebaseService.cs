@@ -2,12 +2,14 @@
 using System.Configuration;
 using System;
 using System.Threading.Tasks;
+using FirebaseAdmin.Auth;
 
 namespace CTC.Application.Features.User.Services.Firebase
 {
     internal sealed class FirebaseService : IFirebaseService
     {
         private readonly FirebaseAuthProvider _authProvider;
+        private readonly FirebaseAdmin.Auth.FirebaseAuth _firebaseAdmin;
 
         private const string FireBaseApiKeyEnvironmentVariableName = "FIRE_BASE_API_KEY";
 
@@ -16,6 +18,7 @@ namespace CTC.Application.Features.User.Services.Firebase
             var fireBaseApiKey = Environment.GetEnvironmentVariable(FireBaseApiKeyEnvironmentVariableName)
                 ?? throw new ConfigurationErrorsException($"Missing environment variable named {FireBaseApiKeyEnvironmentVariableName}");
 
+            _firebaseAdmin = FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance;
             _authProvider = new FirebaseAuthProvider(new FirebaseConfig(fireBaseApiKey));
         }
 
@@ -30,6 +33,32 @@ namespace CTC.Application.Features.User.Services.Firebase
             {
                 return (false, null);
             }
+        }
+
+        public async Task<bool> DeleteFireBaseUser(string userEmail)
+        {
+            try
+            {
+                var userRecord = await _firebaseAdmin.GetUserByEmailAsync(userEmail);
+                await _firebaseAdmin.DeleteUserAsync(userRecord.Uid);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task RegisterFireBaseUser(string userPassword, string userEmail, string userDisplayName)
+        {
+            var args = new UserRecordArgs()
+            {
+                Email = userEmail,
+                Password = userPassword,
+                DisplayName = userDisplayName
+            };
+
+            _ = await _firebaseAdmin.CreateUserAsync(args);
         }
     }
 }
