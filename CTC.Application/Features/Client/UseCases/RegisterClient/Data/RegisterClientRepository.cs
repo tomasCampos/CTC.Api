@@ -24,7 +24,7 @@ namespace CTC.Application.Features.Client.UseCases.RegisterClient.Data
 
         public async Task<int> VerifyIfClientAlreadyExists(string email, string phone, string document)
         {
-            return await _sqlService.CountAsync(RegisterClientSqlScripts.COUNT_CLIENT_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
+            return await _sqlService.CountAsync(ClientSqlScripts.COUNT_CLIENT_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
         }
 
         #region PrivateMethods
@@ -46,7 +46,7 @@ namespace CTC.Application.Features.Client.UseCases.RegisterClient.Data
                 },
 
                 {
-                    RegisterClientSqlScripts.INSERT_CLIENT_SQL,
+                    ClientSqlScripts.INSERT_CLIENT,
                     new
                     {
                         client_id = model.ClientId,

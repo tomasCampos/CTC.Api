@@ -15,7 +15,7 @@ namespace CTC.Application.Features.Client.UseCases.GetClient.Data
 
         public async Task<ClientModel> GetClientById(string clientId)
         {
-            var result = await _sqlService.SelectAsync<ClientModel>(GetClientSqlScripts.GET_CLIENT_BY_ID_SQL_SCRIPT, new { client_id = clientId });
+            var result = await _sqlService.SelectAsync<ClientModel>(ClientSqlScripts.GET_CLIENT_BY_ID, new { client_id = clientId });
             return result.FirstOrDefault();
         }
     }

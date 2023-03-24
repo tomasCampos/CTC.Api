@@ -35,6 +35,10 @@ namespace CTC.Application.Features.Client.UseCases.UpdateClient.UseCase
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
+            var uniqueDataVerificationResult = await VerifyIfThereAreUsersWithTheSameUniqueData(input);
+            if (!uniqueDataVerificationResult.success)
+                return Output.CreateInvalidParametersResult(uniqueDataVerificationResult.errorMessage);
+
             var clientModel = new ClientModel(input.Id!, currentClient.PersonId!, input.Name!, input.Email!, input.Phone!, input.Document!);
             var result = await _repository.UpdateClient(clientModel);
             if (result < 1)
@@ -47,15 +51,15 @@ namespace CTC.Application.Features.Client.UseCases.UpdateClient.UseCase
         {
             var usersWithTheSamePhone = await _repository.GetClientsByPhone(input.Phone!);
             if (usersWithTheSamePhone.Count > 1 || usersWithTheSamePhone.Any(s => s.ClientId != s.ClientId))
-                return (false, "Já existe um usuário com o telefone informado");
+                return (false, "Já existe um cliente com o telefone informado");
 
             var usersWithTheSameEmail = await _repository.GetClientsByEmail(input.Email!);
             if (usersWithTheSameEmail.Count > 1 || usersWithTheSameEmail.Any(s => s.ClientId != s.ClientId))
-                return (false, "Já existe um usuário com o email informado");
+                return (false, "Já existe um cliente com o email informado");
 
             var usersWithTheSameDocument = await _repository.GetClientsByDocument(input.Document!);
             if (usersWithTheSameDocument.Count > 1 || usersWithTheSameDocument.Any(s => s.ClientId != s.ClientId))
-                return (false, "Já existe um usuário com o documento informado");
+                return (false, "Já existe um cliente com o documento informado");
 
             return (true, string.Empty);
         }
