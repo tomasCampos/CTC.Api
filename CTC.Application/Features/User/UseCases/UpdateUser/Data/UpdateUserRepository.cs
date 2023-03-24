@@ -25,28 +25,28 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
 
         public async Task<List<UserModel>> GetUsersByEmail(string email)
         {
-            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_email = @person_email");
+            var sql = UserSqlScripts.GetSelectUserQuery("WHERE p.person_email = @person_email");
             var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_email = email });
             return result.ToList();
         }
 
         public async Task<List<UserModel>> GetUsersByDocument(string document)
         {
-            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_document = @person_document");
+            var sql = UserSqlScripts.GetSelectUserQuery("WHERE p.person_document = @person_document");
             var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_document = document });
             return result.ToList();
         }
 
         public async Task<List<UserModel>> GetUsersByPhone(string phone)
         {
-            var sql = UpdateUserSqlScripts.GetSelectUserQuery("WHERE p.person_phone = @person_phone");
+            var sql = UserSqlScripts.GetSelectUserQuery("WHERE p.person_phone = @person_phone");
             var result = await _sqlService.SelectAsync<UserModel>(sql, new { person_phone = phone });
             return result.ToList();
         }
 
         public async Task<UserModel> GetUserById(string userId)
         {
-            var user = await _sqlService.SelectAsync<UserModel>(UpdateUserSqlScripts.GET_USER_BY_ID_SQL_SCRIPT, new { user_id = userId });
+            var user = await _sqlService.SelectAsync<UserModel>(UserSqlScripts.GET_USER_BY_ID, new { user_id = userId });
             return user.FirstOrDefault();
         }
 
@@ -71,7 +71,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Data
                 },
 
                 {
-                    UpdateUserSqlScripts.UPDATE_USER_SQL,
+                    UserSqlScripts.UPDATE_USER_SQL,
                     new
                     {
                         user_id = model.UserId,

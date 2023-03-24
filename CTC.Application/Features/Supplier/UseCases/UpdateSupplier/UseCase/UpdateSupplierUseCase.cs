@@ -35,6 +35,10 @@ namespace CTC.Application.Features.Supplier.UseCases.UpdateSupplier.UseCase
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
+            var uniqueDataVerificationResult = await VerifyIfThereAreUsersWithTheSameUniqueData(input);
+            if (!uniqueDataVerificationResult.success)
+                return Output.CreateInvalidParametersResult(uniqueDataVerificationResult.errorMessage);
+
             var supplierModel = new SupplierModel(input.Id!, currentSupplier.PersonId!, input.Name!, input.Email!, input.Phone!, input.Document!);
             var result = await _repository.UpdateSupplier(supplierModel);
             if (result < 1)

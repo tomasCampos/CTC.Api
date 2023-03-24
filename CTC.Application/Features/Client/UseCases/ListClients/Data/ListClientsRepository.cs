@@ -15,8 +15,8 @@ namespace CTC.Application.Features.Client.UseCases.ListClients.Data
 
         public async Task<PaginatedQueryResult<ClientModel>> ListClients(QueryRequest queryParams)
         {
-            var result = await _sqlService.SelectPaginated<ClientModel>(queryParams, ListClientsSqlScripts.ListClientsSelectStatement, ListClientsSqlScripts.ListClientsFromAndJoinsStatements,
-                                    ListClientsSqlScripts.ListClientsWhereStatement);
+            var result = await _sqlService.SelectPaginated<ClientModel>(queryParams, ClientSqlScripts.LIST_CLIENTS_SELECT_STATEMENT, ClientSqlScripts.LIST_CLIENTS_FROM_AND_JOIN_STATEMENTS,
+                                    ClientSqlScripts.LIST_CLIENT_WHERE_STATEMENT);
 
             return result;
         }

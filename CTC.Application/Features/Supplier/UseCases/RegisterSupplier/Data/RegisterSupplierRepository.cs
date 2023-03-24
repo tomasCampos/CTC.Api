@@ -25,7 +25,7 @@ namespace CTC.Application.Features.Supplier.UseCases.RegisterSupplier.Data
 
         public async Task<int> VerifyIfSupplierAlreadyExists(string email, string phone, string document)
         {
-            return await _sqlService.CountAsync(RegisterSupplierSqlScripts.COUNT_SUPPLIER_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
+            return await _sqlService.CountAsync(SupplierSqlScripts.COUNT_SUPPLIER_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
         }
 
         #region PrivateMethods
@@ -47,7 +47,7 @@ namespace CTC.Application.Features.Supplier.UseCases.RegisterSupplier.Data
                 },
 
                 {
-                    RegisterSupplierSqlScripts.INSERT_SUPPLIER_SQL,
+                    SupplierSqlScripts.INSERT_SUPPLIER,
                     new
                     {
                         supplier_id = model.SupplierId,

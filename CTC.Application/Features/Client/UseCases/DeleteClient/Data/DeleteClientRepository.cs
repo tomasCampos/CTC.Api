@@ -25,7 +25,7 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient.Data
 
         public async Task<ClientModel> GetClientById(string clientId)
         {
-            var result = await _sqlService.SelectAsync<ClientModel>(DeleteClientSqlScripts.GET_CLIENT_BY_ID_SQL_SCRIPT, new { client_id = clientId });
+            var result = await _sqlService.SelectAsync<ClientModel>(ClientSqlScripts.GET_CLIENT_BY_ID, new { client_id = clientId });
             return result.FirstOrDefault();
         }
 
@@ -36,7 +36,7 @@ namespace CTC.Application.Features.Client.UseCases.DeleteClient.Data
             var commands = new Dictionary<string, object?>
             {
                 {
-                    DeleteClientSqlScripts.DELETE_CLIENT_SQL,
+                    ClientSqlScripts.DELETE_CLIENT,
                     new
                     {
                         client_id = clientId

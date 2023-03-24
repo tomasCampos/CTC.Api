@@ -17,27 +17,27 @@ namespace CTC.Application.Features.Client.UseCases.UpdateClient.Data
 
         public async Task<ClientModel> GetClientById(string id)
         {
-            var client = await _sqlService.SelectAsync<ClientModel>(UpdateClientSqlScripts.GET_CLIENT_BY_ID_SQL, new { client_id = id });
+            var client = await _sqlService.SelectAsync<ClientModel>(ClientSqlScripts.GET_CLIENT_BY_ID, new { client_id = id });
             return client.FirstOrDefault();
         }
 
         public async Task<List<ClientModel>> GetClientsByDocument(string document)
         {
-            var sql = UpdateClientSqlScripts.GetSelectClientQuery("WHERE p.person_email = @person_email");
+            var sql = ClientSqlScripts.GetSelectClientQuery("WHERE p.person_document = @person_document");
             var result = await _sqlService.SelectAsync<ClientModel>(sql, new { person_document = document });
             return result.ToList();
         }
 
         public async Task<List<ClientModel>> GetClientsByEmail(string email)
         {
-            var sql = UpdateClientSqlScripts.GetSelectClientQuery("WHERE p.person_email = @person_email");
+            var sql = ClientSqlScripts.GetSelectClientQuery("WHERE p.person_email = @person_email");
             var result = await _sqlService.SelectAsync<ClientModel>(sql, new { person_email = email });
             return result.ToList();
         }
 
         public async Task<List<ClientModel>> GetClientsByPhone(string phone)
         {
-            var sql = UpdateClientSqlScripts.GetSelectClientQuery("WHERE p.person_email = @person_email");
+            var sql = ClientSqlScripts.GetSelectClientQuery("WHERE p.person_phone = @person_phone");
             var result = await _sqlService.SelectAsync<ClientModel>(sql, new { person_phone = phone });
             return result.ToList();
         }
