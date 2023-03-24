@@ -17,27 +17,27 @@ namespace CTC.Application.Features.Supplier.UseCases.UpdateSupplier.Data
 
         public async Task<SupplierModel> GetSupplierById(string id)
         {
-            var supplier = await _sqlService.SelectAsync<SupplierModel>(UpdateSupplierSqlScripts.GET_SUPPLIER_BY_ID_SQL, new { supplier_id = id });
+            var supplier = await _sqlService.SelectAsync<SupplierModel>(SupplierSqlScripts.GET_SUPPLIER_BY_ID, new { supplier_id = id });
             return supplier.FirstOrDefault();
         }
 
         public async Task<List<SupplierModel>> GetSuppliersByDocument(string document)
         {
-            var sql = UpdateSupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_email = @person_email");
+            var sql = SupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_document = @person_document");
             var result = await _sqlService.SelectAsync<SupplierModel>(sql, new { person_document = document });
             return result.ToList();
         }
 
         public async Task<List<SupplierModel>> GetSuppliersByEmail(string email)
         {
-            var sql = UpdateSupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_email = @person_email");
+            var sql = SupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_email = @person_email");
             var result = await _sqlService.SelectAsync<SupplierModel>(sql, new { person_email = email });
             return result.ToList();
         }
 
         public async Task<List<SupplierModel>> GetSuppliersByPhone(string phone)
         {
-            var sql = UpdateSupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_email = @person_email");
+            var sql = SupplierSqlScripts.GetSelectSupplierQuery("WHERE p.person_phone = @person_phone");
             var result = await _sqlService.SelectAsync<SupplierModel>(sql, new { person_phone = phone });
             return result.ToList();
         }

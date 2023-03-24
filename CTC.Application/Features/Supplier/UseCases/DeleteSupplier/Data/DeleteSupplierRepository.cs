@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Person;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Supplier.UseCases.DeleteSupplier.Data
@@ -24,8 +25,8 @@ namespace CTC.Application.Features.Supplier.UseCases.DeleteSupplier.Data
 
         public async Task<SupplierModel> GetSupplierById(string supplierId)
         {
-            var result = await _sqlService.SelectSingleAsync<SupplierModel>(DeleteSupplierSqlScripts.GET_SUPPLIER_BY_ID_SQL_SCRIPT, new { supplier_id = supplierId });
-            return result;
+            var result = await _sqlService.SelectAsync<SupplierModel>(SupplierSqlScripts.GET_SUPPLIER_BY_ID, new { supplier_id = supplierId });
+            return result.FirstOrDefault();
         }
 
         #region PrivateMethods
@@ -35,7 +36,7 @@ namespace CTC.Application.Features.Supplier.UseCases.DeleteSupplier.Data
             var commands = new Dictionary<string, object?>
             {
                 {
-                    DeleteSupplierSqlScripts.DELETE_SUPPLIER_SQL,
+                    SupplierSqlScripts.DELETE_SUPPLIER,
                     new
                     {
                         supplier_id = supplierId
