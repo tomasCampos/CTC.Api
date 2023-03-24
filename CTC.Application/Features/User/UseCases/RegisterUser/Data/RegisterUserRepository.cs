@@ -24,7 +24,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
 
         public async Task<int> VerifyIfUserAlreadyExists(string email, string phone, string document)
         {
-            return await _sqlService.CountAsync(RegisterUserSqlScripts.COUNT_USER_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
+            return await _sqlService.CountAsync(UserSqlScripts.COUNT_USER_BY_EMAIL_PHONE_DOCUMENT, new { person_email = email, person_phone = phone, person_document = document });
         }
 
         #region PrivateMethods
@@ -46,7 +46,7 @@ namespace CTC.Application.Features.User.UseCases.RegisterUser.Data
                 },
 
                 {
-                    RegisterUserSqlScripts.INSERT_USER_SQL,
+                    UserSqlScripts.INSERT_USER_SQL,
                     new
                     {
                         user_id = model.UserId,

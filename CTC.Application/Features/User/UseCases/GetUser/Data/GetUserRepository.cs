@@ -15,7 +15,7 @@ namespace CTC.Application.Features.User.UseCases.GetUser.Data
 
         public async Task<UserModel> GetUserByEmail(string email)
         {
-            var user = await _sqlService.SelectAsync<UserModel>(GetUserSqlScripts.GetUserByEmail, new { person_email = email });
+            var user = await _sqlService.SelectAsync<UserModel>(UserSqlScripts.GET_USER_BY_EMAIL, new { person_email = email });
             return user.FirstOrDefault();
         }
     }
