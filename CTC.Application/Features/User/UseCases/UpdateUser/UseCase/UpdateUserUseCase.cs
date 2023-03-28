@@ -100,7 +100,7 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         {
             try
             {
-                string? newUserPassword = string.IsNullOrWhiteSpace(newUser.UserPassword) ? oldUser.Password : newUser.UserPassword;
+                string? newUserPassword = string.IsNullOrWhiteSpace(newUser.UserPassword) ? AES.Decrypt(oldUser.Password!, AESKey) : newUser.UserPassword;
                 var userRecord = await _firebaseService.GetFirebaseUserByEmail(oldUser.Email!);
                 var args = new UserRecordArgs()
                 {
