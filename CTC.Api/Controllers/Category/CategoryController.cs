@@ -34,5 +34,19 @@ namespace CTC.Api.Controllers.Category
 
             return GetHttpResponse(output, "/category");
         }
+
+        [Authorize]
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> RegisterCategory([FromRoute] string categoryId)
+        {
+            var input = new GetCategoryInput(categoryId);
+            var output = await _getCategoryUseCase.Execute(input);
+
+            return GetHttpResponse(output);
+        }
     }
 }
