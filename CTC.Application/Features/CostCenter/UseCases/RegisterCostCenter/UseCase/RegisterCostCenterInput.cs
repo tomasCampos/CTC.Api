@@ -14,7 +14,7 @@ namespace CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCas
         public string? AddressPostalCode { get; set; }
         public string? AddressStreetName { get; set; }
         public string? AddressNeighborhood { get; set; }
-        public string? AddressNumber { get; set; }
+        public int? AddressNumber { get; set; }
         public string? AddressComplement { get; set; }
         public string? AddressCity { get; set; }
         public string? AddressState { get; set; }

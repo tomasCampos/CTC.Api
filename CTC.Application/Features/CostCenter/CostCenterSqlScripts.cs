@@ -43,5 +43,12 @@
                                                             @address_state);";
 
         #endregion
+
+        #region
+
+        public static string COUNT_COST_CENTER_BY_NAME = "select count(*) from cost_center where cost_center_name = @cost_center_name";
+        public static string COUNT_CLIENT_BY_ID = "select count(*) `heroku_3a06699194dd49a`.client c where c.client_id = @client_id";
+
+        #endregion
     }
 }

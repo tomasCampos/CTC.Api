@@ -17,16 +17,6 @@ namespace CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.Valida
                 errors.Add("A data de criação do centro de custo deve ser informada.");
             if (string.IsNullOrWhiteSpace(request.ClientId))
                 errors.Add("O cliente relacionado ao centro de custo deve ser informado.");
-            if (string.IsNullOrWhiteSpace(request.AddressStreetName))
-                errors.Add("O nome da rua do endereço do centro de custo deve ser informado.");
-            if (string.IsNullOrWhiteSpace(request.AddressNeighborhood))
-                errors.Add("O nome do bairro do endereço do centro de custo deve ser informado.");
-            if (string.IsNullOrWhiteSpace(request.AddressCity))
-                errors.Add("O nome da cidade do endereço do centro de custo deve ser informado.");
-            if (string.IsNullOrWhiteSpace(request.AddressState))
-                errors.Add("O estado do endereço do centro de custo deve ser informado.");
-            if (string.IsNullOrWhiteSpace(request.AddressNumber))
-                errors.Add("O número do endereço do centro de custo deve ser informado.");
 
             var result = new RequestValidationModel(errors);
             return Task.FromResult(result);
