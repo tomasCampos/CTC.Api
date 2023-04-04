@@ -1,7 +1,9 @@
-﻿namespace CTC.Application.Features.Category.UseCases.GetCategory.Data
+﻿using System.Threading.Tasks;
+
+namespace CTC.Application.Features.Category.UseCases.GetCategory.Data
 {
     internal interface IGetCategoryRepository
     {
-        CategoryModel GetCategory(string id);
+        Task<CategoryModel> GetCategoryById(string categoryId);
     }
 }
