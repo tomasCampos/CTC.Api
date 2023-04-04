@@ -1,5 +1,6 @@
 using CTC.Api.Controllers.Category.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.Category.UseCases.GetCategory.UseCase;
 using CTC.Application.Features.Category.UseCases.RegisterCategory.UseCase;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
@@ -14,6 +15,7 @@ namespace CTC.Api.Controllers.Category
     public sealed class CategoryController : BaseController
     {
         private readonly IUseCase<RegisterCategoryInput, Output> _registerCategoryUseCase;
+        private readonly IUseCase<GetCategoryInput, Output> _getCategoryUseCase;
 
         public CategoryController(IUseCase<RegisterCategoryInput, Output> registerCategoryUseCase)
         {
