@@ -18,5 +18,17 @@
                                                         heroku_3a06699194dd49a.Category 
                                                     WHERE 
                                                         category_id = @category_id";
+
+        public static string LIST_CATEGORIES_SELECT_STATEMENT = @"SELECT
+                                                                category_id AS CategoryId,
+                                                                category_name AS CategoryName";
+
+        public static string LIST_CATEGORIES_FROM_AND_JOIN_STATEMENTS = @"FROM
+                                                                    `heroku_3a06699194dd49a`.category";
+
+        public static string LIST_CATEGORY_WHERE_STATEMENT = @"WHERE
+                                                            (
+                                                            category_name LIKE '%@search_param%'
+                                                            )";
     }
 }
