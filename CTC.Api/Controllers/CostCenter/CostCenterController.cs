@@ -1,5 +1,6 @@
 ﻿using CTC.Api.Controllers.CostCenter.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter.UseCase;
 using CTC.Application.Shared.UseCase;
@@ -16,13 +17,16 @@ namespace CTC.Api.Controllers.CostCenter
     {
         private readonly IUseCase<RegisterCostCenterInput, Output> _registerCostCenterUseCase;
         private readonly IUseCase<UpdateCostCenterInput, Output> _updateCostCenterUseCase;
+        private readonly IUseCase<GetCostCenterInput, Output> _getCostCenterUseCase;
 
         public CostCenterController
             (IUseCase<RegisterCostCenterInput, Output> registerCostCenterUseCase, 
-            IUseCase<UpdateCostCenterInput, Output> updateCostCenterUseCase)
+            IUseCase<UpdateCostCenterInput, Output> updateCostCenterUseCase,
+            IUseCase<GetCostCenterInput, Output> getCostCenterUseCase)
         {
             _registerCostCenterUseCase = registerCostCenterUseCase;
             _updateCostCenterUseCase = updateCostCenterUseCase;
+            _getCostCenterUseCase = getCostCenterUseCase;
         }
 
         [Authorize]
@@ -85,6 +89,20 @@ namespace CTC.Api.Controllers.CostCenter
             };
 
             var result = await _updateCostCenterUseCase.Execute(input);
+
+            return GetHttpResponse(result);
+        }
+
+        [Authorize]
+        [HttpGet("{costCenterId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateCostCenter([FromRoute] string costCenterId)
+        {
+            var input = new GetCostCenterInput(costCenterId);
+            var result = await _getCostCenterUseCase.Execute(input);
 
             return GetHttpResponse(result);
         }
