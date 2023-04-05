@@ -30,5 +30,12 @@
                                                             (
                                                             category_name LIKE '%@search_param%'
                                                             )";
+
+        public static string UPDATE_CATEGORY = @"UPDATE
+                                                `heroku_3a06699194dd49a`.`category`
+                                                SET
+                                                `category_name` = @category_name
+                                                WHERE
+                                                `category_id` = @category_id;";
     }
 }
