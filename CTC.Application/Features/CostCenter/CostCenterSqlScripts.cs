@@ -44,10 +44,62 @@
 
         #endregion
 
-        #region
+        #region SELECT
 
         public static string COUNT_COST_CENTER_BY_NAME = "select count(*) from cost_center where cost_center_name = @cost_center_name";
+
         public static string COUNT_CLIENT_BY_ID = "select count(*) `heroku_3a06699194dd49a`.client c where c.client_id = @client_id";
+
+        public static string SELECT_COST_CENTER_BY_ID = @"SELECT 
+	                                                        c.cost_center_id AS Id,
+                                                            c.cost_center_starting_date AS StartingDate,
+                                                            c.cost_center_name AS `Name`,
+                                                            c.cost_center_observations AS Observations,
+                                                            c.cost_center_closing_forecast_date AS ExpectedClosingDate,
+                                                            c.cost_center_closing_date AS ClosingDate,
+                                                            a.address_city AS AddressCity,
+                                                            a.address_complement AS AddressComplement,
+                                                            a.address_neighborhood AS AddressNeighborhood,
+                                                            a.address_number AS AddresNumber,
+                                                            a.address_postal_code AS PostalCode,
+                                                            a.address_state AS AddressState,
+                                                            a.address_street AS AddressStreetName,
+                                                            a.address_id AS AddressId
+                                                        FROM 
+	                                                        cost_center c
+                                                        INNER JOIN 
+	                                                        address a ON c.address_id = a.address_id
+                                                        WHERE 
+	                                                        c.cost_center_id = @cost_center_id";
+
+        #endregion
+
+        #region UPDATE
+
+        public static string UPDATE_COST_CENTER = @"UPDATE 
+	                                                    `heroku_3a06699194dd49a`.`cost_center`
+                                                    SET
+	                                                    `cost_center_name` = @cost_center_name,
+	                                                    `cost_center_observations` = @cost_center_observations,
+	                                                    `cost_center_starting_date` = @cost_center_starting_date,
+	                                                    `cost_center_closing_forecast_date` = @cost_center_closing_forecast_date,
+	                                                    `cost_center_closing_date` = @cost_center_closing_date,
+	                                                    `client_id` = @client_id
+                                                    WHERE 
+	                                                    `cost_center_id` = @cost_center_id;";
+
+        public static string UPDATE_COST_CENTER_ADDRESS = @"UPDATE 
+	                                                            `heroku_3a06699194dd49a`.`address`
+                                                            SET
+	                                                            `address_postal_code` = @address_postal_code,
+	                                                            `address_street` = @address_street,
+	                                                            `address_neighborhood` = @address_neighborhood,
+	                                                            `address_number` = @address_number,
+	                                                            `address_complement` = @address_complement,
+	                                                            `address_city` = @address_city,
+	                                                            `address_state` = @address_state
+                                                            WHERE `
+	                                                            address_id` = @address_id;";
 
         #endregion
     }

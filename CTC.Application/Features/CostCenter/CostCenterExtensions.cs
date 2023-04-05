@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter;
+using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.CostCenter
@@ -8,6 +9,7 @@ namespace CTC.Application.Features.CostCenter
         public static IServiceCollection AddCostCenter(this IServiceCollection services) 
         {
             services.AddRegisterCostCenter();
+            services.AddUpdateCostCenter();
             return services;
         }
     }

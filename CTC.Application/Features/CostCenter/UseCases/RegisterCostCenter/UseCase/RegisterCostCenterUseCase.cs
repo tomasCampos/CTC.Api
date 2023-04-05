@@ -45,7 +45,6 @@ namespace CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCas
                 input.AddressPostalCode, input.AddressStreetName, input.AddressNeighborhood, input.AddressNumber, input.AddressComplement, input.AddressCity, input.AddressState);
 
             var success = await _repository.InsertCostCenter(costCenterModel);
-
             if (!success)
                 return Output.CreateInternalErrorResult("Não foi possível registrar o centro de custo. Ocorreu um erro. Tente novamente mais tarde.");
 
