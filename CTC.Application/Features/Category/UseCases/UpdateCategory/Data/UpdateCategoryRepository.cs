@@ -15,7 +15,7 @@ namespace CTC.Application.Features.Category.UseCases.UpdateCategory.Data
 
         public async Task<CategoryModel> GetCategoryById(string id)
         {
-            var category = await _sqlService.SelectAsync<CategoryModel>(CategorySqlScripts.UPDATE_CATEGORY, new { category_id = id });
+            var category = await _sqlService.SelectAsync<CategoryModel>(CategorySqlScripts.GET_CATEGORY_BY_ID, new { category_id = id });
             return category.FirstOrDefault();
         }
 

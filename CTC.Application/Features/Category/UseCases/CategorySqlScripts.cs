@@ -20,8 +20,8 @@
                                                         category_id = @category_id";
 
         public static string LIST_CATEGORIES_SELECT_STATEMENT = @"SELECT
-                                                                category_id AS CategoryId,
-                                                                category_name AS CategoryName";
+                                                                category_id AS Id,
+                                                                category_name AS Name";
 
         public static string LIST_CATEGORIES_FROM_AND_JOIN_STATEMENTS = @"FROM
                                                                     `heroku_3a06699194dd49a`.category";
@@ -38,7 +38,7 @@
                                                 WHERE
                                                 `category_id` = @category_id;";
 
-        public static string COUNT_CATEGORIES_BY_NAME = @"SELECT COUNT (*) FROM `heroku_3a06699194dd49a`.`category` WHERE category_name = @category_name";
+        public static string COUNT_CATEGORIES_BY_NAME = @"SELECT COUNT(*) FROM `heroku_3a06699194dd49a`.`category` WHERE category_name = @category_name";
 
         public static string DELETE_CATEGORY = @"DELETE FROM `heroku_3a06699194dd49a`.category WHERE category_id = @category_id";
     }

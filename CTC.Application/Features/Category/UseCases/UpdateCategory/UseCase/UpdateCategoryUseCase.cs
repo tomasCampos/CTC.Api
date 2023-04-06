@@ -42,7 +42,7 @@ namespace CTC.Application.Features.Category.UseCases.UpdateCategory.UseCase
                     return Output.CreateConflictResult("O nome informado já está sendo usado para outra categoria");
             }
 
-            var categoryModel = new CategoryModel(input.Id!, input.Name!);
+            var categoryModel = new CategoryModel(input.Name!, input.Id!);
             var result = await _repository.UpdateCategory(categoryModel);
             if (result < 1)
                 return Output.CreateInternalErrorResult("Erro ao atualizar a categoria. Tente novamente mais tarde ou entre em contato com o administrador.");

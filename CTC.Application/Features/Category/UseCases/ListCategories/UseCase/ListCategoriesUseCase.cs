@@ -7,9 +7,9 @@ namespace CTC.Application.Features.Category.UseCases.ListCategories.UseCase
 {
     internal sealed class ListCategoriesUseCase : IUseCase<ListCategoriesInput, Output>
     {
-        private readonly ListCategoriesRepository _categoriesRepository;
+        private readonly IListCategoriesRepository _categoriesRepository;
 
-        public ListCategoriesUseCase(ListCategoriesRepository categoriesRepository)
+        public ListCategoriesUseCase(IListCategoriesRepository categoriesRepository)
         {
             _categoriesRepository = categoriesRepository;
         }

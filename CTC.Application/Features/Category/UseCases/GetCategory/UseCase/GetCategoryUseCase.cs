@@ -14,9 +14,14 @@ namespace CTC.Application.Features.Category.UseCases.GetCategory.UseCase
             _getCategoryRepository = getCategoryRepository;
         }
 
-        public Task<Output> Execute(GetCategoryInput input)
+        public async Task<Output> Execute(GetCategoryInput input)
         {
-            throw new System.NotImplementedException();
+            var category = await _getCategoryRepository.GetCategoryById(input.categoryId!);
+
+            if (category == null)
+                return Output.CreateNotFoundResult();
+
+            return Output.CreateOkResult(category);
         }
     }
 }

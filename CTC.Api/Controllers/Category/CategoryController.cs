@@ -47,7 +47,7 @@ namespace CTC.Api.Controllers.Category
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> RegisterCategory([FromBody] RegisterCategoryRequest request)
         {
-            var input = new RegisterCategoryInput(request.CategoryName);
+            var input = new RegisterCategoryInput(request.Name);
             var output = await _registerCategoryUseCase.Execute(input);
 
             return GetHttpResponse(output, "/category");
@@ -59,7 +59,7 @@ namespace CTC.Api.Controllers.Category
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterCategory([FromRoute] string categoryId)
+        public async Task<IActionResult> GetCategory([FromRoute] string categoryId)
         {
             var input = new GetCategoryInput(categoryId);
             var output = await _getCategoryUseCase.Execute(input);

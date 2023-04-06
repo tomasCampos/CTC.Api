@@ -2,6 +2,6 @@
 {
     public sealed class RegisterCategoryRequest
     {
-        public string? CategoryName { get; set; }
+        public string? Name { get; set; }
     }
 }
