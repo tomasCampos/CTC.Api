@@ -88,7 +88,6 @@
                                                                     c.client_id AS ClientId,
                                                                     a.address_city AS AddressCity,
                                                                     a.address_complement AS AddressComplement,
-
                                                                     a.address_neighborhood AS AddressNeighborhood,
                                                                     a.address_number AS AddressNumber,
                                                                     a.address_postal_code AS AddressPostalCode,
