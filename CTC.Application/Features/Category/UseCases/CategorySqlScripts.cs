@@ -37,5 +37,9 @@
                                                 `category_name` = @category_name
                                                 WHERE
                                                 `category_id` = @category_id;";
+
+        public static string COUNT_CATEGORIES_BY_NAME = @"SELECT COUNT (*) FROM `heroku_3a06699194dd49a`.`category` WHERE category_name = @category_name";
+
+        public static string DELETE_CATEGORY = @"DELETE FROM `heroku_3a06699194dd49a`.category WHERE category_id = @category_id";
     }
 }

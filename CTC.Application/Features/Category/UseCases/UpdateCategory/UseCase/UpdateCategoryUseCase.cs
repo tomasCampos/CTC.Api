@@ -1,15 +1,13 @@
 ﻿using CTC.Application.Features.Category.UseCases.UpdateCategory.Data;
-using CTC.Application.Features.Client;
-using CTC.Application.Features.Client.UseCases.UpdateClient.Data;
-using CTC.Application.Features.Client.UseCases.UpdateClient.UseCase;
 using CTC.Application.Shared.Authorization;
 using CTC.Application.Shared.Request.Validator;
+using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Category.UseCases.UpdateCategory.UseCase
 {
-    internal sealed class UpdateCategoryUseCase
+    internal sealed class UpdateCategoryUseCase : IUseCase<UpdateCategoryInput, Output>
     {
         private readonly IRequestValidator<UpdateCategoryInput> _validator;
         private readonly IUpdateCategoryRepository _repository;
@@ -38,7 +36,10 @@ namespace CTC.Application.Features.Category.UseCases.UpdateCategory.UseCase
 
             if (!string.Equals(input.Name, currentCategory.Name))
             {
-                //TODO: Validar se o nome do input já existe para outra categoria no banco de dados, caso exista, retornar Bad Request (CreateInvalidParameterResult)
+                var categoryCount = await _repository.CountCategoryByName(input.Name!);
+
+                if (categoryCount > 0)
+                    return Output.CreateConflictResult("O nome informado já está sendo usado para outra categoria");
             }
 
             var categoryModel = new CategoryModel(input.Id!, input.Name!);

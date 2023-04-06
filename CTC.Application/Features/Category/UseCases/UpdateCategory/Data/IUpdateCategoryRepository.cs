@@ -7,5 +7,7 @@ namespace CTC.Application.Features.Category.UseCases.UpdateCategory.Data
         Task<CategoryModel> GetCategoryById(string id);
 
         Task<int> UpdateCategory(CategoryModel model);
+
+        Task<int> CountCategoryByName(string name);
     }
 }

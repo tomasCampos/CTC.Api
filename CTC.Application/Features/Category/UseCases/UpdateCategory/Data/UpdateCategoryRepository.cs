@@ -19,6 +19,13 @@ namespace CTC.Application.Features.Category.UseCases.UpdateCategory.Data
             return category.FirstOrDefault();
         }
 
+        public async Task<int> CountCategoryByName(string name)
+        {
+            var count = await _sqlService.CountAsync(CategorySqlScripts.COUNT_CATEGORIES_BY_NAME, new { category_name = name });
+
+            return count;
+        }
+
         public async Task<int> UpdateCategory(CategoryModel model)
         {
             var result = await _sqlService.ExecuteAsync(CategorySqlScripts.UPDATE_CATEGORY, new
