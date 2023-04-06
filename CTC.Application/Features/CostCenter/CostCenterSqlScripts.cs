@@ -57,6 +57,7 @@
                                                             c.cost_center_observations AS Observations,
                                                             c.cost_center_closing_forecast_date AS ExpectedClosingDate,
                                                             c.cost_center_closing_date AS ClosingDate,
+                                                            c.client_id AS ClientId
                                                             a.address_city AS AddressCity,
                                                             a.address_complement AS AddressComplement,
                                                             a.address_neighborhood AS AddressNeighborhood,
@@ -64,11 +65,14 @@
                                                             a.address_postal_code AS PostalCode,
                                                             a.address_state AS AddressState,
                                                             a.address_street AS AddressStreetName,
-                                                            a.address_id AS AddressId
+                                                            a.address_id AS AddressId,
+                                                            cl.client_name AS ClientName
                                                         FROM 
 	                                                        cost_center c
                                                         INNER JOIN 
 	                                                        address a ON c.address_id = a.address_id
+                                                        INNER JOIN 
+                                                            client cl ON c.client_id = cl.client_id
                                                         WHERE 
 	                                                        c.cost_center_id = @cost_center_id";
 

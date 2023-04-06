@@ -7,7 +7,7 @@ namespace CTC.Application.Features.CostCenter
     {
         public CostCenterModel(in string name, in string? observations, in DateTime startingDate, in DateTime? expectedClosingDate, in DateTime? closingDate, in string clientId,
             in string? addresPostalCode, in string? addresStreetName, in string? addresNeighborhood, in int? addresNumber, in string? addresComplement, in string? addresCity,
-            in string? addresState, in string? id = null, in string? addressId = null)
+            in string? addresState, in string? id = null, in string? addressId = null, string? clientName = null)
         {
             Id = id ?? Guid.NewGuid().ToString();
             AddressId = addressId ?? Guid.NewGuid().ToString();
@@ -24,6 +24,7 @@ namespace CTC.Application.Features.CostCenter
             AddressComplement = addresComplement ?? string.Empty;
             AddressCity = addresCity ?? string.Empty;
             AddressState = addresState ?? string.Empty;
+            ClientName = clientName ?? string.Empty;
         }
 
         public CostCenterModel() {}
@@ -43,5 +44,6 @@ namespace CTC.Application.Features.CostCenter
         public string AddressComplement { get; set; }
         public string AddressCity { get; set; }
         public string AddressState { get; set; }
+        public string ClientName { get; set; }
     }
 }

@@ -28,7 +28,11 @@ namespace CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase
                 costCenter.StartingDate,
                 costCenter.ExpectedClosingDate,
                 costCenter.ClosingDate,
-                costCenter.ClientId,
+                Client = new 
+                {
+                    costCenter.ClientId,
+                    costCenter.ClientName
+                },
                 Address = new 
                 {
                     PostalCode = costCenter.AddressPostalCode,
