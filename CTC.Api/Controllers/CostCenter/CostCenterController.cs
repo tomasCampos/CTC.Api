@@ -1,5 +1,6 @@
 ﻿using CTC.Api.Controllers.CostCenter.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.CostCenter.UseCases.DeleteCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter.UseCase;
@@ -18,15 +19,18 @@ namespace CTC.Api.Controllers.CostCenter
         private readonly IUseCase<RegisterCostCenterInput, Output> _registerCostCenterUseCase;
         private readonly IUseCase<UpdateCostCenterInput, Output> _updateCostCenterUseCase;
         private readonly IUseCase<GetCostCenterInput, Output> _getCostCenterUseCase;
+        private readonly IUseCase<DeleteCostCenterInput, Output> _deleteCostCenterUseCase;
 
         public CostCenterController
             (IUseCase<RegisterCostCenterInput, Output> registerCostCenterUseCase, 
             IUseCase<UpdateCostCenterInput, Output> updateCostCenterUseCase,
-            IUseCase<GetCostCenterInput, Output> getCostCenterUseCase)
+            IUseCase<GetCostCenterInput, Output> getCostCenterUseCase,
+            IUseCase<DeleteCostCenterInput, Output> deleteCostCenterUseCase)
         {
             _registerCostCenterUseCase = registerCostCenterUseCase;
             _updateCostCenterUseCase = updateCostCenterUseCase;
             _getCostCenterUseCase = getCostCenterUseCase;
+            _deleteCostCenterUseCase = deleteCostCenterUseCase;
         }
 
         [Authorize]
@@ -103,6 +107,21 @@ namespace CTC.Api.Controllers.CostCenter
         {
             var input = new GetCostCenterInput(costCenterId);
             var result = await _getCostCenterUseCase.Execute(input);
+
+            return GetHttpResponse(result);
+        }
+
+        [Authorize]
+        [HttpDelete("{costCenterId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteCostCenter([FromRoute] string costCenterId)
+        {
+            var input = new DeleteCostCenterInput(costCenterId);
+            var result = await _deleteCostCenterUseCase.Execute(input);
 
             return GetHttpResponse(result);
         }

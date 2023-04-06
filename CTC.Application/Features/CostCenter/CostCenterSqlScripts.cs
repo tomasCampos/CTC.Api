@@ -98,8 +98,16 @@
 	                                                            `address_complement` = @address_complement,
 	                                                            `address_city` = @address_city,
 	                                                            `address_state` = @address_state
-                                                            WHERE `
-	                                                            address_id` = @address_id;";
+                                                            WHERE 
+                                                                `address_id` = @address_id;";
+
+        #endregion
+
+        #region DELETE
+
+        public static string DELETE_COST_CENTER = "DELETE FROM `heroku_3a06699194dd49a`.`cost_center` WHERE cost_center_id = @cost_center_id;";
+
+        public static string DELETE_COST_CENTER_ADDRESS = "DELETE FROM `heroku_3a06699194dd49a`.`address` WHERE `address_id` = @address_id;";
 
         #endregion
     }
