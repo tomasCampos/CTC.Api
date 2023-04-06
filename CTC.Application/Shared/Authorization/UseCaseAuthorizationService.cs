@@ -47,6 +47,15 @@ namespace CTC.Application.Shared.Authorization
             if (string.Equals(useCaseName, "DeleteCategoryUseCase"))
                 return Task.FromResult(_userContext.UserPermission == UserPermission.Write);
 
+            if (string.Equals(useCaseName, "RegisterCostCenterUseCase"))
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Write);
+
+            if (string.Equals(useCaseName, "UpdateCostCenterUseCase"))
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Write);
+
+            if (string.Equals(useCaseName, "DeleteCostCenterUseCase"))
+                return Task.FromResult(_userContext.UserPermission == UserPermission.Write);
+
             return Task.FromResult(false);
         }
     }
