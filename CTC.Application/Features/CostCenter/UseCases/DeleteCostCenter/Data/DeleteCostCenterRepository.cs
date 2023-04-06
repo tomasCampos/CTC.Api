@@ -30,25 +30,24 @@ namespace CTC.Application.Features.CostCenter.UseCases.DeleteCostCenter.Data
 
         #region PrivateMethods
 
-        private static Dictionary<string, object?> BuildCommands(string costCenterId, string addresId)
+        private static Dictionary<string, object?> BuildCommands(string costCenterId, string addressId)
         {
             var commands = new Dictionary<string, object?>
             {
-                {
-                    CostCenterSqlScripts.DELETE_COST_CENTER_ADDRESS,
-                    new
-                    {
-                        addres_id = addresId
-                    }
-                },
-
                 {
                     CostCenterSqlScripts.DELETE_COST_CENTER,
                     new
                     {
                         cost_center_id = costCenterId
                     }
-                }
+                },
+                {
+                    CostCenterSqlScripts.DELETE_COST_CENTER_ADDRESS,
+                    new
+                    {
+                        address_id = addressId
+                    }
+                }                
             };
 
             return commands;
