@@ -14,12 +14,12 @@ namespace CTC.Application.Features.Category.UseCases.RegisterCategory.Data
 
         public async Task<int> CountCategoryByName(string categoryName)
         {
-            return await _sqlService.CountAsync(RegisterCategorySqlScripts.COUNT_CATEGORY_BY_NAME_SQL, new { category_name = categoryName });
+            return await _sqlService.CountAsync(CategorySqlScripts.COUNT_CATEGORY_BY_NAME, new { category_name = categoryName });
         }
 
         public async Task InsertCategory(CategoryModel model)
         {
-            _ = await _sqlService.ExecuteAsync(RegisterCategorySqlScripts.INSERT_CATEGORY_SQL, new { category_id = model.Id, category_name = model.Name });
+            _ = await _sqlService.ExecuteAsync(CategorySqlScripts.INSERT_CATEGORY, new { category_id = model.Id, category_name = model.Name });
         }
     }
 }

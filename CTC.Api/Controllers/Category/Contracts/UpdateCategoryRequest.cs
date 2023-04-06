@@ -1,7 +1,8 @@
 ﻿namespace CTC.Api.Controllers.Category.Contracts
 {
-    public sealed class RegisterCategoryRequest
+    public class UpdateCategoryRequest
     {
+        public string? Id { get; set; }
         public string? Name { get; set; }
     }
 }
