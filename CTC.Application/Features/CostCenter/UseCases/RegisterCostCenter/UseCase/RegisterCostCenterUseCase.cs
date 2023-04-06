@@ -48,7 +48,7 @@ namespace CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCas
             if (!success)
                 return Output.CreateInternalErrorResult("Não foi possível registrar o centro de custo. Ocorreu um erro. Tente novamente mais tarde.");
 
-            return Output.CreateCreatedResult(costCenterModel);
+            return Output.CreateCreatedResult();
         }
     }
 }

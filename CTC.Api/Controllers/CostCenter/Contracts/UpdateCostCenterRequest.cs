@@ -2,10 +2,10 @@
 {
     public class UpdateCostCenterRequest
     {
-        public string? id { get; set; }
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public string? Observations { get; set; }
-        public DateTime StartingDate { get; set; }
+        public DateTime? StartingDate { get; set; }
         public DateTime? ExpectedClosingDate { get; set; }
         public DateTime? ClosingDate { get; set; }
         public string? ClientId { get; set; }

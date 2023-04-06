@@ -20,7 +20,7 @@ namespace CTC.Application.Features.CostCenter
             AddressPostalCode = addresPostalCode ?? string.Empty;
             AddressStreetName = addresStreetName ?? string.Empty;
             AddressNeighborhood = addresNeighborhood ?? string.Empty;
-            AddressNumber = addresNumber;
+            AddressNumber = addresNumber ?? 0;
             AddressComplement = addresComplement ?? string.Empty;
             AddressCity = addresCity ?? string.Empty;
             AddressState = addresState ?? string.Empty;

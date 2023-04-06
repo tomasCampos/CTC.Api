@@ -2,8 +2,10 @@
 using CTC.Api.Shared;
 using CTC.Application.Features.CostCenter.UseCases.DeleteCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase;
+using CTC.Application.Features.CostCenter.UseCases.ListCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter.UseCase;
+using CTC.Application.Shared.Request;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -20,17 +22,20 @@ namespace CTC.Api.Controllers.CostCenter
         private readonly IUseCase<UpdateCostCenterInput, Output> _updateCostCenterUseCase;
         private readonly IUseCase<GetCostCenterInput, Output> _getCostCenterUseCase;
         private readonly IUseCase<DeleteCostCenterInput, Output> _deleteCostCenterUseCase;
+        private readonly IUseCase<ListCostCentersInput, Output> _listCostCentersUseCase;
 
         public CostCenterController
             (IUseCase<RegisterCostCenterInput, Output> registerCostCenterUseCase, 
             IUseCase<UpdateCostCenterInput, Output> updateCostCenterUseCase,
             IUseCase<GetCostCenterInput, Output> getCostCenterUseCase,
-            IUseCase<DeleteCostCenterInput, Output> deleteCostCenterUseCase)
+            IUseCase<DeleteCostCenterInput, Output> deleteCostCenterUseCase,
+            IUseCase<ListCostCentersInput, Output> listCostCentersUseCase)
         {
             _registerCostCenterUseCase = registerCostCenterUseCase;
             _updateCostCenterUseCase = updateCostCenterUseCase;
             _getCostCenterUseCase = getCostCenterUseCase;
             _deleteCostCenterUseCase = deleteCostCenterUseCase;
+            _listCostCentersUseCase = listCostCentersUseCase;
         }
 
         [Authorize]
@@ -62,7 +67,7 @@ namespace CTC.Api.Controllers.CostCenter
 
             var result = await _registerCostCenterUseCase.Execute(input);
 
-            return GetHttpResponse(result);
+            return GetHttpResponse(result, "/costCenter");
         }
 
         [Authorize]
@@ -76,7 +81,7 @@ namespace CTC.Api.Controllers.CostCenter
         {
             var input = new UpdateCostCenterInput
             {
-                Id = request.id,
+                Id = request.Id,
                 AddressCity = request.Address?.City,
                 AddressComplement = request.Address?.Complement,
                 AddressNeighborhood = request.Address?.Neighborhood,
@@ -103,7 +108,7 @@ namespace CTC.Api.Controllers.CostCenter
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> UpdateCostCenter([FromRoute] string costCenterId)
+        public async Task<IActionResult> GetCostCenter([FromRoute] string costCenterId)
         {
             var input = new GetCostCenterInput(costCenterId);
             var result = await _getCostCenterUseCase.Execute(input);
@@ -124,6 +129,20 @@ namespace CTC.Api.Controllers.CostCenter
             var result = await _deleteCostCenterUseCase.Execute(input);
 
             return GetHttpResponse(result);
+        }
+
+        [Authorize]
+        [HttpGet()]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ListCostCenters([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string? queryParam)
+        {
+            var request = QueryRequest.Create(pageNumber, pageSize, queryParam);
+            var input = new ListCostCentersInput(request);
+            var output = await _listCostCentersUseCase.Execute(input);
+
+            return GetHttpResponse(output);
         }
     }
 }
