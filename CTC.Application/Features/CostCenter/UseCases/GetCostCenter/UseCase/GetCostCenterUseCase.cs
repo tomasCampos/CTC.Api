@@ -23,6 +23,7 @@ namespace CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase
 
             var result = new 
             {
+                costCenter.Id,
                 costCenter.Name,
                 costCenter.Observations,
                 costCenter.StartingDate,
@@ -30,11 +31,12 @@ namespace CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase
                 costCenter.ClosingDate,
                 Client = new 
                 {
-                    costCenter.ClientId,
+                    Id = costCenter.ClientId,
                     costCenter.ClientName
                 },
                 Address = new 
                 {
+                    Id = costCenter.AddressId,
                     PostalCode = costCenter.AddressPostalCode,
                     StreetName = costCenter.AddressStreetName,
                     Neighborhood = costCenter.AddressNeighborhood,

@@ -31,6 +31,7 @@ namespace CTC.Application.Features.CostCenter.UseCases.ListCostCenter.UseCase
             {
                 var costCenter = new
                 {
+                    item.Id,
                     item.Name,
                     item.Observations,
                     item.StartingDate,
@@ -38,11 +39,12 @@ namespace CTC.Application.Features.CostCenter.UseCases.ListCostCenter.UseCase
                     item.ClosingDate,
                     Client = new
                     {
-                        item.ClientId,
+                        Id = item.ClientId,
                         item.ClientName
                     },
                     Address = new
                     {
+                        Id = item.AddressId,
                         PostalCode = item.AddressPostalCode,
                         StreetName = item.AddressStreetName,
                         Neighborhood = item.AddressNeighborhood,
