@@ -1,5 +1,5 @@
 ﻿using CTC.Application.Shared.Data;
-using CTC.Application.Shared.Person;
+using CTC.Application.Shared.Models.Person;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

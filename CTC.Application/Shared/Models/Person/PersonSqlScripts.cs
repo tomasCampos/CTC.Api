@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CTC.Application.Shared.Person
+namespace CTC.Application.Shared.Models.Person
 {
     internal static class PersonSqlScripts
     {

@@ -1,6 +1,6 @@
 ﻿using CTC.Application.Features.User.UseCases.RegisterUser.Data;
 using CTC.Application.Shared.Data;
-using CTC.Application.Shared.Person;
+using CTC.Application.Shared.Models.Person;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
