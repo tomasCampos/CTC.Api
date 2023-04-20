@@ -6,9 +6,9 @@ namespace CTC.Application.Shared.Models.Transaction
     {
         protected TransactionModel() { }
 
-        protected TransactionModel(in string id, in decimal value, in DateTime paymentDate, in string observation, in string categoryId, in string costCenterId)
+        protected TransactionModel(in string transactionId, in decimal value, in DateTime paymentDate, in string observation, in string categoryId, in string costCenterId)
         {
-            Id = id;
+            TransactionId = transactionId;
             Value = value;
             PaymentDate = paymentDate;
             Observation = observation;
@@ -16,7 +16,7 @@ namespace CTC.Application.Shared.Models.Transaction
             CostCenterId = costCenterId;
         }
 
-        public string? Id { get; set; }
+        public string? TransactionId { get; set; }
         public decimal? Value { get; set; }
         public DateTime? PaymentDate { get; set; }
         public string? Observation { get; set; }
