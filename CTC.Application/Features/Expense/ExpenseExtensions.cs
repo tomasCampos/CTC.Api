@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CTC.Application.Features.Expense.UseCases.RegisterExpense;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.Expense
 {
@@ -6,6 +7,7 @@ namespace CTC.Application.Features.Expense
     {
         public static IServiceCollection AddExpense(this IServiceCollection services) 
         {
+            services.AddRegisterExpense();
             return services;
         }
     }

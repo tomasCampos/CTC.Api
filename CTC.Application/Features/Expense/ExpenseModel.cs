@@ -5,11 +5,11 @@ namespace CTC.Application.Features.Expense
 {
     internal sealed class ExpenseModel : TransactionModel
     {
-        public ExpenseModel(in string expenseId, in string supplierId, in string transactionId, in decimal value, 
-                            in DateTime paymentDate, in string observation, in string categoryId, in string costCenterId) 
+        public ExpenseModel(in string supplierId, in decimal value, in DateTime? paymentDate, in string? observation,
+                in string? categoryId, in string costCenterId, in string? expenseId = null, in string? transactionId = null) 
             : base(transactionId ?? Guid.NewGuid().ToString(), value, paymentDate, observation, categoryId, costCenterId)
         {
-            ExpenseId = expenseId;
+            ExpenseId = expenseId ?? Guid.NewGuid().ToString();
             SupplierId = supplierId;
         }
 

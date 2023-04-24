@@ -1,9 +1,6 @@
-﻿using CTC.Application.Shared.UseCase.IO;
-using System;
-
-namespace CTC.Application.Features.Expense.UseCases.RegisterExpense.UseCase
+﻿namespace CTC.Api.Controllers.Expense.Contracts
 {
-    public sealed class RegisterExpenseInput : IInput
+    public sealed class RegisterExpenseRequest
     {
         public decimal? Value { get; set; }
         public DateTime? PaymentDate { get; set; }
