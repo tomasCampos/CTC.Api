@@ -4,7 +4,35 @@
     {
         #region SELECT
 
-        
+        public static string SELECT_TRANSACTION_BY_EXPENSE_ID = @"SELECT ex.transaction_id FROM `heroku_3a06699194dd49a`.expense ex WHERE ex.expense_id = @expense_id";
+
+        public static string LIST_EXPENSE_SELECT_STATEMENT = @"SELECT 
+	                                                            ex.expense_id AS ExpenseId,
+                                                                ex.supplier_id AS SupplierId,
+                                                                per.person_first_name AS SupplierName,
+                                                                ex.transaction_id AS TransactionId,
+                                                                tran.transaction_value AS `Value`,
+                                                                tran.transaction_payment_date AS PaymentDate,
+                                                                tran.transaction_observations AS Observation,
+                                                                tran.category_id AS CategoryId,
+                                                                cat.category_name AS CategoryName,
+                                                                cc.cost_center_id AS CostCenterId,
+                                                                cc.cost_center_name AS CostCenterName";
+
+        public static string LIST_EXPENSE_FROM_AND_JOIN_STATEMENT = @"FROM  
+	                                                                    `heroku_3a06699194dd49a`.expense ex
+                                                                    INNER JOIN
+	                                                                    `heroku_3a06699194dd49a`.supplier sup ON ex.supplier_id = sup.supplier_id
+                                                                    INNER JOIN
+	                                                                    `heroku_3a06699194dd49a`.person per ON sup.person_id = per.person_id
+                                                                    INNER JOIN 
+	                                                                    `heroku_3a06699194dd49a`.transaction tran ON ex.transaction_id = tran.transaction_id
+                                                                    INNER JOIN
+	                                                                    `heroku_3a06699194dd49a`.category cat ON tran.category_id = cat.category_id
+                                                                    INNER JOIN
+	                                                                    `heroku_3a06699194dd49a`.cost_center cc ON tran.cost_center_id = cc.cost_center_id";
+
+        public static string LIST_EXPENSE_WHERE_STATEMENT = @""; //TODO: O WHERE VAI TER QUE SER MONTADO DINAMICAMENTE COM OS PARÂMETROS DE FILTRO PASSADOS NA QUERY
 
         #endregion
 
@@ -18,6 +46,17 @@
                                                 (@expense_id,
                                                 @supplier_id,
                                                 @transaction_id);";
+
+        #endregion
+
+        #region UPDATE
+
+        public static string UPDATE_EXPENSE = @"UPDATE 
+	                                                `heroku_3a06699194dd49a`.`expense`
+                                                SET
+	                                                `supplier_id` = @supplier_id
+                                                WHERE 
+	                                                `expense_id` = @expense_id;";
 
         #endregion
     }
