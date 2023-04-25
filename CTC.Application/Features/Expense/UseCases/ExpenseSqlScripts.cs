@@ -59,5 +59,11 @@
 	                                                `expense_id` = @expense_id;";
 
         #endregion
+
+        #region DELETE
+
+        public static string DELETE_EXPENSE = @"DELETE FROM `heroku_3a06699194dd49a`.`expense` WHERE `heroku_3a06699194dd49a`.`expense`.expense_id = @expense_id;";
+
+        #endregion
     }
 }

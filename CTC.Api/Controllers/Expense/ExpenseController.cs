@@ -1,5 +1,6 @@
 ﻿using CTC.Api.Controllers.Expense.Contracts;
 using CTC.Api.Shared;
+using CTC.Application.Features.Expense.UseCases.DeleteExpense.UseCase;
 using CTC.Application.Features.Expense.UseCases.RegisterExpense.UseCase;
 using CTC.Application.Features.Expense.UseCases.UpdateExpense.UseCase;
 using CTC.Application.Shared.UseCase;
@@ -16,11 +17,16 @@ namespace CTC.Api.Controllers.Expense
     {
         private readonly IUseCase<RegisterExpenseInput, Output> _registerExpenseUseCase;
         private readonly IUseCase<UpdateExpenseInput, Output> _updateExpenseUseCase;
+        private readonly IUseCase<DeleteExpenseInput, Output> _deleteExpenseUseCase;
 
-        public ExpenseController(IUseCase<RegisterExpenseInput, Output> registerExpenseUseCase, IUseCase<UpdateExpenseInput, Output> updateExpenseUseCase)
+        public ExpenseController(
+            IUseCase<RegisterExpenseInput, Output> registerExpenseUseCase,
+            IUseCase<UpdateExpenseInput, Output> updateExpenseUseCase,
+            IUseCase<DeleteExpenseInput, Output> deleteExpenseUseCase)
         {
             _registerExpenseUseCase = registerExpenseUseCase;
             _updateExpenseUseCase = updateExpenseUseCase;
+            _deleteExpenseUseCase = deleteExpenseUseCase;
         }
 
         [Authorize]
@@ -53,7 +59,7 @@ namespace CTC.Api.Controllers.Expense
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterExpense([FromBody] UpdateExpenseRequest request)
+        public async Task<IActionResult> UpdateExpense([FromBody] UpdateExpenseRequest request)
         {
             var input = new UpdateExpenseInput
             {
@@ -67,6 +73,20 @@ namespace CTC.Api.Controllers.Expense
             };
 
             var output = await _updateExpenseUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpDelete("{expenseId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteExpense([FromRoute] string expenseId)
+        {
+            var input = new DeleteExpenseInput { ExpenseId = expenseId };
+            var output = await _deleteExpenseUseCase.Execute(input);
             return GetHttpResponse(output);
         }
     }
