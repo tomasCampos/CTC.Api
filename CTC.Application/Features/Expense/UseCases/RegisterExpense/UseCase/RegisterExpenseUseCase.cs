@@ -20,7 +20,7 @@ namespace CTC.Application.Features.Expense.UseCases.RegisterExpense.UseCase
         {
             _validator = validator;
             _useCaseAuthorizationService = useCaseAuthorizationService;
-            this._repository = repository;
+            _repository = repository;
         }
 
         public async Task<Output> Execute(RegisterExpenseInput input)
