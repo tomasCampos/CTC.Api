@@ -68,12 +68,12 @@ namespace CTC.Application.Shared.Data
             return (true, totalRowsAffected);
         }
 
-        public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "") where T : class
+        public async Task<PaginatedQueryResult<T>> SelectPaginated<T>(QueryRequest queryRequest, string selectStatement, string fromAndJoinsStatements, string whereStatement = "", bool independentWhereStatement = false) where T : class
         {
             selectStatement += " {0} {1} {2}";
-            if (queryRequest.SearchParam == null)
+            if (queryRequest.SearchParam == null && !independentWhereStatement)
                 whereStatement = string.Empty;
-            else
+            else if(!independentWhereStatement)
                 whereStatement = whereStatement.Replace("@search_param", queryRequest.SearchParam);
 
             var sqlCount = string.Format("SELECT COUNT(*) {0} {1}", fromAndJoinsStatements, whereStatement);
