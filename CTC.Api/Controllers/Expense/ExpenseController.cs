@@ -1,6 +1,7 @@
 ﻿using CTC.Api.Controllers.Expense.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.Expense.UseCases.DeleteExpense.UseCase;
+using CTC.Application.Features.Expense.UseCases.GetExpense.UseCase;
 using CTC.Application.Features.Expense.UseCases.ListExpenses.UseCase;
 using CTC.Application.Features.Expense.UseCases.RegisterExpense.UseCase;
 using CTC.Application.Features.Expense.UseCases.UpdateExpense.UseCase;
@@ -21,17 +22,20 @@ namespace CTC.Api.Controllers.Expense
         private readonly IUseCase<UpdateExpenseInput, Output> _updateExpenseUseCase;
         private readonly IUseCase<DeleteExpenseInput, Output> _deleteExpenseUseCase;
         private readonly IUseCase<ListExpensesInput, Output> _listExpensesUseCase;
+        private readonly IUseCase<GetExpenseInput, Output> _getExpensesUseCase;
 
         public ExpenseController(
             IUseCase<RegisterExpenseInput, Output> registerExpenseUseCase,
             IUseCase<UpdateExpenseInput, Output> updateExpenseUseCase,
             IUseCase<DeleteExpenseInput, Output> deleteExpenseUseCase,
-            IUseCase<ListExpensesInput, Output> listExpensesUseCase)
+            IUseCase<ListExpensesInput, Output> listExpensesUseCase,
+            IUseCase<GetExpenseInput, Output> getExpenseUseCase)
         {
             _registerExpenseUseCase = registerExpenseUseCase;
             _updateExpenseUseCase = updateExpenseUseCase;
             _deleteExpenseUseCase = deleteExpenseUseCase;
             _listExpensesUseCase = listExpensesUseCase;
+            _getExpensesUseCase = getExpenseUseCase;
         }
 
         [Authorize]
@@ -100,12 +104,26 @@ namespace CTC.Api.Controllers.Expense
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteExpense([FromQuery] int pageNumber, int pageSize, string? costCenterName, string? categoryName, int? year)
+        public async Task<IActionResult> ListExpense([FromQuery] int pageNumber, int pageSize, string? costCenterName, string? categoryName, int? year)
         {
             var request = QueryRequest.Create(pageNumber, pageSize, null);
             var input = new ListExpensesInput(request, costCenterName, categoryName, year);
             var output = await _listExpensesUseCase.Execute(input);
             return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpGet("{expenseId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ListExpense([FromRoute] string expenseId)
+        {
+            var input = new GetExpenseInput { ExpenseId = expenseId };
+            var result = await _getExpensesUseCase.Execute(input);
+
+            return GetHttpResponse(result);
         }
     }
 }
