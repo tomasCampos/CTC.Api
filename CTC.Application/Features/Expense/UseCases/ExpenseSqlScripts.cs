@@ -58,6 +58,12 @@
 	                                                `heroku_3a06699194dd49a`.cost_center cc ON tran.cost_center_id = cc.cost_center_id
                                                 WHERE ex.expense_id = @expense_id";
 
+        public static string VERIFY_IF_SUPPLIER_EXISTS = @"SELECT COUNT(*)
+                                                    FROM
+                                                        `heroku_3a06699194dd49a`.supplier s
+                                                    WHERE
+                                                        s.supplier_id = @supplier_id";
+
         #endregion
 
         #region INSERT

@@ -24,7 +24,7 @@
                                                                     INNER JOIN
 	                                                                    `heroku_3a06699194dd49a`.client cli ON re.client_id = cli.client_id
                                                                     INNER JOIN
-	                                                                    `heroku_3a06699194dd49a`.person per ON sup.person_id = per.person_id
+	                                                                    `heroku_3a06699194dd49a`.person per ON cli.person_id = per.person_id
                                                                     INNER JOIN 
 	                                                                    `heroku_3a06699194dd49a`.transaction tran ON re.transaction_id = tran.transaction_id
                                                                     INNER JOIN
@@ -56,6 +56,13 @@
                                                 INNER JOIN
 	                                                `heroku_3a06699194dd49a`.cost_center cc ON tran.cost_center_id = cc.cost_center_id
                                                 WHERE re.revenue_id = @revenue_id";
+
+        public static string SELECT_CLIENT_BY_COST_CENTER_ID = @"SELECT 
+                                                                    c.client_id
+                                                                FROM 
+	                                                                cost_center c
+                                                                WHERE 
+                                                                    c.cost_center_id = @cost_center_id";
         #endregion
 
         #region INSERT

@@ -33,7 +33,11 @@ namespace CTC.Application.Features.Revenue.UseCases.RegisterRevenue.UseCase
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
-            var revenue = new RevenueModel(input.ClientId!, input.Value!.Value, input.PaymentDate, input.Observation, input.CategoryId, input.CostCenterId!);
+            var clientId = await _repository.GetClientIdByCostCenterId(input.CostCenterId!);
+            if (clientId == null)
+                return Output.CreateInvalidParametersResult("O centro de custo informado não é válido ou não possui um cliente relacionado");
+
+            var revenue = new RevenueModel(clientId, input.Value!.Value, input.PaymentDate, input.Observation, input.CategoryId, input.CostCenterId!);
             var wasRevenueInsertedWithSuccess = await _repository.InsertRevenue(revenue);
             if (!wasRevenueInsertedWithSuccess)
                 return Output.CreateInternalErrorResult("Ocorreu um erro e não foi possível cadastrar a receita. Tente novamente mais tarde.");

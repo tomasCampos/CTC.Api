@@ -53,8 +53,7 @@ namespace CTC.Api.Controllers.Revenue
                 CostCenterId = request.CostCenterId,
                 Observation = request.Observation,
                 PaymentDate = request.PaymentDate,
-                ClientId = request.ClientId,
-                Value = request.Value,
+                Value = request.Value
             };
 
             var output = await _registerRevenueUseCase.Execute(input);
@@ -118,7 +117,7 @@ namespace CTC.Api.Controllers.Revenue
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> ListRevenue([FromRoute] string revenueId)
+        public async Task<IActionResult> GetRevenue([FromRoute] string revenueId)
         {
             var input = new GetRevenueInput { RevenueId = revenueId };
             var result = await _getRevenueUseCase.Execute(input);

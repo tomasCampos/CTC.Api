@@ -22,6 +22,12 @@ namespace CTC.Application.Features.Expense.UseCases.RegisterExpense.Data
             return result.Success;
         }
 
+        public async Task<bool> VerifyIfSupplierExists(string supplierId)
+        {
+            var count = await _sqlService.CountAsync(ExpenseSqlScripts.VERIFY_IF_SUPPLIER_EXISTS, new { supplier_id = supplierId });
+            return count > 0;
+        }
+
         #region PrivateMethods
 
         private static Dictionary<string, object?> BuildCommands(ExpenseModel model)

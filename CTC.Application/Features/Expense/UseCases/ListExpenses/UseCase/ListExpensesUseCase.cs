@@ -26,7 +26,7 @@ namespace CTC.Application.Features.Expense.UseCases.ListExpenses.UseCase
 
         private static PaginatedQueryResult<object> FormatExpenseData(PaginatedQueryResult<ExpenseModel> data)
         {
-            var formatedCostCenterList = new List<object>();
+            var formatedExpenseList = new List<object>();
             foreach (var expense in data.Results)
             {
                 var result = new
@@ -52,10 +52,10 @@ namespace CTC.Application.Features.Expense.UseCases.ListExpenses.UseCase
                     }
                 };
 
-                formatedCostCenterList.Add(result);
+                formatedExpenseList.Add(result);
             }
 
-            return new PaginatedQueryResult<object>(formatedCostCenterList, data.TotalCount);
+            return new PaginatedQueryResult<object>(formatedExpenseList, data.TotalCount);
         }
     }
 }

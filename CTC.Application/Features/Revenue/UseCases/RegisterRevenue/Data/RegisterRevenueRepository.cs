@@ -1,6 +1,7 @@
 ﻿using CTC.Application.Shared.Data;
 using CTC.Application.Shared.Models.Transaction;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Revenue.UseCases.RegisterRevenue.Data
@@ -20,6 +21,12 @@ namespace CTC.Application.Features.Revenue.UseCases.RegisterRevenue.Data
 
             var result = await _sqlService.ExecuteWithTransactionAsync(commands);
             return result.Success;
+        }
+
+        public async Task<string> GetClientIdByCostCenterId(string costCenterId)
+        {
+            var clientId = await _sqlService.SelectAsync<string>(RevenueSqlScripts.SELECT_CLIENT_BY_COST_CENTER_ID, new { cost_center_id = costCenterId });
+            return clientId.FirstOrDefault();
         }
 
         #region PrivateMethods

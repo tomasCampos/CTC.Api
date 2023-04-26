@@ -33,10 +33,14 @@ namespace CTC.Application.Features.Expense.UseCases.RegisterExpense.UseCase
             if (!validationResult.IsValid)
                 return Output.CreateInvalidParametersResult(validationResult.ErrorMessage);
 
+            var isSupplierIdValid = await _repository.VerifyIfSupplierExists(input.SupplierId!);
+            if (!isSupplierIdValid)
+                return Output.CreateInvalidParametersResult("O fornecedor informado não existe.");
+
             var expense = new ExpenseModel(input.SupplierId!, input.Value!.Value, input.PaymentDate, input.Observation, input.CategoryId, input.CostCenterId!);
             var wasExpenseInsertedWithSuccess = await _repository.InsertExpense(expense);
             if (!wasExpenseInsertedWithSuccess)
-                return Output.CreateInternalErrorResult("Ocorreu um erro e não foi posspivel cadastrar a despesa. Tente novamente mais tarde.");
+                return Output.CreateInternalErrorResult("Ocorreu um erro e não foi possível cadastrar a despesa. Tente novamente mais tarde.");
 
             return Output.CreateCreatedResult();
         }

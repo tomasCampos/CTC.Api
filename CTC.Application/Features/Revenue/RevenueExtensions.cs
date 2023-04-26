@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.Revenue.UseCases.DeleteRevenue;
+using CTC.Application.Features.Revenue.UseCases.GetRevenue;
 using CTC.Application.Features.Revenue.UseCases.ListRevenues;
 using CTC.Application.Features.Revenue.UseCases.RegisterRevenue;
 using CTC.Application.Features.Revenue.UseCases.UpdateRevenue;
@@ -14,6 +15,7 @@ namespace CTC.Application.Features.Revenue
             services.AddUpdateRevenue();
             services.AddDeleteRevenue();
             services.AddListRevenues();
+            services.AddGetRevenue();
             return services;
         }
     }

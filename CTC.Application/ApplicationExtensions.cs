@@ -2,6 +2,7 @@
 using CTC.Application.Features.Client;
 using CTC.Application.Features.CostCenter;
 using CTC.Application.Features.Expense;
+using CTC.Application.Features.Revenue;
 using CTC.Application.Features.Supplier;
 using CTC.Application.Features.User;
 using CTC.Application.Shared;
@@ -20,6 +21,7 @@ namespace CTC.Application
             services.AddCostCenter();
             services.AddShared();
             services.AddExpense();
+            services.AddRevenue();
             return services;
         }
     }
