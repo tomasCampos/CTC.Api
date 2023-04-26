@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CTC.Application.Shared.Person
+namespace CTC.Application.Shared.Models.Person
 {
     internal abstract class PersonModel
     {

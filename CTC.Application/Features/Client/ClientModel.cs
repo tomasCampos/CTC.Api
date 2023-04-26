@@ -1,4 +1,4 @@
-﻿using CTC.Application.Shared.Person;
+﻿using CTC.Application.Shared.Models.Person;
 using System;
 
 namespace CTC.Application.Features.Client

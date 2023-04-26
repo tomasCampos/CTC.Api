@@ -1,5 +1,4 @@
-﻿using CTC.Application.Features.Supplier.UseCases.RegisterSupplier.UseCase;
-using System;
+﻿using System;
 
 namespace CTC.Application.Features.CostCenter
 {
