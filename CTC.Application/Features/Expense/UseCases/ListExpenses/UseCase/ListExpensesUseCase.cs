@@ -1,6 +1,8 @@
 ﻿using CTC.Application.Features.Expense.UseCases.ListExpenses.Data;
+using CTC.Application.Shared.Data;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CTC.Application.Features.Expense.UseCases.ListExpenses.UseCase
@@ -16,8 +18,44 @@ namespace CTC.Application.Features.Expense.UseCases.ListExpenses.UseCase
 
         public async Task<Output> Execute(ListExpensesInput input)
         {
-            var result = await _repository.ListExpenses(input.Request, input.CostCenterName, input.CategoryName, input.Year);
+            var expenses = await _repository.ListExpenses(input.Request, input.CostCenterName, input.CategoryName, input.Year);
+            var result = FormatExpenseData(expenses);
+
             return Output.CreateOkResult(result);
+        }
+
+        private static PaginatedQueryResult<object> FormatExpenseData(PaginatedQueryResult<ExpenseModel> data)
+        {
+            var formatedCostCenterList = new List<object>();
+            foreach (var expense in data.Results)
+            {
+                var result = new
+                {
+                    id = expense.ExpenseId,
+                    transactionValue = expense.Value,
+                    paymentDate = expense.PaymentDate,
+                    observations = expense.Observation,
+                    category = new
+                    {
+                        id = expense.CategoryId,
+                        name = expense.CategoryName
+                    },
+                    costCenter = new
+                    {
+                        id = expense.CostCenterId,
+                        name = expense.CostCenterName
+                    },
+                    supplier = new
+                    {
+                        id = expense.SupplierId,
+                        name = expense.SupplierName
+                    }
+                };
+
+                formatedCostCenterList.Add(result);
+            }
+
+            return new PaginatedQueryResult<object>(formatedCostCenterList, data.TotalCount);
         }
     }
 }
