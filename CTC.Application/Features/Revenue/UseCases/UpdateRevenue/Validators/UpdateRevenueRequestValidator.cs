@@ -15,8 +15,6 @@ namespace CTC.Application.Features.Revenue.UseCases.UpdateRevenue.Validators
                 errors.Add("O valor da transação deve ser informado");
             if (string.IsNullOrWhiteSpace(request.CostCenterId))
                 errors.Add("O Centro de Custo deve ser informado");
-            if (string.IsNullOrWhiteSpace(request.ClientId))
-                errors.Add("O Cliente deve ser informado");
 
             var result = new RequestValidationModel(errors);
             return Task.FromResult(result);

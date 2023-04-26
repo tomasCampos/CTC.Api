@@ -76,7 +76,6 @@ namespace CTC.Api.Controllers.Revenue
                 CostCenterId = request.CostCenterId,
                 Observation = request.Observation,
                 PaymentDate = request.PaymentDate,
-                ClientId = request.ClientId,
                 Value = request.Value,
             };
 

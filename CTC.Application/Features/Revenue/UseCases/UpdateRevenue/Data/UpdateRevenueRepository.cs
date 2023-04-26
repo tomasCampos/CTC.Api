@@ -29,6 +29,12 @@ namespace CTC.Application.Features.Revenue.UseCases.UpdateRevenue.Data
             return result.Success;
         }
 
+        public async Task<string> GetClientIdByCostCenterId(string costCenterId)
+        {
+            var clientId = await _sqlService.SelectAsync<string>(RevenueSqlScripts.SELECT_CLIENT_BY_COST_CENTER_ID, new { cost_center_id = costCenterId });
+            return clientId.FirstOrDefault();
+        }
+
         #region PrivateMethods
 
         private static Dictionary<string, object?> BuildCommands(RevenueModel model)
@@ -52,8 +58,8 @@ namespace CTC.Application.Features.Revenue.UseCases.UpdateRevenue.Data
                     RevenueSqlScripts.UPDATE_REVENUE,
                     new
                     {
-                        expense_id = model.RevenueId,
-                        supplier_id = model.ClientId
+                        revenue_id = model.RevenueId,
+                        client_id = model.ClientId
                     }
                 }
             };

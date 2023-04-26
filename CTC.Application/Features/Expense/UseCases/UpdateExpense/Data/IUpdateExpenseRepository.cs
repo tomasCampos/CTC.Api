@@ -7,5 +7,7 @@ namespace CTC.Application.Features.Expense.UseCases.UpdateExpense.Data
         Task<string> GetTransactionIdByExpenseId(string id);
 
         Task<bool> UpdateExpense(ExpenseModel expense);
+
+        Task<bool> VerifyIfSupplierExists(string supplierId);
     }
 }

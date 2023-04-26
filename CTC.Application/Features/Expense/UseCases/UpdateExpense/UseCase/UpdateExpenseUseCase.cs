@@ -37,6 +37,10 @@ namespace CTC.Application.Features.Expense.UseCases.UpdateExpense.UseCase
             if (string.IsNullOrEmpty(transactionId))
                 return Output.CreateInvalidParametersResult("A despesa a ser alterada não existe.");
 
+            var isSupplierIdValid = await _repository.VerifyIfSupplierExists(input.SupplierId!);
+            if (!isSupplierIdValid)
+                return Output.CreateInvalidParametersResult("O fornecedor informado não existe.");
+
             var expense = new ExpenseModel(input.SupplierId!, input.Value!.Value, input.PaymentDate, input.Observation,
                 input.CategoryId, input.CostCenterId!, transactionId: transactionId, expenseId: input.ExpenseId);
             var wasExpenseUpdatedWithSuccess = await _repository.UpdateExpense(expense);

@@ -27,7 +27,7 @@
 	                                                                    `heroku_3a06699194dd49a`.person per ON cli.person_id = per.person_id
                                                                     INNER JOIN 
 	                                                                    `heroku_3a06699194dd49a`.transaction tran ON re.transaction_id = tran.transaction_id
-                                                                    INNER JOIN
+                                                                    LEFT JOIN
 	                                                                    `heroku_3a06699194dd49a`.category cat ON tran.category_id = cat.category_id
                                                                     INNER JOIN
 	                                                                    `heroku_3a06699194dd49a`.cost_center cc ON tran.cost_center_id = cc.cost_center_id";
@@ -51,7 +51,7 @@
 	                                                `heroku_3a06699194dd49a`.person per ON cli.person_id = per.person_id
                                                 INNER JOIN 
 	                                                `heroku_3a06699194dd49a`.transaction tran ON re.transaction_id = tran.transaction_id
-                                                INNER JOIN
+                                                LEFT JOIN
 	                                                `heroku_3a06699194dd49a`.category cat ON tran.category_id = cat.category_id
                                                 INNER JOIN
 	                                                `heroku_3a06699194dd49a`.cost_center cc ON tran.cost_center_id = cc.cost_center_id

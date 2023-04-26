@@ -37,7 +37,11 @@ namespace CTC.Application.Features.Revenue.UseCases.UpdateRevenue.UseCase
             if (string.IsNullOrEmpty(transactionId))
                 return Output.CreateInvalidParametersResult("A despesa a ser alterada não existe.");
 
-            var revenue = new RevenueModel(input.ClientId!, input.Value!.Value, input.PaymentDate, input.Observation,
+            var clientId = await _repository.GetClientIdByCostCenterId(input.CostCenterId!);
+            if (clientId == null)
+                return Output.CreateInvalidParametersResult("O centro de custo informado não é válido ou não possui um cliente relacionado");
+
+            var revenue = new RevenueModel(clientId, input.Value!.Value, input.PaymentDate, input.Observation,
                 input.CategoryId, input.CostCenterId!, transactionId: transactionId, revenueId: input.RevenueId);
             var wasRevenueUpdatedWithSuccess = await _repository.UpdateRevenue(revenue);
             if (!wasRevenueUpdatedWithSuccess)
