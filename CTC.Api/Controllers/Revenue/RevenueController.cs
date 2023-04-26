@@ -1,6 +1,7 @@
 ﻿using CTC.Api.Controllers.Revenue.Contracts;
 using CTC.Api.Shared;
 using CTC.Application.Features.Revenue.UseCases.DeleteRevenue.UseCase;
+using CTC.Application.Features.Revenue.UseCases.GetRevenue.UseCase;
 using CTC.Application.Features.Revenue.UseCases.ListRevenues.UseCase;
 using CTC.Application.Features.Revenue.UseCases.RegisterRevenue.UseCase;
 using CTC.Application.Features.Revenue.UseCases.UpdateRevenue.UseCase;
@@ -21,17 +22,20 @@ namespace CTC.Api.Controllers.Revenue
         private readonly IUseCase<UpdateRevenueInput, Output> _updateRevenueUseCase;
         private readonly IUseCase<DeleteRevenueInput, Output> _deleteRevenueUseCase;
         private readonly IUseCase<ListRevenuesInput, Output> _listRevenuesUseCase;
+        private readonly IUseCase<GetRevenueInput, Output> _getRevenueUseCase;
 
         public RevenueController(
             IUseCase<RegisterRevenueInput, Output> registerRevenueUseCase,
             IUseCase<UpdateRevenueInput, Output> updateRevenueUseCase,
             IUseCase<DeleteRevenueInput, Output> deleteRevenueUseCase,
-            IUseCase<ListRevenuesInput, Output> listRevenuesUseCase)
+            IUseCase<ListRevenuesInput, Output> listRevenuesUseCase,
+            IUseCase<GetRevenueInput, Output> getRevenueUseCase)
         {
             _registerRevenueUseCase = registerRevenueUseCase;
             _updateRevenueUseCase = updateRevenueUseCase;
             _deleteRevenueUseCase = deleteRevenueUseCase;
             _listRevenuesUseCase = listRevenuesUseCase;
+            _getRevenueUseCase = getRevenueUseCase;
         }
 
         [Authorize]
@@ -106,6 +110,20 @@ namespace CTC.Api.Controllers.Revenue
             var input = new ListRevenuesInput(request, costCenterName, categoryName, year);
             var output = await _listRevenuesUseCase.Execute(input);
             return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpGet("{revenueId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ListRevenue([FromRoute] string revenueId)
+        {
+            var input = new GetRevenueInput { RevenueId = revenueId };
+            var result = await _getRevenueUseCase.Execute(input);
+
+            return GetHttpResponse(result);
         }
     }
 }
