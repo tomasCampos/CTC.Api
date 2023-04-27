@@ -17,9 +17,9 @@ namespace CTC.Application.Features.Expense.UseCases.ListExpenses.Data
         {
             var whereStatement = @"WHERE 1=1 ";
             if (!string.IsNullOrEmpty(costCenterName))
-                whereStatement += $"AND cc.cost_center_name = {costCenterName} ";
+                whereStatement += $"AND cc.cost_center_name LIKE '%{costCenterName}%' ";
             if (!string.IsNullOrEmpty(categoryName))
-                whereStatement += $"AND cat.category_name = {categoryName} ";
+                whereStatement += $"AND cat.category_name LIKE '%{categoryName}%' ";
             if (year.HasValue)
                 whereStatement += $"AND YEAR(tran.transaction_payment_date) = {year} ";
 
