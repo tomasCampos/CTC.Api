@@ -1,4 +1,5 @@
-﻿using CTC.Application.Features.Category;
+﻿using CTC.Application.Features.Analytics;
+using CTC.Application.Features.Category;
 using CTC.Application.Features.Client;
 using CTC.Application.Features.CostCenter;
 using CTC.Application.Features.Expense;
@@ -22,6 +23,7 @@ namespace CTC.Application
             services.AddShared();
             services.AddExpense();
             services.AddRevenue();
+            services.AddAnalytics();
             return services;
         }
     }
