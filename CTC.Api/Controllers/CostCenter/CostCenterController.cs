@@ -2,6 +2,7 @@
 using CTC.Api.Shared;
 using CTC.Application.Features.CostCenter.UseCases.DeleteCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase;
+using CTC.Application.Features.CostCenter.UseCases.GetCostCenterReport.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.ListCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter.UseCase;
 using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter.UseCase;
@@ -23,19 +24,22 @@ namespace CTC.Api.Controllers.CostCenter
         private readonly IUseCase<GetCostCenterInput, Output> _getCostCenterUseCase;
         private readonly IUseCase<DeleteCostCenterInput, Output> _deleteCostCenterUseCase;
         private readonly IUseCase<ListCostCentersInput, Output> _listCostCentersUseCase;
+        private readonly IUseCase<GetCostCenterReportInput, Output> _getCostCenterReportUseCase;
 
         public CostCenterController
             (IUseCase<RegisterCostCenterInput, Output> registerCostCenterUseCase, 
             IUseCase<UpdateCostCenterInput, Output> updateCostCenterUseCase,
             IUseCase<GetCostCenterInput, Output> getCostCenterUseCase,
             IUseCase<DeleteCostCenterInput, Output> deleteCostCenterUseCase,
-            IUseCase<ListCostCentersInput, Output> listCostCentersUseCase)
+            IUseCase<ListCostCentersInput, Output> listCostCentersUseCase,
+            IUseCase<GetCostCenterReportInput, Output> getCostCenterReportUseCase)
         {
             _registerCostCenterUseCase = registerCostCenterUseCase;
             _updateCostCenterUseCase = updateCostCenterUseCase;
             _getCostCenterUseCase = getCostCenterUseCase;
             _deleteCostCenterUseCase = deleteCostCenterUseCase;
             _listCostCentersUseCase = listCostCentersUseCase;
+            _getCostCenterReportUseCase = getCostCenterReportUseCase;
         }
 
         [Authorize]
@@ -143,6 +147,19 @@ namespace CTC.Api.Controllers.CostCenter
             var output = await _listCostCentersUseCase.Execute(input);
 
             return GetHttpResponse(output);
+        }
+
+        [Authorize]
+        [HttpGet("Report/{costCenterId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetCostCenterReport([FromRoute] string costCenterId)
+        {
+            var input = new GetCostCenterReportInput { CostCenterId = costCenterId };
+            var result = await _getCostCenterReportUseCase.Execute(input);
+            
+            return GetHttpResponse(result);
         }
     }
 }

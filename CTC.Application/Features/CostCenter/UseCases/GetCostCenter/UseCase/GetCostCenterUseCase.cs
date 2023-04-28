@@ -32,7 +32,8 @@ namespace CTC.Application.Features.CostCenter.UseCases.GetCostCenter.UseCase
                 Client = new 
                 {
                     Id = costCenter.ClientId,
-                    costCenter.ClientName
+                    costCenter.ClientName,
+                    costCenter.ClientDocument
                 },
                 Address = new 
                 {

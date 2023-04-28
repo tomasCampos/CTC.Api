@@ -66,7 +66,8 @@
                                                             a.address_state AS AddressState,
                                                             a.address_street AS AddressStreetName,
                                                             a.address_id AS AddressId,
-                                                            p.person_first_name AS ClientName
+                                                            p.person_first_name AS ClientName,
+                                                            p.person_document AS ClientDocument
                                                         FROM 
 	                                                        cost_center c
                                                         INNER JOIN 
@@ -94,7 +95,8 @@
                                                                     a.address_state AS AddressState,
                                                                     a.address_street AS AddressStreetName,
                                                                     a.address_id AS AddressId,
-                                                                    p.person_first_name AS ClientName";
+                                                                    p.person_first_name AS ClientName,
+                                                                    p.person_document AS ClientDocument";
 
         public static string LIST_COST_CENTER_FROM_AND_JOIN_STATEMENT = @"FROM 
 	                                                                        cost_center c

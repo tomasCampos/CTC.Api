@@ -40,7 +40,8 @@ namespace CTC.Application.Features.CostCenter.UseCases.ListCostCenter.UseCase
                     Client = new
                     {
                         Id = item.ClientId,
-                        item.ClientName
+                        item.ClientName,
+                        item.ClientDocument
                     },
                     Address = new
                     {

@@ -1,7 +1,6 @@
 ﻿using CTC.Application.Features.Analytics.Data;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

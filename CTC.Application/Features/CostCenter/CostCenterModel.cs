@@ -44,5 +44,6 @@ namespace CTC.Application.Features.CostCenter
         public string AddressCity { get; set; }
         public string AddressState { get; set; }
         public string ClientName { get; set; }
+        public string ClientDocument { get; set; }
     }
 }
