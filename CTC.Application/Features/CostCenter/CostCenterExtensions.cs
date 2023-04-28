@@ -1,5 +1,6 @@
 ﻿using CTC.Application.Features.CostCenter.UseCases.DeleteCostCenter;
 using CTC.Application.Features.CostCenter.UseCases.GetCostCenter;
+using CTC.Application.Features.CostCenter.UseCases.GetCostCenterReport;
 using CTC.Application.Features.CostCenter.UseCases.ListCostCenter;
 using CTC.Application.Features.CostCenter.UseCases.RegisterCostCenter;
 using CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter;
@@ -16,6 +17,7 @@ namespace CTC.Application.Features.CostCenter
             services.AddGetCostCenter();
             services.AddDeleteCostCenter();
             services.AddListCostCenters();
+            services.AddGetCostCenterReport();
             return services;
         }
     }
