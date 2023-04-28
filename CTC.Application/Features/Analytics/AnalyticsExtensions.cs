@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CTC.Application.Features.Analytics.Data.Extensions;
+using CTC.Application.Features.Analytics.UseCases.GetOverview;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CTC.Application.Features.Analytics
 {
@@ -6,6 +8,8 @@ namespace CTC.Application.Features.Analytics
     {
         public static IServiceCollection AddAnalytics(this IServiceCollection services) 
         {
+            services.AddAnalyticsData();
+            services.AddGetOverview();
             return services;
         }
     }
