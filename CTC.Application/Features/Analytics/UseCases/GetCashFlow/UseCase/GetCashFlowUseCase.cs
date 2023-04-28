@@ -19,7 +19,7 @@ namespace CTC.Application.Features.Analytics.UseCases.GetCashFlow.UseCase
 
         public async Task<Output> Execute(GetCashFlowInput input)
         {
-            (var expensesData, var revenuesData) = await _transactionAnalyticsRepository.ListTransactionsByYear(input.Year, TransactionAnalyticsFiltersType.BeforeOrEqualsToYear);
+            (var expensesData, var revenuesData) = await _transactionAnalyticsRepository.ListTransactionsByYear(input.Year, TransactionAnalyticsFiltersType.EqualsToYear);
 
             var january = GetMonthCashFlow(1, expensesData, revenuesData);
             var february = GetMonthCashFlow(2, expensesData, revenuesData);

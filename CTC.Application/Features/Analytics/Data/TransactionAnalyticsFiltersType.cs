@@ -2,7 +2,7 @@
 {
     internal enum TransactionAnalyticsFiltersType
     {
-        OfYear = 1,
+        EqualsToYear = 1,
         BeforeOrEqualsToYear = 2,
     }
 }

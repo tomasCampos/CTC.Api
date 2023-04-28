@@ -54,7 +54,7 @@ namespace CTC.Application.Features.Analytics.Data
         {
             switch (filterType) 
             {
-                case TransactionAnalyticsFiltersType.OfYear : return "WHERE YEAR(tran.transaction_payment_date) == @transaction_payment_year";
+                case TransactionAnalyticsFiltersType.EqualsToYear : return "WHERE YEAR(tran.transaction_payment_date) = @transaction_payment_year";
                 case TransactionAnalyticsFiltersType.BeforeOrEqualsToYear : return "WHERE YEAR(tran.transaction_payment_date) <= @transaction_payment_year";
                 default: return "";
             }
