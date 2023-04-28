@@ -37,18 +37,17 @@ namespace CTC.Application.Features.Analytics.Data
             _sqlService = sqlService;
         }
 
-        public async Task<IEnumerable<TransactionAnalyticsModel>> ListExpensesByYear(int year, TransactionAnalyticsFiltersType filterType)
+        public async Task<(IEnumerable<TransactionAnalyticsModel> expensesData, IEnumerable<TransactionAnalyticsModel> revenuesData)> ListTransactionsByYear(int year, TransactionAnalyticsFiltersType filterType)
         {
             var whereClause = GetWhereClauseByFilterType(filterType);
-            var sql = $"{SELECT_EXPENSES} {whereClause}";
-            return await _sqlService.SelectAsync<TransactionAnalyticsModel>(sql, new { transaction_payment_year = year });
-        }
+            var sqlExpenses = $"{SELECT_EXPENSES} {whereClause}";
+            var sqlRevenues = $"{SELECT_REVENUES} {whereClause}";
 
-        public async Task<IEnumerable<TransactionAnalyticsModel>> ListRevenuesByYear(int year, TransactionAnalyticsFiltersType filterType)
-        {
-            var whereClause = GetWhereClauseByFilterType(filterType);
-            var sql = $"{SELECT_REVENUES} {whereClause}";
-            return await _sqlService.SelectAsync<TransactionAnalyticsModel>(sql, new { transaction_payment_year = year });
+            var expensesTask = _sqlService.SelectAsync<TransactionAnalyticsModel>(sqlExpenses, new { transaction_payment_year = year });
+            var revenueTask = _sqlService.SelectAsync<TransactionAnalyticsModel>(sqlRevenues, new { transaction_payment_year = year });
+            await Task.WhenAll(expensesTask, revenueTask);
+
+            return(expensesTask.Result, revenueTask.Result);
         }
 
         private static string GetWhereClauseByFilterType(TransactionAnalyticsFiltersType filterType) 

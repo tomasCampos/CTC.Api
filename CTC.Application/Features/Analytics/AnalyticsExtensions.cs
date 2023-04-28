@@ -1,4 +1,5 @@
 ﻿using CTC.Application.Features.Analytics.Data.Extensions;
+using CTC.Application.Features.Analytics.UseCases.CashFlow;
 using CTC.Application.Features.Analytics.UseCases.GetOverview;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace CTC.Application.Features.Analytics
         {
             services.AddAnalyticsData();
             services.AddGetOverview();
+            services.AddGetCashFLow();
             return services;
         }
     }

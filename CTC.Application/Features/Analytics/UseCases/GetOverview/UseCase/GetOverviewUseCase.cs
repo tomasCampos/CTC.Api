@@ -1,7 +1,6 @@
 ﻿using CTC.Application.Features.Analytics.Data;
 using CTC.Application.Shared.UseCase;
 using CTC.Application.Shared.UseCase.IO;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,18 +17,14 @@ namespace CTC.Application.Features.Analytics.UseCases.GetOverview.UseCase
 
         public async Task<Output> Execute(GetOverviewInput input)
         {
-            var expensesTask = _transactionAnalyticsRepository.ListExpensesByYear(input.Year, TransactionAnalyticsFiltersType.BeforeOrEqualsToYear);
-            var revenueTask = _transactionAnalyticsRepository.ListRevenuesByYear(input.Year, TransactionAnalyticsFiltersType.BeforeOrEqualsToYear);
-            await Task.WhenAll(expensesTask, revenueTask);
-            var expensesData = expensesTask.Result;
-            var revenuesData = revenueTask.Result;
+            var (expensesData, revenuesData) = await _transactionAnalyticsRepository.ListTransactionsByYear(input.Year, TransactionAnalyticsFiltersType.BeforeOrEqualsToYear);
 
-            var currentYearExpenses = expensesData.Where(exp => exp.PaymentDate.Year == input.Year).Sum(exp => exp.TransactionValue);
-            var currentYearRevenues = revenuesData.Where(rev => rev.PaymentDate.Year == input.Year).Sum(rev => rev.TransactionValue);
+            var currentYearExpenses = expensesData.AsParallel().Where(exp => exp.PaymentDate.Year == input.Year).Sum(exp => exp.TransactionValue);
+            var currentYearRevenues = revenuesData.AsParallel().Where(rev => rev.PaymentDate.Year == input.Year).Sum(rev => rev.TransactionValue);
             var cashFlow = currentYearRevenues - currentYearExpenses;
 
-            var totalExpenses = expensesData.Sum(exp => exp.TransactionValue);
-            var totalRevenues = revenuesData.Sum(rev => rev.TransactionValue);
+            var totalExpenses = expensesData.AsParallel().Sum(exp => exp.TransactionValue);
+            var totalRevenues = revenuesData.AsParallel().Sum(rev => rev.TransactionValue);
             var accumulatedBalance = totalRevenues - totalExpenses;
 
             var result = new 
