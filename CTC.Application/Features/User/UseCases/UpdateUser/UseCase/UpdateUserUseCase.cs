@@ -49,14 +49,22 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
         }
 
         public async Task<Output> Execute(UpdateUserInput input)
-        {
-            var currentUser = await _repository.GetUserById(input.UserId!);
+        {   
+            (var currentUser, var isProfileUdate) = await GetCurrentUser(input.UserId);
             if (currentUser == null)
                 return Output.CreateInvalidParametersResult("O usuário a ser atualizado não existe");
 
             var isAuthorized = await _useCaseAuthorizationService.Authorize(nameof(UpdateUserUseCase), currentUser.Email);
             if (!isAuthorized)
                 return Output.CreateForbiddenResult();
+
+            //Caso seja atualização de perfil (não passa o ID, o usuário a ser atualizado é obtido através do _userContext (usuário logado).)
+            if (isProfileUdate)
+            {
+                //Nesse caso é necessário manter as informações a serem atualizadas com a permissão e o id, pois não são enviados pelo usuário e são necessários.
+                input.UserPermission = currentUser.Permission;
+                input.UserId = currentUser.UserId;
+            }
 
             var validationResult = await _validator.Validate(input);
             if (!validationResult.IsValid)
@@ -76,6 +84,16 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.UseCase
 
             _userContextCacheReset.Reset(currentUser.Email!);
             return Output.CreateOkResult();
+        }
+
+        private async Task<(UserModel userModel, bool isProfileUpdate)> GetCurrentUser(string? userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                var users = await _repository.GetUsersByEmail(_userContext.UserEmail);
+                return (users.FirstOrDefault(), true);
+            }
+            return (await _repository.GetUserById(userId), false);
         }
 
         private async Task<bool> UpdateSqlServeUser(UserModel currentUserData, UpdateUserInput newUserData)

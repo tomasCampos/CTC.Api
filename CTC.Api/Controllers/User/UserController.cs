@@ -119,6 +119,30 @@ namespace CTC.Api.Controllers.User
             return GetHttpResponse(output);
         }
 
+        [Authorize]
+        [HttpPut("Profile")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileRequest request)
+        {
+            var input = new UpdateUserInput
+            (
+                null,
+                request.FirstName,
+                request.Email,
+                request.Phone,
+                request.Document,
+                request.LastName,
+                null,
+                request.Password
+            );
+
+            var output = await _updateUserUseCase.Execute(input);
+            return GetHttpResponse(output);
+        }
+
         [HttpPost("Authorize")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]

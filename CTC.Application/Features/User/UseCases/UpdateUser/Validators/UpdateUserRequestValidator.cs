@@ -12,8 +12,6 @@ namespace CTC.Application.Features.User.UseCases.UpdateUser.Validators
         {
             var errors = new List<string>();
 
-            if (string.IsNullOrWhiteSpace(request.UserId))
-                errors.Add("O Id do usuário deve ser informado");
             if (string.IsNullOrWhiteSpace(request.UserLastName))
                 errors.Add("O último nome do usuário deve ser informado");
             if (!request.UserPermission.HasValue)
