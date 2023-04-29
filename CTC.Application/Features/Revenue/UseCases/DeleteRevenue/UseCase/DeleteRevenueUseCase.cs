@@ -25,7 +25,7 @@ namespace CTC.Application.Features.Revenue.UseCases.DeleteRevenue.UseCase
 
             var transactionId = await _repository.GetTransactionIdByRevenueId(input.RevenueId!);
             if (string.IsNullOrEmpty(transactionId))
-                return Output.CreateInvalidParametersResult("A despesa a ser alterada não existe.");
+                return Output.CreateInvalidParametersResult("A receita a ser alterada não existe.");
 
             var result = await _repository.DeleteRevenue(input.RevenueId!, transactionId);
             if (!result)

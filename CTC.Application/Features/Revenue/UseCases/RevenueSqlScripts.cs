@@ -91,7 +91,7 @@
 
         #region DELETE
 
-        public static string DELETE_REVENUE = @"DELETE FROM `heroku_3a06699194dd49a`.`revenue` WHERE `heroku_3a06699194dd49a`.`revenue`.revenue_id = revenue_id;";
+        public static string DELETE_REVENUE = @"DELETE FROM `heroku_3a06699194dd49a`.`revenue` WHERE `heroku_3a06699194dd49a`.`revenue`.revenue_id = @revenue_id;";
 
         #endregion
     }
