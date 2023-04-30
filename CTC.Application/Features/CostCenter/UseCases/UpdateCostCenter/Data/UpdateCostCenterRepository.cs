@@ -57,7 +57,7 @@ namespace CTC.Application.Features.CostCenter.UseCases.UpdateCostCenter.Data
                         address_number = model.AddressNumber,
                         address_complement = model.AddressComplement,
                         address_city = model.AddressCity,
-                        address_state = model.AddressStreetName
+                        address_state = model.AddressState
                     }
                 },
 
