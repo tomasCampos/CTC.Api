@@ -24,7 +24,11 @@ namespace CTC.Application.Features.Analytics.UseCases.GetCostCenterSummary.UseCa
             var summary = new Dictionary<string, decimal>();
             foreach (var costCenter in distictCostCenter)
             {
-                var costCenterName = expensesData.FirstOrDefault(tran => tran.CostCenterId == costCenter).CostCenterName;
+                var costCenterName = expensesData.FirstOrDefault(tran => tran.CostCenterId == costCenter)?.CostCenterName;
+                costCenterName ??= revenuesData.FirstOrDefault(tran => tran.CostCenterId == costCenter)?.CostCenterName;
+
+                if (costCenterName == null)
+                    break;
 
                 var expenses = expensesData.AsParallel().Where(exp => exp.CostCenterId == costCenter).Sum(exp => exp.TransactionValue);
                 var revenues = revenuesData.AsParallel().Where(rev => rev.CostCenterId == costCenter).Sum(rev => rev.TransactionValue);

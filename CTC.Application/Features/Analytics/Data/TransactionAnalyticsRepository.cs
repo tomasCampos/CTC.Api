@@ -21,6 +21,7 @@ namespace CTC.Application.Features.Analytics.Data
 
         private const string SELECT_REVENUES = @"SELECT 
 	                                                cc.cost_center_id AS `CostCenterId`,
+                                                    cc.cost_center_name AS `CostCenterName`,
 	                                                tran.transaction_id AS `TransactionId`,
                                                     tran.transaction_value AS `TransactionValue`,
                                                     tran.transaction_payment_date AS `PaymentDate`
