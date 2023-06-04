@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CTC.Integration.Test.Dtos;
+using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 
@@ -16,25 +17,28 @@ namespace CTC.Integration.Test.Shared
                 BaseAddress = new Uri(CTC_API_BASE_ADDRESS)
             };
 
+            var bearerToken = GetAuthToken().Result;
+
             _httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", bearerToken);
         }
 
-        protected async Task<(HttpStatusCode statusCode, T result)> MakeGetRequest<T>(string requestUri) 
+        protected async Task<HttpResponseDto<T>> MakeGetRequest<T>(string requestUri) 
         {
             var response = await _httpClient.GetAsync(requestUri);
 
-            var result = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-
+            var responseBody = JsonConvert.DeserializeObject<HttpResponseDto<T>>(await response.Content.ReadAsStringAsync());
             response.EnsureSuccessStatusCode();
-            return (response.StatusCode, result);
+
+            return responseBody;
         }
 
         protected async Task<HttpStatusCode> MakePostRequest(string requestUri, object? requestBody = null)
         {
             var contentString = BuildHttpRequestStringContent(requestBody);
             var response = await _httpClient.PostAsync(requestUri, contentString);
-
             response.EnsureSuccessStatusCode();
+
             return response.StatusCode;
         }
 
@@ -42,16 +46,16 @@ namespace CTC.Integration.Test.Shared
         {
             var contentString = BuildHttpRequestStringContent(requestBody);
             var response = await _httpClient.PutAsync(requestUri, contentString);
-
             response.EnsureSuccessStatusCode();
+
             return response.StatusCode;
         }
 
         protected async Task<HttpStatusCode> MakeDeleteRequest(string requestUri)
         {
             var response = await _httpClient.DeleteAsync(requestUri);
-
             response.EnsureSuccessStatusCode();
+
             return response.StatusCode;
         }
 
@@ -59,12 +63,17 @@ namespace CTC.Integration.Test.Shared
         {
             var stringContent = BuildHttpRequestStringContent(new { userEmail = "integration.test@gmail.com", userPassword = "1234567" });
             var response = await _httpClient.PostAsync("/User/Autorize", stringContent);
+
+            var result = JsonConvert.DeserializeObject<HttpResponseDto<AuthorizationDto>>(await response.Content.ReadAsStringAsync());
+
+            return $"Bearer {result!.Body!.BearerToken}";
         }
 
         private static StringContent BuildHttpRequestStringContent(object? requestBody)
         {
             var jsonContent = JsonConvert.SerializeObject(requestBody);
             var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
             return contentString;
         }
     }
