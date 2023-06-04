@@ -6,7 +6,7 @@ using System.Net;
 namespace CTC.Integration.Test.Features.RegisterClient
 {
     [TestClass]
-    internal class RegisterClientTest : IntegrationTestBase
+    public class RegisterClientTest : IntegrationTestBase
     {
         private const string REQUEST_URI = "/Client";
 
@@ -31,7 +31,7 @@ namespace CTC.Integration.Test.Features.RegisterClient
             Assert.AreEqual(HttpStatusCode.OK, getResultBeforeRegister.StatusCode);
             Assert.AreEqual(HttpStatusCode.Created, registerClientResult);
             Assert.AreEqual(HttpStatusCode.OK, getResultAfterRegister.StatusCode);
-            Assert.IsTrue(getResultBeforeRegister.Body!.TotalCount == (getResultAfterRegister.Body!.TotalCount + 1));
+            Assert.IsTrue(getResultAfterRegister.Body!.TotalCount == (getResultBeforeRegister.Body!.TotalCount + 1));
 
             var registeredClient = getResultAfterRegister.Body.Results!.FirstOrDefault(c => c.Document == newClient.Document);
             Assert.IsNotNull(registeredClient);
@@ -39,7 +39,7 @@ namespace CTC.Integration.Test.Features.RegisterClient
             //Arrange
             var updateClient = new
             {
-                Id = registeredClient.CliendId,
+                Id = registeredClient.ClientId,
                 Name = "Test Client",
                 Email = "test.client@gmail.com",
                 Phone = "31912365544",
@@ -48,14 +48,18 @@ namespace CTC.Integration.Test.Features.RegisterClient
 
             //Act
             var updateClientResult = await MakePutRequest(REQUEST_URI, updateClient);
-            var getResultAfterUpdate = await MakeGetRequest<GetClientDto>($"{REQUEST_URI}/{registeredClient.CliendId}");
+            var getResultAfterUpdate = await MakeGetRequest<GetClientDto>($"{REQUEST_URI}/{registeredClient.ClientId}");
 
             //Assert
             Assert.IsNotNull(getResultAfterUpdate);
             Assert.AreEqual(HttpStatusCode.OK, getResultAfterUpdate.StatusCode);
-            Assert.AreEqual(getResultAfterUpdate.Body.Document, updateClient.Document);
+            Assert.AreEqual(getResultAfterUpdate.Body!.Document, updateClient.Document);
 
-            //Arrange
+            //Act
+            var deletClientResult = await MakeDeleteRequest($"{REQUEST_URI}/{registeredClient.ClientId}");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, deletClientResult);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CTC.Integration.Test.Shared
 {
-    internal abstract class IntegrationTestBase
+    public abstract class IntegrationTestBase
     {
         private readonly HttpClient _httpClient;
         private const string CTC_API_BASE_ADDRESS = "https://ctc-api.up.railway.app";
@@ -18,8 +18,6 @@ namespace CTC.Integration.Test.Shared
             };
 
             var bearerToken = GetAuthToken().Result;
-
-            _httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
             _httpClient.DefaultRequestHeaders.Add("Authorization", bearerToken);
         }
 
@@ -28,7 +26,6 @@ namespace CTC.Integration.Test.Shared
             var response = await _httpClient.GetAsync(requestUri);
 
             var responseBody = JsonConvert.DeserializeObject<HttpResponseDto<T>>(await response.Content.ReadAsStringAsync());
-            response.EnsureSuccessStatusCode();
 
             return responseBody;
         }
@@ -37,7 +34,6 @@ namespace CTC.Integration.Test.Shared
         {
             var contentString = BuildHttpRequestStringContent(requestBody);
             var response = await _httpClient.PostAsync(requestUri, contentString);
-            response.EnsureSuccessStatusCode();
 
             return response.StatusCode;
         }
@@ -46,7 +42,6 @@ namespace CTC.Integration.Test.Shared
         {
             var contentString = BuildHttpRequestStringContent(requestBody);
             var response = await _httpClient.PutAsync(requestUri, contentString);
-            response.EnsureSuccessStatusCode();
 
             return response.StatusCode;
         }
@@ -54,7 +49,6 @@ namespace CTC.Integration.Test.Shared
         protected async Task<HttpStatusCode> MakeDeleteRequest(string requestUri)
         {
             var response = await _httpClient.DeleteAsync(requestUri);
-            response.EnsureSuccessStatusCode();
 
             return response.StatusCode;
         }
@@ -62,7 +56,7 @@ namespace CTC.Integration.Test.Shared
         private async Task<string> GetAuthToken()
         {
             var stringContent = BuildHttpRequestStringContent(new { userEmail = "integration.test@gmail.com", userPassword = "1234567" });
-            var response = await _httpClient.PostAsync("/User/Autorize", stringContent);
+            var response = await _httpClient.PostAsync("/User/Authorize", stringContent);
 
             var result = JsonConvert.DeserializeObject<HttpResponseDto<AuthorizationDto>>(await response.Content.ReadAsStringAsync());
 
