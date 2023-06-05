@@ -1,4 +1,4 @@
-﻿using CTC.Integration.Test.Dtos;
+﻿using CTC.Integration.Test.Shared.Dtos;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;

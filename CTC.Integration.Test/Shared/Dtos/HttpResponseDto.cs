@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace CTC.Integration.Test.Shared
+namespace CTC.Integration.Test.Shared.Dtos
 {
     public sealed class HttpResponseDto<T>
     {

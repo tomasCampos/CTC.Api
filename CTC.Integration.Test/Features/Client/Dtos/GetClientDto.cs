@@ -1,4 +1,4 @@
-﻿namespace CTC.Integration.Test.Dtos.Client
+﻿namespace CTC.Integration.Test.Features.Client.Dtos
 {
     internal sealed class GetClientDto
     {

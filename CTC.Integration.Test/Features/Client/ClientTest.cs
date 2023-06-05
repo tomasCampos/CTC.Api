@@ -1,9 +1,9 @@
-﻿using CTC.Integration.Test.Dtos.Client;
+﻿using CTC.Integration.Test.Features.Client.Dtos;
 using CTC.Integration.Test.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 
-namespace CTC.Integration.Test.Features.RegisterClient
+namespace CTC.Integration.Test.Features.Client
 {
     [TestClass]
     public class RegisterClientTest : IntegrationTestBase
@@ -11,7 +11,7 @@ namespace CTC.Integration.Test.Features.RegisterClient
         private const string REQUEST_URI = "/Client";
 
         [TestMethod]
-        public async Task ShouldRegisterClient()
+        public async Task ShouldRegisterGetUpdateAndDeleteClient()
         {
             //Arrange
             var newClient = new
@@ -57,9 +57,11 @@ namespace CTC.Integration.Test.Features.RegisterClient
 
             //Act
             var deletClientResult = await MakeDeleteRequest($"{REQUEST_URI}/{registeredClient.ClientId}");
+            var getResultAfterDelete = await MakeGetRequest<GetClientDto>($"{REQUEST_URI}/{registeredClient.ClientId}");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, deletClientResult);
+            Assert.AreEqual(HttpStatusCode.NotFound, getResultAfterDelete.StatusCode);
         }
     }
 }

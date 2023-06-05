@@ -1,4 +1,4 @@
-﻿namespace CTC.Integration.Test.Dtos
+﻿namespace CTC.Integration.Test.Shared.Dtos
 {
     internal sealed class AuthorizationDto
     {
