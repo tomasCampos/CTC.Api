@@ -19,7 +19,7 @@ namespace CTC.Api.Shared
             if (output.StatusCode == HttpStatusCode.Forbidden)
                 return Forbid();
             if (output.StatusCode == HttpStatusCode.NotFound)
-                return NotFound();
+                return NotFound(httpResponse);
 
             if (output.StatusCode == HttpStatusCode.OK)
                 return Ok(httpResponse);
